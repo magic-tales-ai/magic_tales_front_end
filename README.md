@@ -8,7 +8,7 @@
 # Installation 
 - Clone the repo
 - Install packages: run "npm install" 
-- Run the app: npm run start
+- Run the app: "npm run start"
 
 # Notes
 - The app runs on localhost:3000
