@@ -7,7 +7,7 @@ import {
   SEND_MESSAGE
 } from './constants';
 
-const WEBSOCKET_URL = 'ws://104.237.150.104:8001/bot/ws';
+const WEBSOCKET_URL = 'ws://localhost:8001/bot/ws';
 
 function createWebSocketConnection(url, params = {}, callback) {
   const urlWithParams = `${url}?${new URLSearchParams(params)}`;
