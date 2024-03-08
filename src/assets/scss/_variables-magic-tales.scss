@@ -1,0 +1,25 @@
+$primary:	#292929;
+$secondary: #7000FF;
+$danger: #FF6666;
+$theme-colors: (
+  "primary": $primary,
+  "danger":  $danger,
+);
+
+$font-family-sans-serif: "Inter", sans-serif;
+$font-family-base: $font-family-sans-serif;
+$font-size-base: 0.88rem;
+$border-radius-lg: 8px;
+$enable-negative-margins: true;
+
+// Variables dark
+//$body-bg-dark:                      #373737;
+$body-bg-dark:                      #141414;
+$body-color-dark:                   #ffffff;
+$body-secondary-color-dark:         #9C9C9C;
+$danger-text-dark:                  #FF6666;
+$dark-dark:                         #ffffff;
+$secondary-dark:                    #202020;
+
+// Dropdown
+$dropdown-bg-dark:                  #292929;
