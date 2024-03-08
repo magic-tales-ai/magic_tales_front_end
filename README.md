@@ -1,5 +1,5 @@
-# Magic-Tales Front End 
-# Builded in REACT JS 
+# Magic-Tales Front End (React JS) 
+
 
 # Requirements  
 - Node.JS (tested version 16.13.2) 
@@ -14,7 +14,8 @@
 - The app runs on localhost:3000
 - The app connects to the API REST on: localhost:8000
 - The app connects to the CHAT CORE on: localhost:8001
-* not configurable at the moment. needs to run both backends services on those ports
+  
+** not configurable at the moment. needs to run both backends services on those ports
 
 
   
