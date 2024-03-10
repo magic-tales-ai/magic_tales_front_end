@@ -11,7 +11,7 @@ import { getDataRecovery, requirementsForNewChat } from '../../redux/chat/helper
 
 
 const useSendMessage = () => {
-    const commandForNewChat = useRef(['new-tale', 'spin-off'])
+    const commandForNewChat = useRef(['new_tale', 'spin_off'])
     const dispatch = useDispatch();
     const user = useSelector(state => state.Auth?.user);
     const active_tale = useSelector(state => state.Chat?.get('active_tale'));
@@ -63,7 +63,7 @@ const useSendMessage = () => {
                 if (dataRecovery?.uid) {
                     wsmessage = buildWsMessage({
                         ...message,
-                        command: 'conversation-recovery',
+                        command: 'conversation_recovery',
                     });
                 }
             }

@@ -91,7 +91,7 @@ function* forgetPassword({ payload: { email } }) {
  */
 function* loadMonthStoriesCount({ payload }) {
     try {
-        if(payload.message.command == 'new-tale') {
+        if(payload.message.command == 'new_tale') {
             if(localStorage.getItem("authUser")) {
                 const response = yield call(get, 'user/month-stories-count');
                 yield put(loadMonthStoriesCountSuccess(response));

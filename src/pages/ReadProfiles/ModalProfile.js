@@ -33,7 +33,7 @@ export const ModalProfile = (props) => {
     }
 
     const goToNewTale = () => {
-        sendMessage({ command: 'new-tale' })
+        sendMessage({ command: 'new_tale' })
         navigate('/dashboard')
     }
 
