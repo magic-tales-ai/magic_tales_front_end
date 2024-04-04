@@ -3,3 +3,15 @@ export const WEBSOCKET_CONNECTED = "WEBSOCKET_CONNECTED";
 export const WEBSOCKET_MESSAGE = "WEBSOCKET_MESSAGE";
 export const WEBSOCKET_DISCONNECT = "WEBSOCKET_DISCONNECT";
 export const SEND_MESSAGE = "SEND_MESSAGE";
+
+export const websocket_commands_messages = {
+    USER_MESSAGE: 'user_message',
+    NEW_TALE: 'new_tale',
+    SPIN_OFF: 'spin_off',
+    MESSAGE_FOR_HUMAN: 'message_for_human',
+    PROGRESS_UPDATE: 'progress_update',
+    DONE: 'done',
+    STATUS_UPDATE: 'status_update',
+    CONVERSATION_RECOVERY: 'conversation_recovery',
+    LINK_USER_WITH_CONVERSATIONS: 'link-user-with-conversations'
+}

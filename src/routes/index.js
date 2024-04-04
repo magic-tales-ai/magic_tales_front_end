@@ -1,30 +1,21 @@
 import React, { Suspense } from 'react';
-import { Routes as SwitchRoute, Route, Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Routes as SwitchRoute, Route } from 'react-router-dom';
 
-//import routes
+// Routes
 import { authProtectedRoutes, publicRoutes } from './routes';
 
-//import layouts
+// Layouts
 import Layout from "../layouts/GeneralLayout/";
 
-const AuthProtected = (props) => {
-    /*
-      Navigate is un-auth access protected routes via url
-      */
-  
-      if (props.isAuthProtected && !localStorage.getItem("authUser")) {
-            return (
-                <Navigate to={{ pathname: "/login", state: { from: props.location } }} />
-            );
-        }
-  
-    return <>{props.children}</>;
-  };
+// Selectors
+import { selectAuth } from '../redux/auth/selectors';
 
 /**
  * Main Route component
  */
 const Routes = () => {
+    const { user } = useSelector(selectAuth)
 
     return (
         // rendering the router with layout
@@ -32,7 +23,7 @@ const Routes = () => {
             <Suspense fallback = {<div></div>} >
                 <SwitchRoute>
                     {/* public routes */}
-                    {publicRoutes.map((route, idx) =>
+                    {!user?.get('id') && publicRoutes.map((route, idx) =>
                         <Route 
                             path={route.path} 
                             layout={Layout} 
@@ -47,16 +38,14 @@ const Routes = () => {
                     )}
 
                     {/* private/auth protected routes */}
-                    {authProtectedRoutes.map((route, idx) =>
+                    {user?.get('id') && authProtectedRoutes.map((route, idx) =>
                         <Route 
                             path={route.path} 
                             layout={Layout} 
                             element={
-                                <AuthProtected isAuthProtected={true}>
-                                    <Layout>
-                                        {route.component}
-                                    </Layout>
-                                </AuthProtected>
+                                <Layout>
+                                    {route.component}
+                                </Layout>
                             }
                             key={idx} 
                             isAuthProtected={true}  />

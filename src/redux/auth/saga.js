@@ -1,7 +1,6 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
 import { APIClient } from '../../helpers/apiClient';
-import { getFirebaseBackend } from "../../helpers/firebase";
 
 
 import {
@@ -21,10 +20,6 @@ import {
     logoutUserSuccess,
     loadMonthStoriesCountSuccess
 } from './actions';
-
-
-//Initilize firebase
-const fireBaseBackend = getFirebaseBackend();
 
 
 /**
@@ -91,7 +86,7 @@ function* forgetPassword({ payload: { email } }) {
  */
 function* loadMonthStoriesCount({ payload }) {
     try {
-        if(payload.message.command == 'new-tale') {
+        if(payload.message.command == 'new_tale') {
             if(localStorage.getItem("authUser")) {
                 const response = yield call(get, 'user/month-stories-count');
                 yield put(loadMonthStoriesCountSuccess(response));

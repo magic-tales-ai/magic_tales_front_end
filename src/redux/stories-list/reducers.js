@@ -1,4 +1,5 @@
-import { List } from 'immutable';
+import { List, Map } from 'immutable';
+
 import {
     LOAD_STORIES_LIST,
     LOAD_STORIES_LIST_SUCCESS,
@@ -9,10 +10,13 @@ import {
 
 import { LOGOUT_USER_SUCCESS } from '../auth/constants';
 
-const INIT_STATE = {
+import { createStory } from './story';
+
+const INIT_STATE = Map({
     list: new List(),
-    loading: false
-};
+    loading: false,
+    error: null
+});
 
 const StoriesList = (state = INIT_STATE, action) => {
     switch (action.type) {
@@ -20,20 +24,37 @@ const StoriesList = (state = INIT_STATE, action) => {
             return INIT_STATE;
             
         case LOAD_STORIES_LIST:
-            return { ...state, loading: true };
+            return state.set('loading', true);
+
         case LOAD_STORIES_LIST_SUCCESS:
-            return { ...state, list: action.payload, loading: false, error: null };
+            const storyRecords = action.payload.map(storyData => createStory(storyData));
+
+            return state.merge({
+                list: List(storyRecords),
+                loading: false,
+                error: null
+            });
 
         case DELETE_STORY:
-            return { ...state, loading: true };
+            return state.set('loading', true);
+
         case DELETE_STORY_SUCCESS:
-            let auxList = state.list.filter(story => story.id !== action.payload.storyId);
-            return { ...state, list: auxList, loading: false, error: null };
+            const updatedList = state.get('list').filter(story => story.get('id') !== action.payload.storyId);
+
+            return state.merge({
+                list: updatedList,
+                loading: false,
+                error: null
+            });
 
         case API_FAILED:
-            return { ...state, loading: false, error: action.payload };
+            return state.merge({
+                loading: false,
+                error: action.payload
+            });
 
-        default: return { ...state };
+        default: 
+            return state;
     }
 }
 

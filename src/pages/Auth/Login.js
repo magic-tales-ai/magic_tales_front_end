@@ -32,7 +32,10 @@ const Login = (props) => {
 
 
 const mapStateToProps = (state) => {
-    const { user, loading, error } = state.Auth;
+    const user = state.Auth.get('user');
+    const loading = state.Auth.get('loading');
+    const error = state.Auth.get('error');
+
     return { user, loading, error };
 };
 

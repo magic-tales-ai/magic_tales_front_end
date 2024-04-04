@@ -1,10 +1,10 @@
 import {
-    ACTIVE_TALE, NEW_USER_MESSAGE
+    ACTIVE_CHAT, NEW_USER_MESSAGE
 } from './constants';
 
-export const activeTale = (taleId) => ({
-    type: ACTIVE_TALE,
-    payload: taleId
+export const setActiveChat = (chatId) => ({
+    type: ACTIVE_CHAT,
+    payload: chatId
 });
 
 export const newUserMessage = (message) => ({

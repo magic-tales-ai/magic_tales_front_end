@@ -1,11 +1,11 @@
 import { List, Record, Map } from 'immutable';
 import { v4 as uuidv4 } from 'uuid';
 
-import Chat, { INIT_STATE as INIT_STATE_CHAT } from './reducers';
+import ChatReducer, { INIT_STATE as INIT_STATE_CHAT } from './reducers';
 
-export const Tale = new Record({
+export const Chat = new Record({
     uid: null,
-    name: 'New Tale',
+    name: 'New Chat',
     progress: 0,
     profilePicture: '',
     unRead: 0,
@@ -18,10 +18,10 @@ export const Tale = new Record({
     messages: new List(),
 });
 
-export const createNewTale = (data) => {
+export const createNewChat = (data) => {
     let messages = data?.messages ? data?.messages.map((message) => createNewMessage(message)) : [];
 
-    return new Tale({
+    return new Chat({
         ...data,
         messages: new List(messages),
         storyId: data?.data?.story_id ? data.data.story_id : null,
@@ -29,14 +29,14 @@ export const createNewTale = (data) => {
     })
 }
 
-export const recoverTale = ({ uid, data }) => {
+export const recoverChat = ({ uid, data }) => {
     var state = INIT_STATE_CHAT
-        .set('active_tale', uid)
-        .set('tales', new Map([[uid, createNewTale({ uid })]]))
+        .set('activeChat', uid)
+        .set('chats', new Map([[uid, createNewChat({ uid })]]))
 
     data.conversations?.map(interaction => {
         const { command, details } = interaction;
-        const { token, ...detailsWithoutToken } = details
+        const { token, ...detailsWithoutToken } = details;
 
         let action = {
             type: 'WEBSOCKET_MESSAGE', 
@@ -47,10 +47,10 @@ export const recoverTale = ({ uid, data }) => {
             }
         }
 
-        state = Chat(state, action)
+        state = ChatReducer(state, action)
     })
 
-    return state.get('tales').first();
+    return state.get('chats').first();
 }
 
 export const Message = new Record({

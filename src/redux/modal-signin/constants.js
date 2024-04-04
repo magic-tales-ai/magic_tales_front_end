@@ -1,0 +1,3 @@
+export const OPEN_MODAL = "OPEN_MODAL_SIGNIN";
+export const CLOSE_MODAL = "CLOSE_MODAL_SIGNIN";
+export const SET_VIEW = "SET_VIEW_SIGNIN";

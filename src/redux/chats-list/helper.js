@@ -47,11 +47,15 @@ function getDataRecovery() {
         canRecover: conversation ? true : false,
         uid: conversation?.uid ?? null,
     }
-    console.log(dataRecovery)
+
     return dataRecovery;
 }
 
-function removeConversationByUid(uid) {
+function removeConversationByUidLS(uid) {
+    if(!uid) {
+        return;
+    }
+    
     const guestConversation = JSON.parse(localStorage.getItem('guestConversationData'));
     if(guestConversation?.uid == uid) {
         localStorage.removeItem('guestConversationData');
@@ -64,26 +68,21 @@ function removeConversationByUid(uid) {
     }
 }
 
-function requirementsForNewChat({ currentTale, storyParentId }) {console.log(currentTale, storyParentId)
+function requirementsForNewChat({ currentChat }) {
     let requirements = {
         confirmation: false,
         sendCommand: true
     }
 
-    if(!currentTale) {
+    if(!currentChat) {
         return requirements;
     }
 
-    if(!currentTale.get('isFinished') && currentTale.get('hasUserMessages')) {
+    if(!currentChat.get('isFinished') && currentChat.get('hasUserMessages')) {
         requirements.confirmation = true;
-    }
-
-    if(storyParentId && currentTale.get('storyParentId') == storyParentId) {
-        requirements.confirmation = false;
-        requirements.sendCommand = false;
     }
 
     return requirements;
 }
 
-export { handleSaveConversationLS, getConversationLS, moveGuestToUserConversation, getDataRecovery, requirementsForNewChat, removeConversationByUid }
+export { handleSaveConversationLS, getConversationLS, moveGuestToUserConversation, getDataRecovery, requirementsForNewChat, removeConversationByUidLS }

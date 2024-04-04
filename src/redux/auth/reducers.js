@@ -1,3 +1,4 @@
+import { Map } from 'immutable';
 import {
     LOGIN_USER,
     LOGIN_USER_SUCCESS,
@@ -17,56 +18,83 @@ import { setAuthorization } from '../../helpers/apiClient';
 
 import { getLoggedInUser, updateTokenLoggedInUser } from '../../helpers/authUtils';
 
-const INIT_STATE = {
-    user: getLoggedInUser(),
+import { createNewUser } from './user';
+
+const INIT_STATE = Map({
+    user: createNewUser(getLoggedInUser()),
     loading: false,
-    isUserLogout : false,
+    isUserLogout: false,
     error: null
-};
+});
 
 const Auth = (state = INIT_STATE, action) => {
-    if(action?.payload?.token) {
-        setAuthorization(action.payload.token)
+    if (action?.payload?.token) {
+        setAuthorization(action.payload.token);
     }
+
     switch (action.type) {
         case LOGIN_USER:
-            return { ...state, loading: true };
+            return state.set('loading', true);
+
         case LOGIN_USER_SUCCESS:
-            return { ...state, user: action.payload, loading: false, error: null };
+            return state.merge({
+                user: createNewUser(action.payload),
+                loading: false,
+                error: null
+            });
 
         case REGISTER_USER:
-            return { ...state, loading: true };
+            return state.set('loading', true);
+
         case REGISTER_USER_SUCCESS:
-            return { ...state, loading: false, error: null };
+            return state.merge({
+                loading: false,
+                error: null
+            });
 
         case LOGOUT_USER_SUCCESS:
-            return { ...state, user: null, isUserLogout : true };
+            return state.merge({
+                user: null,
+                isUserLogout: true
+            });
 
         case FORGET_PASSWORD:
-            return { ...state, loading: true };
+            return state.set('loading', true);
+
         case FORGET_PASSWORD_SUCCESS:
-            return { ...state, passwordResetStatus: action.payload, loading: false, error: null };
+            return state.merge({
+                passwordResetStatus: action.payload,
+                loading: false,
+                error: null
+            });
 
         case UPDATE_TOKEN:
-            updateTokenLoggedInUser(action.payload)
-            return { ...state, user: { ...state.user, token: action.payload } };
+            updateTokenLoggedInUser(action.payload);
+            return state.update('user', user => user.set('token', action.payload));
 
         case LOAD_MONTH_STORIES_COUNT_SUCCESS:
-            return { ...state, user: { ...state.user, month_stories_count: action.payload.stories_this_month } };
+            return state.update('user', user => user.set('monthStoriesCount', action.payload.stories_this_month));
 
         case API_FAILED:
-            return { ...state, loading: false, error: action.payload, isUserLogout : false };
+            return state.merge({
+                loading: false,
+                error: action.payload,
+                isUserLogout: false
+            });
 
         case WEBSOCKET_MESSAGE:
             const token = action.payload?.message?.token;
-            if(token){
-                updateTokenLoggedInUser(token)
-                return { ...state, user: { ...state.user, token: token } };
+
+            if (token) {
+                updateTokenLoggedInUser(token);
+                return state.update('user', user => user.set('token', token))
             }
             return state;
 
-        default: return { ...state };
+        default:
+            return state;
     }
-}
+};
+
 
 export default Auth;

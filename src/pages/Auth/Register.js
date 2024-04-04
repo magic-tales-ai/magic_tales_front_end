@@ -53,9 +53,9 @@ const Register = (props) => {
     const selectAccount = createSelector(
         (state) => state.Auth,
         (account) => ({
-            user: account.user,
-            success: account.success,
-            error: account.error,
+            user: account.get('user'),
+            success: account.get('success'),
+            error: account.get('error'),
         })
     );
 

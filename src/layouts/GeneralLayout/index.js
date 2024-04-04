@@ -17,12 +17,11 @@ class Index extends Component {
 
     componentDidMount() {
         var getLayoutMode = localStorage.getItem("layoutMode");
-        this.props.changeLayoutMode(getLayoutMode);
 
         if (getLayoutMode) {
             this.props.changeLayoutMode(getLayoutMode);
         } else {
-            this.props.changeLayoutMode(this.props.layout.layoutMode);
+            this.props.changeLayoutMode(this.props.layout?.layoutMode);
         }
     }
 
@@ -41,7 +40,9 @@ Index.propTypes = {
 };
 
 const mapStateToProps = state => {
-    const { layoutMode, Websocket } = state;
+    const { Websocket } = state;
+    const layoutMode = state.Layout.get('layoutMode')
+
     return { layoutMode, Websocket };
 };
 

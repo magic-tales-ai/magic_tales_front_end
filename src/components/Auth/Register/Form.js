@@ -51,9 +51,9 @@ const RegisterForm = (props) => {
     const selectAccount = createSelector(
         (state) => state.Auth,
         (account) => ({
-            user: account.user,
-            loading: account.loading,
-            error: account.error,
+            user: account.get('user'),
+            loading: account.get('loading'),
+            error: account.get('error'),
         })
     );
 
@@ -194,10 +194,4 @@ const RegisterForm = (props) => {
     )
 }
 
-
-const mapStateToProps = (state) => {
-    const { user, loading, error } = state.Auth;
-    return { user, loading, error };
-};
-
-export default withRouter(connect(mapStateToProps, { registerUser, apiError })(RegisterForm));
+export default withRouter(connect(null, { registerUser, apiError })(RegisterForm));
