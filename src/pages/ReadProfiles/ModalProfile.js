@@ -5,17 +5,20 @@ import { useNavigate } from 'react-router-dom';
 
 import Profile from "./Profile";
 
-//i18n
+// i18n
 import { useTranslation } from 'react-i18next';
 
-//actions
+// Actions
 import { activeTale, setActiveTab } from "../../redux/actions";
 
-//icon
+// icon
 import iconFile from "../../assets/images/icons/file-plus.svg";
 
 // Hooks
 import useSendMessage from '../../hooks/websocket/sendMessage';
+
+// Constants
+import { websocket_commands_messages } from "../../redux/websocket/constants";
 
 export const ModalProfile = (props) => {
     const {
@@ -33,7 +36,7 @@ export const ModalProfile = (props) => {
     }
 
     const goToNewTale = () => {
-        sendMessage({ command: 'new_tale' })
+        sendMessage({ command: websocket_commands_messages.NEW_TALE })
         navigate('/dashboard')
     }
 

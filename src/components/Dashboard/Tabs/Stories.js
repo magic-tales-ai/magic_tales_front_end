@@ -30,6 +30,9 @@ import { ModalConfirmDelete } from '../../Common/Modals/ModalConfirmDelete';
 import { selectAuth } from '../../../redux/auth/selectors';
 import { selectChatsList } from '../../../redux/chats-list/selectors';
 
+// Constants
+import { websocket_commands_messages } from '../../../redux/websocket/constants';
+
 const Stories = ({ stories, activeChat, chats, currentChat, user } = {}) => {
     const { sendMessage, validateForNewChat } = useSendMessage();
     const dispatch = useDispatch();
@@ -72,7 +75,7 @@ const Stories = ({ stories, activeChat, chats, currentChat, user } = {}) => {
         }
         else {
             sendMessage({
-                command: 'conversation-recovery', 
+                command: 'conversation_recovery', 
                 uid: story.get('sessionId')
             })
         }
@@ -91,7 +94,7 @@ const Stories = ({ stories, activeChat, chats, currentChat, user } = {}) => {
             </div>
 
             <div className="d-flex p-3">
-                <Button color="primary" className="d-flex flex-fill" onClick={() => { sendMessage({ command: 'new-tale' }) }}>
+                <Button color="primary" className="d-flex flex-fill" onClick={() => { sendMessage({ command: websocket_commands_messages.NEW_TALE }) }}>
                     <span className="custom-icon me-3"><img src={iconFile} alt="icon file" /></span>
                     {t('New Tale')}
                 </Button>
@@ -162,7 +165,7 @@ const Stories = ({ stories, activeChat, chats, currentChat, user } = {}) => {
                                                         <i className="ri-more-2-fill"></i>
                                                     </DropdownToggle>
                                                     <DropdownMenu className="dropdown-menu-end">
-                                                        <DropdownItem onClick={() => { sendMessage({ command: 'spin-off', story_id: story.get('id') }) }}>{t("Create spin - off")}</DropdownItem>
+                                                        <DropdownItem onClick={() => { sendMessage({ command: websocket_commands_messages.SPIN_OFF, story_id: story.get('id') }) }}>{t("Create spin - off")}</DropdownItem>
                                                         <DropdownItem divider className="my-1" />
                                                         <DropdownItem onClick={() => { setCurrentStoryId(story.get('id')); setOpenModalDelete(true) }}className="text-danger">{t("Delete")}</DropdownItem>
                                                     </DropdownMenu>

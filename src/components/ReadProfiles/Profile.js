@@ -6,17 +6,20 @@ import { useNavigate } from 'react-router-dom';
 import { ModalConfirmDelete } from '../Common/Modals/ModalConfirmDelete';
 import { ModalProfile } from './ModalProfile';
 
-//actions
+// Actions
 import { setActiveChat, setActiveTab } from '../../redux/actions';
 
-//i18n
+// i18n
 import { useTranslation } from 'react-i18next';
 
-//image default
+// Image default
 import avatar1 from "../../assets/images/users/avatar-1.jpg";
 
 // Hooks
 import useSendMessage from '../../hooks/websocket/sendMessage';
+
+// Constants
+import { websocket_commands_messages } from '../../redux/websocket/constants';
 
 const Profile = (props) => {
     const { profile, displayActions = true, small = false, enableModal = true } = props;
@@ -39,7 +42,7 @@ const Profile = (props) => {
     }
 
     const goToNewTale = () => {
-        sendMessage({ command: 'new-tale' })
+        sendMessage({ command: websocket_commands_messages.NEW_TALE })
         navigate('/dashboard')
     }
 

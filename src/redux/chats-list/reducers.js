@@ -7,8 +7,7 @@ import {
 } from './constants';
 import { DELETE_STORY_SUCCESS } from '../stories-list/constants';
 
-import { WEBSOCKET_MESSAGE } from '../websocket/constants';
-import { websocketMessagesActions } from './constants';
+import { WEBSOCKET_MESSAGE, websocket_commands_messages } from '../websocket/constants';
 
 export const INIT_STATE = Map({
     activeChat: null,
@@ -53,7 +52,7 @@ const ChatsList = (state = INIT_STATE, action) => {
             var newMessage = null;
 
             switch (message.command) {
-                case websocketMessagesActions.NEW_TALE:
+                case websocket_commands_messages.NEW_TALE:
                     newChat = createNewChat({
                         ...message,
                     })
@@ -61,7 +60,7 @@ const ChatsList = (state = INIT_STATE, action) => {
                     return state.set('activeChat', newChat.uid)
                         .update('chats', chats => chats.set(newChat.uid, newChat));
 
-                case websocketMessagesActions.SPIN_OFF:
+                case websocket_commands_messages.SPIN_OFF:
                     newChat = createNewChat({
                         ...message,
                         name: 'Spin-Off'
@@ -73,7 +72,7 @@ const ChatsList = (state = INIT_STATE, action) => {
                     return state.set('activeChat', newChat.uid)
                         .update('chats', chats => chats.set(newChat.uid, newChat));
 
-                case websocketMessagesActions.USER_MESSAGE:
+                case websocket_commands_messages.USER_MESSAGE:
                     return state.withMutations(currentState => {
                         currentState.updateIn(['chats', message.uid], chat => {
                             const newMessage = createNewMessage({
@@ -87,7 +86,7 @@ const ChatsList = (state = INIT_STATE, action) => {
                         });
                     });
 
-                case websocketMessagesActions.MESSAGE_FOR_HUMAN:
+                case websocket_commands_messages.MESSAGE_FOR_HUMAN:
                     return state.withMutations(currentState => {
                         currentState.updateIn(['chats', message.uid], chat => {
                             const newMessage = createNewMessage({
@@ -100,7 +99,7 @@ const ChatsList = (state = INIT_STATE, action) => {
                         });
                     });
 
-                case websocketMessagesActions.PROGRESS_UPDATE:
+                case websocket_commands_messages.PROGRESS_UPDATE:
                     return state.withMutations(currentState => {
                         currentState.updateIn(['chats', message.uid], chat => {
                             const numberProgressUpdate = (chat.get('numberProgressUpdate') || 0) + 1;
@@ -117,7 +116,7 @@ const ChatsList = (state = INIT_STATE, action) => {
                         });
                     })
 
-                case websocketMessagesActions.DONE:
+                case websocket_commands_messages.DONE:
                     return state.withMutations(currentState => {
                         currentState.updateIn(['chats', message.uid], chat => {
                             newMessage = createNewMessage({
@@ -135,7 +134,7 @@ const ChatsList = (state = INIT_STATE, action) => {
                         });
                     })
 
-                case websocketMessagesActions.STATUS_UPDATE:
+                case websocket_commands_messages.STATUS_UPDATE:
                     return state.withMutations(currentState => {
                         currentState.updateIn(['chats', message.uid], chat => {
                             newMessage = createNewMessage({
@@ -148,7 +147,7 @@ const ChatsList = (state = INIT_STATE, action) => {
                         })
                     })
 
-                case websocketMessagesActions.CONVERSATION_RECOVERY:
+                case websocket_commands_messages.CONVERSATION_RECOVERY:
                     return state.withMutations(currentState => {
                         currentState.updateIn(['chats', message.uid], _ => {
                             return recoverChat(message);

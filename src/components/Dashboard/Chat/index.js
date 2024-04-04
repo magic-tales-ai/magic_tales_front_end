@@ -40,6 +40,9 @@ import { getConversationLS, moveGuestToUserConversation } from '../../../redux/c
 import { selectChatsList } from '../../../redux/chats-list/selectors';
 import { selectAuth } from '../../../redux/auth/selectors';
 
+// Constants
+import { websocket_commands_messages } from '../../../redux/websocket/constants';
+
 function Chat({ activeChat, currentChat, sockets, user }) {
     const { t } = useTranslation();
     const { sendMessage } = useSendMessage();
@@ -51,13 +54,13 @@ function Chat({ activeChat, currentChat, sockets, user }) {
             const dataConversationLS = getConversationLS();
             if(dataConversationLS?.uid) {
                 sendMessage({ 
-                    command: 'conversation-recovery', 
+                    command: websocket_commands_messages.CONVERSATION_RECOVERY, 
                     uid: dataConversationLS.uid 
                 })
             }
             else {
                 sendMessage({ 
-                    command: 'new-tale'
+                    command: websocket_commands_messages.NEW_TALE
                 })
             }
         }
@@ -67,7 +70,7 @@ function Chat({ activeChat, currentChat, sockets, user }) {
         const dataConversationLS = getConversationLS();
         if (currentChat && user?.get('id') && !dataConversationLS?.userId && currentChat.get('uid') === dataConversationLS?.uid) {
             sendMessage({ 
-                command: 'link-user-with-conversations', 
+                command: websocket_commands_messages.LINK_USER_WITH_CONVERSATIONS, 
                 session_ids: [dataConversationLS?.uid] 
             })
             moveGuestToUserConversation()
@@ -129,7 +132,7 @@ function Chat({ activeChat, currentChat, sockets, user }) {
 
         dispatch(newUserMessage(messageObj))
         sendMessage({
-            command: 'user_message',
+            command: websocket_commands_messages.USER_MESSAGE,
             user_id: user?.get('id'),
             message: message
         })
@@ -261,11 +264,11 @@ function Chat({ activeChat, currentChat, sockets, user }) {
                     {currentChat?.isFinished ?
                         user?.get('id') ?
                             <div className="d-lg-flex justify-content-center p-lg-4 p-3 mt-auto">
-                                <Button color="primary" className="d-flex mx-lg-1 w-100 w-lg-auto mb-2 mb-lg-0" onClick={() => { sendMessage({ command: 'spin-off', story_id: currentChat.get('storyId') }) }}>
+                                <Button color="primary" className="d-flex mx-lg-1 w-100 w-lg-auto mb-2 mb-lg-0" onClick={() => { sendMessage({ command: websocket_commands_messages.SPIN_OFF, story_id: currentChat.get('storyId') }) }}>
                                     <span className="custom-icon me-3"><img src={iconFile} alt="icon file" /></span>
                                     <span className="flex-fill pe-4 pe-lg-0">{t('Create spin - off')}</span>
                                 </Button>
-                                <Button color="primary" className="d-flex mx-lg-1 w-100 w-lg-auto mb-2 mb-lg-0" onClick={() => { sendMessage({ command: 'new-tale' }) }}>
+                                <Button color="primary" className="d-flex mx-lg-1 w-100 w-lg-auto mb-2 mb-lg-0" onClick={() => { sendMessage({ command: websocket_commands_messages.NEW_TALE }) }}>
                                     <span className="custom-icon me-3"><img src={iconFile} alt="icon file" /></span>
                                     <span className="flex-fill pe-4 pe-lg-0">{t('New Tale')}</span>
                                 </Button>
