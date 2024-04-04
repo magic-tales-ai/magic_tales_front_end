@@ -63,7 +63,7 @@ const Chats = ({ recentChatList, active_tale, ...props } = {}) => {
 
     const menuTales =
         <div className="d-flex p-3">
-            <Button color="primary" className="d-flex flex-fill" onClick={() => { sendMessage({ command: 'new-tale' }) }}>
+            <Button color="primary" className="d-flex flex-fill" onClick={() => { sendMessage({ command: 'new_tale' }) }}>
                 <span className="custom-icon me-3"><img src={iconFile} alt="icon file" /></span>
                 {t('New Tale')}
             </Button>
@@ -189,7 +189,7 @@ const Chats = ({ recentChatList, active_tale, ...props } = {}) => {
                                                         <i className="ri-more-2-fill"></i>
                                                     </DropdownToggle>
                                                     <DropdownMenu className="dropdown-menu-end">
-                                                        <DropdownItem onClick={() => { sendMessage({ command: 'spin-off', story_id: chat.id }) }}>{t("Create spin - off")}</DropdownItem>
+                                                        <DropdownItem onClick={() => { sendMessage({ command: 'spin_off', story_id: chat.id }) }}>{t("Create spin - off")}</DropdownItem>
                                                         <DropdownItem divider className="my-1" />
                                                         <DropdownItem onClick={() => { setCurrentStoryId(chat.id); setOpenModalDelete(true) }}className="text-danger">{t("Delete")}</DropdownItem>
                                                     </DropdownMenu>

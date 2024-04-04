@@ -39,7 +39,7 @@ const Profile = (props) => {
     }
 
     const goToNewTale = () => {
-        sendMessage({ command: 'new-tale' })
+        sendMessage({ command: 'new_tale' })
         navigate('/dashboard')
     }
 

@@ -53,7 +53,7 @@ function TaleChat({ active_tale, currentTale, sockets, user }) {
     useEffect(() => {
         if(!active_tale) {
             if(!user?.loading) {
-                sendMessage({ command: 'new-tale' })
+                sendMessage({ command: 'new_tale' })
             }
         }
     }, [sockets, user?.id, user?.loading])
@@ -61,7 +61,7 @@ function TaleChat({ active_tale, currentTale, sockets, user }) {
     useEffect(() => {
         const dataConversationLS = getConversationLS();
         if(currentTale && user?.id && !dataConversationLS?.userId && currentTale.get('uid') === dataConversationLS?.uid) {
-            sendMessage({ command: 'link-user-with-conversations', session_ids: [dataConversationLS?.uid] })
+            sendMessage({ command: 'link_user_with_conversations', session_ids: [dataConversationLS?.uid] })
             moveGuestToUserConversation()
         }
     }, [currentTale, user])
@@ -246,11 +246,11 @@ function TaleChat({ active_tale, currentTale, sockets, user }) {
 
                     {currentTale?.isFinished
                         ? <div className="d-lg-flex justify-content-center p-lg-4 p-3 mt-auto">
-                            <Button color="primary" className="d-flex mx-lg-1 w-100 w-lg-auto mb-2 mb-lg-0" onClick={() => { sendMessage({ command: 'spin-off', story_id: currentTale.get('storyId') }) }}>
+                            <Button color="primary" className="d-flex mx-lg-1 w-100 w-lg-auto mb-2 mb-lg-0" onClick={() => { sendMessage({ command: 'spin_off', story_id: currentTale.get('storyId') }) }}>
                                 <span className="custom-icon me-3"><img src={iconFile} alt="icon file" /></span>
                                 <span className="flex-fill pe-4 pe-lg-0">{t('Create spin - off')}</span>
                             </Button>
-                            <Button color="primary" className="d-flex mx-lg-1 w-100 w-lg-auto mb-2 mb-lg-0" onClick={() => { sendMessage({ command: 'new-tale' }) }}>
+                            <Button color="primary" className="d-flex mx-lg-1 w-100 w-lg-auto mb-2 mb-lg-0" onClick={() => { sendMessage({ command: 'new_tale' }) }}>
                                 <span className="custom-icon me-3"><img src={iconFile} alt="icon file" /></span>
                                 <span className="flex-fill pe-4 pe-lg-0">{t('New Tale')}</span>
                             </Button>

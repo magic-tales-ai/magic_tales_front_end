@@ -6,7 +6,7 @@ import { sendMessage as sendMessageAction, websocketConnect, setActiveChat } fro
 import { openModalConfirmChangeChat } from '../../redux/modal-confirm-change-chat/actions';
 
 // Helpers
-import { removeConversationByUidLS, requirementsForNewChat } from '../../redux/chats-list/helper';
+import { requirementsForNewChat } from '../../redux/chats-list/helper';
 
 //Selectors
 import { selectAuth } from '../../redux/auth/selectors';
@@ -14,7 +14,7 @@ import { selectChatsList } from '../../redux/chats-list/selectors';
 
 const useSendMessage = () => {
     const dispatch = useDispatch();
-    const commandForNewChat = useRef(['new-tale', 'spin-off', 'conversation-recovery'])
+    const commandForNewChat = useRef(['new_tale', 'spin_off', 'conversation_recovery'])
     const currentSocketUid = useRef(null)
     const { user } = useSelector(selectAuth);
     const { activeChat, currentChat, chats } = useSelector(selectChatsList);
@@ -54,7 +54,6 @@ const useSendMessage = () => {
 
         if (commandForNewChat.current.includes(wsmessage.command) && currentSocketUid.current) {
             validateForNewChat({
-                storyParentId: wsmessage?.story_id,
                 _callback: (requirements) => {
                     if (requirements.sendCommand) {
                         handleSendMessage({
@@ -69,7 +68,7 @@ const useSendMessage = () => {
         handleSendMessage({ wsmessage });
     };
 
-    const validateForNewChat = ({ storyParentId, _callback }) => {
+    const validateForNewChat = ({ _callback }) => {
         const requirements = requirementsForNewChat({ currentChat })
 
         if (requirements.confirmation) {
