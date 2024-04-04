@@ -57,9 +57,9 @@ const ReadProfiles = (props) => {
 
                 {profiles.map(profile => {
                     return (
-                    <div className="border-light border rounded-3 filter-profile">
-                        <Profile key={profile.id} profile={profile} />
-                    </div>
+                        <div key={profile.id} className="border-light border rounded-3 filter-profile">
+                            <Profile key={profile.id} profile={profile} />
+                        </div>
                     )
                 })
                 }

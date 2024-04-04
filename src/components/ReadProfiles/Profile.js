@@ -21,6 +21,9 @@ import useSendMessage from '../../hooks/websocket/sendMessage';
 // Constants
 import { websocket_commands_messages } from '../../redux/websocket/constants';
 
+// Modals
+import { ModalUpdateImage } from './ModalUpdateImage';
+
 const Profile = (props) => {
     const { profile, displayActions = true, small = false, enableModal = true } = props;
     const { t } = useTranslation();
@@ -29,6 +32,7 @@ const Profile = (props) => {
     const dispatch = useDispatch();
 
     const [openModalProfile, setOpenModalProfile] = useState(false);
+    const [openModalUpdateImageProfile, setOpenModalUpdateImageProfile] = useState(false);
     const [openModalDelete, setOpenModalDelete] = useState(false);
     const [dropdownOpen, setdropdownOpen] = useState();
     const [dropdownOpenMobile, setDropdownOpenMobile] = useState();
@@ -85,6 +89,8 @@ const Profile = (props) => {
                                         <DropdownItem divider />
                                         <DropdownItem onClick={() => goToEditProfile() }> {t('Edit Profile')} </DropdownItem>
                                         <DropdownItem divider />
+                                        <DropdownItem onClick={() => setOpenModalUpdateImageProfile(true) }> {t('Update Profile Image')} </DropdownItem>
+                                        <DropdownItem divider />
                                         <DropdownItem href="" className="text-danger" > <div onClick={() => setOpenModalDelete(true)}> {t('Delete')} </div>  </DropdownItem>
                                     </DropdownMenu>
                                 </Dropdown>
@@ -111,6 +117,8 @@ const Profile = (props) => {
                     </div>
                 </div>
             </ModalConfirmDelete>
+
+            <ModalUpdateImage isOpen={openModalUpdateImageProfile} setOpen={setOpenModalUpdateImageProfile} currentImage={profile.image} />
 
             {enableModal && <ModalProfile isOpen={openModalProfile} setOpen={setOpenModalProfile} profile={profile} />}
         </React.Fragment>
