@@ -1,7 +1,6 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
 import { APIClient } from '../../helpers/apiClient';
-import { getFirebaseBackend } from "../../helpers/firebase";
 
 
 import {
@@ -21,10 +20,6 @@ import {
     logoutUserSuccess,
     loadMonthStoriesCountSuccess
 } from './actions';
-
-
-//Initilize firebase
-const fireBaseBackend = getFirebaseBackend();
 
 
 /**

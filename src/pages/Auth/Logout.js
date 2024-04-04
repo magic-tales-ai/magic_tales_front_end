@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom';
 import withRouter from "../../components/withRouter";
 
 //redux store
-import { logoutUser } from '../../redux/actions';
+import { logoutUser, openModalSignin } from '../../redux/actions';
 import { createSelector } from 'reselect';
 
 /**
@@ -13,14 +13,13 @@ import { createSelector } from 'reselect';
  */
 const Logout = (props) => {
   const dispatch = useDispatch();
-  // const { isUserLogout } = useSelector((state) => ({
-  //     isUserLogout: state.Auth.isUserLogout,
-  //   }));
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
 
   const layoutdata = createSelector(
     (state) => state.Auth,
     (logoutauth) => ({
-      isUserLogout: logoutauth.isUserLogout,
+      isUserLogout: logoutauth.get('isUserLogout'),
     }),
   );
 
@@ -28,13 +27,18 @@ const Logout = (props) => {
   const isUserLogout = useSelector(layoutdata);
 
   useEffect(() => {
+    if(urlParams.has('requireSignIn')) {
+      dispatch(openModalSignin())
+    }
     dispatch(logoutUser(props.router.navigate));
   }, [dispatch, props.router.navigate]);
 
-  if (isUserLogout) {
-    
-    return <Navigate to="/login" />;
-  }
+  useEffect(() => {
+    if (isUserLogout) {
+      const path = urlParams.has('requireSignIn') ? '/dashboard' : '/';
+      window.location.href = path;
+    }
+  },[isUserLogout])  
 
   document.title = "Logout | Chatvia React - Responsive Bootstrap 5 Chat App"
 

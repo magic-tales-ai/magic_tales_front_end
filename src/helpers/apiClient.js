@@ -1,10 +1,9 @@
 import axios from 'axios';
-import config from "./../config";
 
 import { getLoggedInUser } from './authUtils';
 
 // default
-axios.defaults.baseURL = config.API_URL;
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 // content type
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -15,11 +14,16 @@ axios.interceptors.response.use(function (response) {
 }, function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     let message;
-    switch (error.status) {
-        case 500: message = 'Internal Server Error'; break;
-        case 401: message = 'Invalid credentials'; break;
+    switch (error.response?.status) {
+        case 500: message = 'Internal Server Error';break;
+        case 401:
+            message = 'Invalid credentials';
+            if(getLoggedInUser()?.token) {
+                window.location.href = "/logout?requireSignIn";
+            }
+            break;
         case 404: message = "Sorry! the data you are looking for could not be found"; break;
-        default: message = error.message || error;
+        default: message = error.message || error; break;
     }
     return Promise.reject(message);
 });

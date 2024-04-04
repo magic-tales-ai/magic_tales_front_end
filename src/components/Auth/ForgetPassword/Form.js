@@ -97,7 +97,7 @@ const ForgetPasswordForm = (props) => {
             </div>
 
             <div className="mt-5 text-center">
-                <p>{t('Remember It')} ? <Link to="login" onClick={(e) => { navigate(e, 'login') }} className="font-weight-medium text-primary"> {t('Signin')} </Link> </p>
+                <p>{t('Remember It')} ? <Link to="login" onClick={(e) => { navigate(e, 'login') }} className="font-weight-medium"> {t('Signin')} </Link> </p>
             </div>
         </div>
     )
@@ -105,7 +105,11 @@ const ForgetPasswordForm = (props) => {
 
 
 const mapStateToProps = (state) => {
-    const { user, loading, error, passwordResetStatus } = state.Auth;
+    const user = state.Auth.get('user');
+    const loading = state.Auth.get('loading');
+    const error = state.Auth.get('error');
+    const passwordResetStatus = state.Auth.get('passwordResetStatus');
+
     return { user, loading, error, passwordResetStatus };
 };
 

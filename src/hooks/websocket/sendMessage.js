@@ -1,36 +1,34 @@
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 
 // Actions
-import { sendMessage as sendMessageAction, websocketConnect, activeTale } from '../../redux/actions';
-import { openModal } from '../../redux/modal-confirm/actions';
+import { sendMessage as sendMessageAction, websocketConnect, setActiveChat } from '../../redux/actions';
+import { openModalConfirmChangeChat } from '../../redux/modal-confirm-change-chat/actions';
 
 // Helpers
-import { getDataRecovery, requirementsForNewChat } from '../../redux/chat/helper';
+import { removeConversationByUidLS, requirementsForNewChat } from '../../redux/chats-list/helper';
 
-
+//Selectors
+import { selectAuth } from '../../redux/auth/selectors';
+import { selectChatsList } from '../../redux/chats-list/selectors';
 
 const useSendMessage = () => {
-    const commandForNewChat = useRef(['new-tale', 'spin-off'])
     const dispatch = useDispatch();
-    const user = useSelector(state => state.Auth?.user);
-    const active_tale = useSelector(state => state.Chat?.get('active_tale'));
-    const currentTale = useSelector(state => state.Chat?.get('tales')?.get(active_tale));
+    const commandForNewChat = useRef(['new-tale', 'spin-off', 'conversation-recovery'])
     const currentSocketUid = useRef(null)
+    const { user } = useSelector(selectAuth);
+    const { activeChat, currentChat, chats } = useSelector(selectChatsList);
 
     useEffect(() => {
-        if (active_tale !== null) {
-            currentSocketUid.current = active_tale
+        if (activeChat !== null) {
+            currentSocketUid.current = activeChat
         }
-    }, [active_tale])
+    }, [activeChat])
 
-    const createWSConection = async ({ params, updateActiveTale }) => {
+    const createWSConection = async ({ params }) => {
         await new Promise((resolve) => {
             dispatch(websocketConnect(params, ({ uid }) => {
-                if (updateActiveTale) {
-                    dispatch(activeTale(uid));
-                }
-
+                dispatch(setActiveChat(uid));
                 currentSocketUid.current = uid;
                 resolve();
             }));
@@ -40,69 +38,68 @@ const useSendMessage = () => {
     const buildWsMessage = (message) => {
         let wsmessage = {
             ...message,
-            try_mode: !user?.token
+            try_mode: !user?.get('token')
         };
 
-        if (user?.token) {
-            wsmessage.token = user.token.replace('Bearer ', '');
-            wsmessage.user_id = user.id
+        if (user?.get('token')) {
+            wsmessage.token = user.get('token').replace('Bearer ', '');
+            wsmessage.user_id = user.get('id')
         }
 
         return wsmessage;
     };
 
-    const sendMessage = async (message, updateActiveTale = true) => {
+    const sendMessage = async (message) => {
         var wsmessage = buildWsMessage(message);
-        var dataRecovery = null;
-        var requirements = null;
 
-        if (commandForNewChat.current.includes(message.command)) {
-            if (!active_tale) {
-                //recovery
-                dataRecovery = getDataRecovery()
-                if (dataRecovery?.uid) {
-                    wsmessage = buildWsMessage({
-                        ...message,
-                        command: 'conversation-recovery',
-                    });
-                }
-            }
-            else {
-                //requirements before new chat
-                requirements = requirementsForNewChat({ currentTale, storyParentId: message.story_id })
-                if (requirements.confirmation) {
-                    dispatch(openModal({
-                        title: 'Are you sure?',
-                        message: 'If you start a new conversation you will lose the current one',
-                        callback: () => handleSendMessage({
-                            wsmessage, dataRecovery, requirements, updateActiveTale
+        if (commandForNewChat.current.includes(wsmessage.command) && currentSocketUid.current) {
+            validateForNewChat({
+                storyParentId: wsmessage?.story_id,
+                _callback: (requirements) => {
+                    if (requirements.sendCommand) {
+                        handleSendMessage({
+                            wsmessage
                         })
-                    }))
-                    return;
+                    }
                 }
-            }
+            })
+            return
         }
 
-        handleSendMessage({ wsmessage, dataRecovery, requirements, updateActiveTale })
+        handleSendMessage({ wsmessage });
     };
 
-    const handleSendMessage = async ({ wsmessage, dataRecovery, requirements, updateActiveTale }) => {
-        if (!requirements || requirements.sendCommand) {
-            if (!currentSocketUid.current || commandForNewChat.current.includes(wsmessage.command)) {
-                let params = {};
+    const validateForNewChat = ({ storyParentId, _callback }) => {
+        const requirements = requirementsForNewChat({ currentChat })
 
-                if (dataRecovery?.uid) {
-                    params.uid = dataRecovery.uid
-                }
-
-                await createWSConection({ params, updateActiveTale });
-            }
-
-            dispatch(sendMessageAction({ uid: currentSocketUid.current, message: wsmessage }));
+        if (requirements.confirmation) {
+            dispatch(openModalConfirmChangeChat({
+                callback: () => _callback(requirements)
+            }))
+            return;
         }
+
+        _callback(requirements);
     }
 
-    return { sendMessage };
+    const handleSendMessage = async ({ wsmessage }) => {
+        const needNewSocket = !currentSocketUid.current || commandForNewChat.current.includes(wsmessage.command);
+
+        if (needNewSocket) {
+            const validUidForNewSocket = wsmessage.uid && !chats.get(wsmessage.uid);
+            let params = {};
+
+            if (validUidForNewSocket) {
+                params.uid = wsmessage.uid
+            }
+
+            await createWSConection({ params });
+        }
+
+        dispatch(sendMessageAction({ uid: currentSocketUid.current, message: wsmessage }));
+    }
+
+    return { sendMessage, createWSConection, validateForNewChat };
 };
 
 export default useSendMessage;

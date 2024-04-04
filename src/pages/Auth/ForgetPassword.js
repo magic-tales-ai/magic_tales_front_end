@@ -127,7 +127,11 @@ const ForgetPassword = (props) => {
 
 
 const mapStateToProps = (state) => {
-    const { user, loading, error, passwordResetStatus } = state.Auth;
+    const user = state.Auth.get('user');
+    const loading = state.Auth.get('loading');
+    const error = state.Auth.get('error');
+    const passwordResetStatus = state.Auth.get('passwordResetStatus');
+
     return { user, loading, error, passwordResetStatus };
 };
 
