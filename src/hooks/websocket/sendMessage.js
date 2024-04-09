@@ -8,15 +8,23 @@ import { openModalConfirmChangeChat } from '../../redux/modal-confirm-change-cha
 // Helpers
 import { requirementsForNewChat } from '../../redux/chats-list/helper';
 
-//Selectors
+// Selectors
 import { selectAuth } from '../../redux/auth/selectors';
 import { selectChatsList } from '../../redux/chats-list/selectors';
 
+// Constants
+import { websocket_commands_messages } from '../../redux/websocket/constants';
+
 const useSendMessage = () => {
     const dispatch = useDispatch();
-    const commandForNewChat = useRef(['new_tale', 'spin_off', 'conversation_recovery'])
+    const commandForNewChat = useRef([
+        websocket_commands_messages.NEW_TALE, 
+        websocket_commands_messages.SPIN_OFF, 
+        websocket_commands_messages.CONVERSATION_RECOVERY
+    ])
     const currentSocketUid = useRef(null)
     const { user } = useSelector(selectAuth);
+    const websocket = useSelector(state => state.Websocket);
     const { activeChat, currentChat, chats } = useSelector(selectChatsList);
 
     useEffect(() => {
@@ -83,8 +91,14 @@ const useSendMessage = () => {
 
     const handleSendMessage = async ({ wsmessage }) => {
         const needNewSocket = !currentSocketUid.current || commandForNewChat.current.includes(wsmessage.command);
+        const currentSocket = (currentSocketUid.current && websocket) ? websocket.get(currentSocketUid.current) : null
+        const needReconnect = currentSocket && currentSocket.CLOSED === currentSocket.readyState;
 
-        if (needNewSocket) {
+        if(needReconnect) {
+            let params = { uid: currentSocketUid.current };
+            await createWSConection({ params });
+        }
+        else if (needNewSocket) {
             const validUidForNewSocket = wsmessage.uid && !chats.get(wsmessage.uid);
             let params = {};
 
