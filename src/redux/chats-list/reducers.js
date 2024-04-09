@@ -92,10 +92,10 @@ const ChatsList = (state = INIT_STATE, action) => {
                             const newMessage = createNewMessage({
                                 ...message,
                                 type: "receiver",
-                                progressUntilThisMessage: chat.get('progress')
+                                progressUntilThisMessage: chat?.get('progress')
                             });
 
-                            return chat.set('messages', chat.get('messages').push(newMessage));
+                            return chat?.set('messages', chat?.get('messages').push(newMessage));
                         });
                     });
 
