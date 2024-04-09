@@ -92,10 +92,10 @@ const ChatsList = (state = INIT_STATE, action) => {
                             const newMessage = createNewMessage({
                                 ...message,
                                 type: "receiver",
-                                progressUntilThisMessage: chat.get('progress')
+                                progressUntilThisMessage: chat?.get('progress')
                             });
 
-                            return chat.set('messages', chat.get('messages').push(newMessage));
+                            return chat?.set('messages', chat?.get('messages').push(newMessage));
                         });
                     });
 
@@ -145,6 +145,20 @@ const ChatsList = (state = INIT_STATE, action) => {
 
                             return chat.set('messages', chat.get('messages').push(newMessage));
                         })
+                    })
+
+                case websocket_commands_messages.ASK_FOR_REGISTRATION:
+                    return state.withMutations(currentState => {
+                        currentState.updateIn(['chats', message.uid], chat => {
+                            newMessage = createNewMessage({
+                                ...message,
+                                type: "receiver",
+                                progressUntilThisMessage: chat.get('progress')
+                            });
+
+                            return chat.set('messages', chat.get('messages').push(newMessage))
+                                .set('loginRequired', true);
+                        });
                     })
 
                 case websocket_commands_messages.CONVERSATION_RECOVERY:

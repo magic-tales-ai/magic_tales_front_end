@@ -52,14 +52,14 @@ function Chat({ activeChat, currentChat, sockets, user }) {
     useEffect(() => {
         if (!activeChat) {
             const dataConversationLS = getConversationLS();
-            if(dataConversationLS?.uid) {
-                sendMessage({ 
-                    command: websocket_commands_messages.CONVERSATION_RECOVERY, 
-                    uid: dataConversationLS.uid 
+            if (dataConversationLS?.uid) {
+                sendMessage({
+                    command: websocket_commands_messages.CONVERSATION_RECOVERY,
+                    uid: dataConversationLS.uid
                 })
             }
             else {
-                sendMessage({ 
+                sendMessage({
                     command: websocket_commands_messages.NEW_TALE
                 })
             }
@@ -69,9 +69,9 @@ function Chat({ activeChat, currentChat, sockets, user }) {
     useEffect(() => {
         const dataConversationLS = getConversationLS();
         if (currentChat && user?.get('id') && !dataConversationLS?.userId && currentChat.get('uid') === dataConversationLS?.uid) {
-            sendMessage({ 
-                command: websocket_commands_messages.LINK_USER_WITH_CONVERSATIONS, 
-                session_ids: [dataConversationLS?.uid] 
+            sendMessage({
+                command: websocket_commands_messages.LINK_USER_WITH_CONVERSATIONS,
+                session_ids: [dataConversationLS?.uid]
             })
             moveGuestToUserConversation()
         }
@@ -261,32 +261,32 @@ function Chat({ activeChat, currentChat, sockets, user }) {
                         </div>
                     </div>
 
-                    {currentChat?.isFinished ?
-                        user?.get('id') ?
-                            <div className="d-lg-flex justify-content-center p-lg-4 p-3 mt-auto">
-                                <Button color="primary" className="d-flex mx-lg-1 w-100 w-lg-auto mb-2 mb-lg-0" onClick={() => { sendMessage({ command: websocket_commands_messages.SPIN_OFF, story_id: currentChat.get('storyId') }) }}>
-                                    <span className="custom-icon me-3"><img src={iconFile} alt="icon file" /></span>
-                                    <span className="flex-fill pe-4 pe-lg-0">{t('Create spin - off')}</span>
-                                </Button>
-                                <Button color="primary" className="d-flex mx-lg-1 w-100 w-lg-auto mb-2 mb-lg-0" onClick={() => { sendMessage({ command: websocket_commands_messages.NEW_TALE }) }}>
-                                    <span className="custom-icon me-3"><img src={iconFile} alt="icon file" /></span>
-                                    <span className="flex-fill pe-4 pe-lg-0">{t('New Tale')}</span>
-                                </Button>
-                                <Link to="/subscription/plans" className="btn btn-primary mx-lg-1 w-100 w-lg-auto">
-                                    <span className="flex-fill pe-4 pe-lg-0">{t('Upgrade Suscription')}</span>
-                                </Link>
-                            </div>
-                            :
-                            <div className="d-lg-flex justify-content-center p-lg-4 p-3 mt-auto">
-                                <Button color="primary" className="d-flex mx-lg-1 w-100 w-lg-auto mb-2 mb-lg-0" onClick={() => { dispatch(openModalSignin()) }}>
-                                    <span className="flex-fill pe-sm-0 pe-md-4 pe-lg-0">{t('Login')}</span>
-                                </Button>
-                                <Button color="primary" className="d-flex mx-lg-1 w-100 w-lg-auto mb-2 mb-lg-0" onClick={() => { dispatch(openModalSignin({ view: 'register' })) }}>
-                                    <span className="flex-fill pe-sm-0 pe-md-4 pe-lg-0 ">{t('Sign up')}</span>
-                                </Button>
-                            </div>
-                        : currentChat ? <ChatInput onaddMessage={addMessage} /> : null
-                    }
+                    {currentChat?.loginRequired && !user?.get('id') ? (
+                        <div className="d-lg-flex justify-content-center p-lg-4 p-3 mt-auto">
+                            <Button color="primary" className="d-flex mx-lg-1 w-100 w-lg-auto mb-2 mb-lg-0" onClick={() => { dispatch(openModalSignin()) }}>
+                                <span className="flex-fill pe-sm-0 pe-md-4 pe-lg-0">{t('Login')}</span>
+                            </Button>
+                            <Button color="primary" className="d-flex mx-lg-1 w-100 w-lg-auto mb-2 mb-lg-0" onClick={() => { dispatch(openModalSignin({ view: 'register' })) }}>
+                                <span className="flex-fill pe-sm-0 pe-md-4 pe-lg-0 ">{t('Sign up')}</span>
+                            </Button>
+                        </div>
+                    ) : currentChat?.isFinished ? (
+                        <div className="d-lg-flex justify-content-center p-lg-4 p-3 mt-auto">
+                            <Button color="primary" className="d-flex mx-lg-1 w-100 w-lg-auto mb-2 mb-lg-0" onClick={() => { sendMessage({ command: websocket_commands_messages.SPIN_OFF, story_id: currentChat.get('storyId') }) }}>
+                                <span className="custom-icon me-3"><img src={iconFile} alt="icon file" /></span>
+                                <span className="flex-fill pe-4 pe-lg-0">{t('Create spin - off')}</span>
+                            </Button>
+                            <Button color="primary" className="d-flex mx-lg-1 w-100 w-lg-auto mb-2 mb-lg-0" onClick={() => { sendMessage({ command: websocket_commands_messages.NEW_TALE }) }}>
+                                <span className="custom-icon me-3"><img src={iconFile} alt="icon file" /></span>
+                                <span className="flex-fill pe-4 pe-lg-0">{t('New Tale')}</span>
+                            </Button>
+                            <Link to="/subscription/plans" className="btn btn-primary mx-lg-1 w-100 w-lg-auto">
+                                <span className="flex-fill pe-4 pe-lg-0">{t('Upgrade Subscription')}</span>
+                            </Link>
+                        </div>
+                    ) : currentChat ? (
+                        <ChatInput onaddMessage={addMessage} />
+                    ) : null}
 
                 </div>
             </div>
