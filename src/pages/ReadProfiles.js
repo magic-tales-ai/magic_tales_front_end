@@ -9,7 +9,7 @@ import Profile from '../components/ReadProfiles/Profile';
 // i18n
 import { useTranslation } from 'react-i18next';
 
-// Profiles
+// Selectors
 import { selectProfiles } from '../redux/profiles-list/selectors';
 import { selectStories } from '../redux/stories-list/selectors';
 

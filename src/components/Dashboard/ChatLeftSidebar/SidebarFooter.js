@@ -1,11 +1,7 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { Nav, Dropdown, DropdownItem, DropdownToggle, DropdownMenu, Button } from "reactstrap";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
-
-// Components
-import { ModalSignIn } from "../../../components/Auth/Modal";
+import { useDispatch, connect } from 'react-redux';
 
 // Constants
 import { FULL_PLAN_CODE, FREE_PLAN_CODE } from "../../../constants";
@@ -19,21 +15,26 @@ import { useTranslation } from 'react-i18next';
 // Actions
 import { openModalSignin } from "../../../redux/actions";
 
-export const SidebarFooter = () => {
+// Selectors
+import { selectAuth } from "../../../redux/auth/selectors";
+import { selectProfiles } from "../../../redux/profiles-list/selectors";
+
+const SidebarFooterComponent = ({ user, anyProfile }) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
-
-    const selectAuthUser = createSelector(
-        (state) => state.Auth,
-        (auth) => ({
-            user: auth?.get('user') || null,
-        })
-    );
-
-    const { user } = useSelector(selectAuthUser);
     const [dropdownOpen, setdropdownOpen] = useState(false)
+    const [disableOptionsProfile, setDisableOptionsProfile] = useState(false);
 
     const toggle = () => setdropdownOpen(!dropdownOpen);
+
+    useEffect(() => {
+        if(user?.get('id') && !anyProfile) {
+            setDisableOptionsProfile(true);
+            return;
+        }
+
+        setDisableOptionsProfile(false);
+    }, [user, anyProfile]);
 
     const userMenu = user && <>
         <Dropdown isOpen={dropdownOpen} toggle={toggle} className="user-dropdown" >
@@ -53,8 +54,10 @@ export const SidebarFooter = () => {
             </div>
         </DropdownToggle>
         <DropdownMenu className="dropdown-menu-end">
-            <DropdownItem href="/"> {t('Manage Profiles')} </DropdownItem>
-            <DropdownItem divider />
+            {!disableOptionsProfile && <>
+                <DropdownItem href="/profiles"> {t('Manage Profiles')} </DropdownItem>
+                <DropdownItem divider />
+            </>}
             <DropdownItem href="/"> {t('Settings')} </DropdownItem>
             <DropdownItem divider />
             <DropdownItem href="/logout"> {t('Log out')} </DropdownItem>
@@ -110,3 +113,14 @@ export const SidebarFooter = () => {
         </React.Fragment>
     )
 }
+
+
+const mapStateToProps = (state) => {
+    const { user } = selectAuth(state);
+    const profiles = selectProfiles(state);
+    const anyProfile = profiles.list.size > 0;
+
+    return { user, anyProfile };
+};
+
+export const SidebarFooter = connect(mapStateToProps, { openModalSignin })(SidebarFooterComponent);
