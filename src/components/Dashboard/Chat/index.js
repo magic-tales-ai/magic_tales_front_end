@@ -49,6 +49,11 @@ function Chat({ activeChat, currentChat, sockets, user }) {
     const dispatch = useDispatch();
     const simpleBarRef = useRef();
 
+    const messages = currentChat?.get('messages');
+    const statusMessages = messages?.filter(message => message.type === "status");
+    const lastStatusMessage = statusMessages?.last();
+    const lastStatusMessageIndex = messages?.indexOf(lastStatusMessage)
+
     useEffect(() => {
         if (!activeChat) {
             const dataConversationLS = getConversationLS();
@@ -144,7 +149,6 @@ function Chat({ activeChat, currentChat, sockets, user }) {
         }
     }
 
-
     return (
         <React.Fragment>
             <div className="user-chat w-100 vh-100 overflow-hidden user-chat-show">
@@ -198,11 +202,13 @@ function Chat({ activeChat, currentChat, sockets, user }) {
                                                             <div className="ctext-wrap-content">
                                                                 <p className="mb-0">
                                                                     {chat.message}
-                                                                    <span className="animate-typing">
-                                                                        <span className="dot ms-1"></span>
-                                                                        <span className="dot ms-1"></span>
-                                                                        <span className="dot ms-1"></span>
-                                                                    </span>
+                                                                    {key === lastStatusMessageIndex &&
+                                                                        <span className="animate-typing">
+                                                                            <span className="dot ms-1"></span>
+                                                                            <span className="dot ms-1"></span>
+                                                                            <span className="dot ms-1"></span>
+                                                                        </span>
+                                                                    }
                                                                 </p>
                                                             </div>
                                                         </div>
