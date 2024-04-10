@@ -2,7 +2,6 @@ import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
 import { APIClient } from '../../helpers/apiClient';
 
-
 import {
     LOGIN_USER,
     LOGOUT_USER,
@@ -10,7 +9,7 @@ import {
     FORGET_PASSWORD,
 } from './constants';
 
-import { WEBSOCKET_MESSAGE } from '../websocket/constants';
+import { WEBSOCKET_MESSAGE, websocket_commands_messages } from '../websocket/constants';
 
 import {
     loginUserSuccess,
@@ -86,7 +85,7 @@ function* forgetPassword({ payload: { email } }) {
  */
 function* loadMonthStoriesCount({ payload }) {
     try {
-        if(payload.message.command == 'new_tale') {
+        if(payload.message.command == websocket_commands_messages.DONE) {
             if(localStorage.getItem("authUser")) {
                 const response = yield call(get, 'user/month-stories-count');
                 yield put(loadMonthStoriesCountSuccess(response));
