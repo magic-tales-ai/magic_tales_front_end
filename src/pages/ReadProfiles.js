@@ -32,12 +32,6 @@ const ReadProfiles = (props) => {
         },
     ]
 
-    const cardNewProfile = <div className="border-light border rounded-3 filter-profile">
-            <div className="justify-content-center align-items-center d-flex h-100 my-2">
-                <Button color="primary" className="py-2 px-3"><i className="font-size-24 fw-normal text-white ri-add-line"></i></Button>
-            </div>
-        </div>
-
     return (
         <React.Fragment>
         <div className="w-100 overflow-hidden">
@@ -53,19 +47,14 @@ const ReadProfiles = (props) => {
             </div>
 
             <div className="p-3 p-lg-4 flex-wrap d-flex flex-column flex-lg-row-reverse justify-content-center reader-list-profile gap-3">
-                {cardNewProfile}
-
                 {profiles.map(profile => {
                     return (
-                    <div className="border-light border rounded-3 filter-profile">
-                        <Profile key={profile.id} profile={profile} />
-                    </div>
+                        <div className="border-light border rounded-3 filter-profile">
+                            <Profile key={profile.id} profile={profile} />
+                        </div>
                     )
-                })
-                }
-
+                })}
             </div>
-
 
         </div>
         </React.Fragment>
