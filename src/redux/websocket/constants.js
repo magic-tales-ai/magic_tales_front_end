@@ -13,5 +13,6 @@ export const websocket_commands_messages = {
     DONE: 'done',
     STATUS_UPDATE: 'status_update',
     CONVERSATION_RECOVERY: 'conversation_recovery',
-    LINK_USER_WITH_CONVERSATIONS: 'link-user-with-conversations'
+    LINK_USER_WITH_CONVERSATIONS: 'link_user_with_conversations',
+    ASK_FOR_REGISTRATION: 'ask_for_registration'
 }
