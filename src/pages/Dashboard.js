@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { connect, useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 
 // Components
 import ChatLeftSidebar from "../components/Dashboard/ChatLeftSidebar";

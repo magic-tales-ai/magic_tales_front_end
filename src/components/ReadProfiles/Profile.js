@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Nav, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from "reactstrap";
 import { connect, useDispatch } from "react-redux";
 import { useNavigate } from 'react-router-dom';
@@ -13,7 +13,7 @@ import { setActiveChat, setActiveTab } from '../../redux/actions';
 import { useTranslation } from 'react-i18next';
 
 // Image default
-import avatar1 from "../../assets/images/users/avatar-1.jpg";
+import { ReactComponent as ProfileImageDefault } from "../../assets/images/profiles/profile-svgrepo-com.svg";
 
 // Hooks
 import useSendMessage from '../../hooks/websocket/sendMessage';
@@ -35,14 +35,9 @@ const Profile = (props) => {
     const [openModalUpdateImageProfile, setOpenModalUpdateImageProfile] = useState(false);
     const [openModalDelete, setOpenModalDelete] = useState(false);
     const [dropdownOpen, setdropdownOpen] = useState();
-    const [dropdownOpenMobile, setDropdownOpenMobile] = useState();
 
     const toggle = () => {
         setdropdownOpen(!dropdownOpen)
-    }
-
-    const toggleMobile = () => {
-        setDropdownOpenMobile(!dropdownOpenMobile)
     }
 
     const goToNewTale = () => {
@@ -57,16 +52,18 @@ const Profile = (props) => {
     }
 
     const avatar = <picture>
-        <source srcSet={profile.image} className={`rounded avatar-${small ? 'xs' : 'md'}`} />
-        <img src={avatar1} className={`rounded avatar-${small ? 'xs' : 'md'}`} alt="avatar" />
+        {profile.get('image') 
+            ? <img src={'data:image/*;base64,' + profile.get('image')} className={`rounded avatar-${small ? 'xs' : 'md'}`} alt="avatar" />
+            : <ProfileImageDefault className={`rounded avatar-${small ? 'xs' : 'md'}`} alt="avatar" />
+        }
     </picture>
 
     const profileInfo = <div className="profile-info">
-        <h6 className="mb-0 profile-name"> {profile.name} </h6>
-        <p className="profile-year mb-2 font-size-12"> {profile.years + ' ' + t('years')} </p>
+        <h6 className="mb-0 profile-name"> {profile.get('details').get('name') + ' ' + profile.get('details').get('lastName')} </h6>
+        <p className="profile-year mb-2 font-size-12"> {profile.get('details').get('age') + ' ' + t('years')} </p>
 
         {!small && <p className="font-size-12">
-            {profile.description}
+            {profile.get('details').get('description')}
         </p>}
     </div>
 
@@ -118,7 +115,7 @@ const Profile = (props) => {
                 </div>
             </ModalConfirmDelete>
 
-            <ModalUpdateImage isOpen={openModalUpdateImageProfile} setOpen={setOpenModalUpdateImageProfile} currentImage={profile.image} />
+            <ModalUpdateImage isOpen={openModalUpdateImageProfile} setOpen={setOpenModalUpdateImageProfile} profile={profile} />
 
             {enableModal && <ModalProfile isOpen={openModalProfile} setOpen={setOpenModalProfile} profile={profile} />}
         </React.Fragment>

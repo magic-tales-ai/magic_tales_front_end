@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { FormGroup, Form, InputGroup, Input, FormFeedback, Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { useFormik } from 'formik';
@@ -8,17 +8,19 @@ import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
 // Actions
-import { setActiveChat, setActiveTab } from "../../redux/actions";
+import { uploadProfileImage } from "../../redux/actions";
 
 // Image default
-import avatar1 from "../../assets/images/users/avatar-1.jpg";
+import { ReactComponent as ProfileImageDefault } from "../../assets/images/profiles/profile-svgrepo-com.svg";
 
 // Constants
 import { MAX_IMAGE_SIZE } from "../../constants";
 
 export const ModalUpdateImage = (props) => {
-    const { isOpen, setOpen, currentImage } = props;
+    const { isOpen, setOpen, profile } = props;
     const [imageFile, setImageFile] = useState(null)
+    const [uploading, setUploading] = useState(false)
+    const currentImage = profile.get('image')
     const dispatch = useDispatch();
     const { t } = useTranslation();
 
@@ -32,6 +34,13 @@ export const ModalUpdateImage = (props) => {
         }
     }, [isOpen])
 
+    useEffect(() => {
+        if(uploading && !profile.get('loading')) {
+            setUploading(false);
+            toggle();
+        }
+    }, [uploading, profile.get('loading')])
+
     // validation
     const formik = useFormik({
         initialValues: {
@@ -43,7 +52,7 @@ export const ModalUpdateImage = (props) => {
                 .test('fileSize', `Uploaded file is too big (max: ${MAX_IMAGE_SIZE}kb).`, (value) => {
                     return(
                         value
-                            ? (value.size <= MAX_IMAGE_SIZE ? true : false)
+                            ? (value.size <= MAX_IMAGE_SIZE * 1024 ? true : false)
                             : true
                         )
                 })
@@ -57,7 +66,8 @@ export const ModalUpdateImage = (props) => {
             )
         }),
         onSubmit: values => {
-            //TODO save...
+            setUploading(true)
+            dispatch(uploadProfileImage({ profileId: profile.get('id'), image: values.image }))
         },
     });
 
@@ -65,6 +75,10 @@ export const ModalUpdateImage = (props) => {
         setImageFile(e.target.files[0])
         formik.setFieldValue('image', e.target.files[0])
     }
+
+    const currentImageUrl = (imageFile && !formik?.errors.image) 
+        ? URL.createObjectURL(imageFile) 
+        : 'data:image/*;base64,' + currentImage;
 
     return (
         <Modal isOpen={isOpen} centered toggle={toggle}>
@@ -76,8 +90,8 @@ export const ModalUpdateImage = (props) => {
                 <div className="d-flex justify-content-center text-center">
                     <Form onSubmit={formik.handleSubmit}>
                         <picture>
-                            <source srcSet={(imageFile && !formik.errors.image) ? URL.createObjectURL(imageFile) : currentImage} className={`rounded avatar-lg`} />
-                            <img src={avatar1} className={`rounded avatar-lg`} alt="avatar" />
+                            {currentImageUrl && <img src={currentImageUrl} className={`rounded avatar-lg`} />}
+                            {!currentImageUrl && <ProfileImageDefault className={`rounded avatar-lg`} alt="avatar" />}
                         </picture>
 
                         <FormGroup className="mb-0">

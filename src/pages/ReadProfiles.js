@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Row, Col } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
+import { connect, useDispatch } from "react-redux";
 
 // Components
 import Profile from '../components/ReadProfiles/Profile';
@@ -8,29 +9,21 @@ import Profile from '../components/ReadProfiles/Profile';
 // i18n
 import { useTranslation } from 'react-i18next';
 
-// Images
-import avatar2 from "../assets/images/users/avatar-2.jpg";
+// Profiles
+import { selectProfiles } from '../redux/profiles-list/selectors';
+import { selectStories } from '../redux/stories-list/selectors';
 
-const ReadProfiles = (props) => {
+// Actions
+import { loadProfilesList } from '../redux/actions';
+
+const ReadProfiles = ({ profiles, stories }) => {
+    const dispatch = useDispatch();
     const navigate = useNavigate()
     const { t } = useTranslation()
 
-    const profiles = [
-        {
-            id: 0,
-            name: 'Carlos',
-            image: '',
-            years: 8,
-            description: "Smiles a lot, like magic, is strong"
-        },
-        {
-            id: 1,
-            name: 'Juan',
-            image: avatar2,
-            years: 6,
-            description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima sed neque commodi voluptas ad obcaecati?"
-        },
-    ]
+    useEffect(() => {
+        dispatch(loadProfilesList());
+    }, [, stories])
 
     const cardNewProfile = <div className="border-light border rounded-3 filter-profile">
             <div className="justify-content-center align-items-center d-flex h-100 my-2">
@@ -40,7 +33,7 @@ const ReadProfiles = (props) => {
 
     return (
         <React.Fragment>
-        <div className="w-100 overflow-hidden">
+        <div className="w-100">
             <div className="p-3 p-lg-4">
                 <Row>
                     <Col lg="12" className="d-flex align-items-center mb-0">
@@ -54,8 +47,8 @@ const ReadProfiles = (props) => {
 
             <div className="p-3 p-lg-4 flex-wrap d-flex flex-column flex-lg-row-reverse justify-content-center reader-list-profile gap-3">
                 {cardNewProfile}
-
-                {profiles.map(profile => {
+        
+                {profiles?.list.map(profile => {
                     return (
                         <div key={profile.id} className="border-light border rounded-3 filter-profile">
                             <Profile key={profile.id} profile={profile} />
@@ -72,4 +65,11 @@ const ReadProfiles = (props) => {
     );
 }
 
-export default ReadProfiles;
+const mapStateToProps = (state) => {
+    const profiles = selectProfiles(state);
+    const stories = selectStories(state);
+
+    return { profiles, stories };
+};
+
+export default connect(mapStateToProps)(ReadProfiles);

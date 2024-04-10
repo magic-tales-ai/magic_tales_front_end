@@ -497,6 +497,10 @@ input[name='password'] { border-right: 0 }
 }
 .cursor-pointer { cursor:pointer; }
 
+.default-fill-profile {
+	fill: #6c757d;
+}
+
 @keyframes fadeIn {
 	0%   { opacity: 0;}
 	100% { opacity: 1;}
