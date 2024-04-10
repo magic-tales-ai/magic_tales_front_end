@@ -4,6 +4,7 @@ import StoriesList from './stories-list/saga';
 import WebsocketSaga from './websocket/saga';
 import LayoutSaga from './layout/saga';
 import PlansListSaga from './plans-list/saga';
+import ProfilesListSaga from './profiles-list/saga';
 
 export default function* rootSaga(getState) {
     yield all([
@@ -12,5 +13,6 @@ export default function* rootSaga(getState) {
         WebsocketSaga(),
         LayoutSaga(),
         PlansListSaga(),
+        ProfilesListSaga(),
     ]);
 }

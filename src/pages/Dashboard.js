@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { connect, useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 
 // Components
 import ChatLeftSidebar from "../components/Dashboard/ChatLeftSidebar";
@@ -9,7 +9,7 @@ import Chat from "../components/Dashboard/Chat/index";
 import { ModalConfirmChangeChat } from '../components/Dashboard/ModalConfirmChangeChat';
 
 // Actions
-import { loadStoriesList } from '../redux/actions';
+import { loadStoriesList, loadProfilesList } from '../redux/actions';
 
 // Selectors
 import { selectStories } from '../redux/stories-list/selectors';
@@ -21,6 +21,7 @@ const Dashboard = ({ stories, currentChatDone, user }) => {
 
     useEffect(() => {
         if(user?.get('id')) {
+            dispatch(loadProfilesList());
             dispatch(loadStoriesList());
         }
     }, [user, currentChatDone])

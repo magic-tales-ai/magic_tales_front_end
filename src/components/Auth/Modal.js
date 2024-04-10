@@ -42,11 +42,7 @@ export const ModalSignIn = () => {
         <Modal isOpen={isOpen} centered toggle={toggle}>
             <ModalHeader className="border-0 pb-0" toggle={toggle}></ModalHeader>
             <ModalBody className="pt-0" >
-                { content.get(view) ??
-                <>
-                    TODO aquí iria el caso de descargar con los botones para navegar al login y register
-                </>
-                }
+                { content.get(view) }
             </ModalBody>
         </Modal>
     )

@@ -29,11 +29,12 @@ import { ModalConfirmDelete } from '../../Common/Modals/ModalConfirmDelete';
 // Selectors
 import { selectAuth } from '../../../redux/auth/selectors';
 import { selectChatsList } from '../../../redux/chats-list/selectors';
+import { selectProfiles } from '../../../redux/profiles-list/selectors';
 
 // Constants
 import { websocket_commands_messages } from '../../../redux/websocket/constants';
 
-const Stories = ({ stories, activeChat, chats, currentChat, user } = {}) => {
+const Stories = ({ stories, activeChat, chats, currentChat, user, anyProfile } = {}) => {
     const { sendMessage, validateForNewChat } = useSendMessage();
     const dispatch = useDispatch();
     const { t } = useTranslation();
@@ -42,6 +43,7 @@ const Stories = ({ stories, activeChat, chats, currentChat, user } = {}) => {
     const [dropdownOpen, setdropdownOpen] = useState();
     const [openModalDelete, setOpenModalDelete] = useState(false);
     const [currentStoryId, setCurrentStoryId] = useState();
+    const [disableBtns, setDisableBtns] = useState(false);
 
     const toggle = (e, id = false) => {
         e.preventDefault();
@@ -64,6 +66,14 @@ const Stories = ({ stories, activeChat, chats, currentChat, user } = {}) => {
     useEffect(() => {
         ref.current.recalculate();
     }, [activeChat, stories]);
+
+    useEffect(() => {
+        if(user?.get('id') && !anyProfile) {
+            setDisableBtns(true);
+            return;
+        }
+        setDisableBtns(false);
+    }, [user, anyProfile]);
 
     const openStoryChat = (e, story) => {
         e.preventDefault();
@@ -99,7 +109,7 @@ const Stories = ({ stories, activeChat, chats, currentChat, user } = {}) => {
                     {t('New Tale')}
                 </Button>
 
-                <Link to='/profiles' onClick={(e) => { !user?.get('id') && dispatch(openModalSignin()) && e.preventDefault() }} size="xs" className="btn btn-outline-primary mx-2" >
+                <Link to='/profiles' onClick={(e) => { !user?.get('id') && dispatch(openModalSignin()) && e.preventDefault() }} size="xs" className={`btn btn-outline-primary mx-2 ${disableBtns && 'disabled'}`} >
                     <span className="custom-icon"><img src={iconGroup} alt="icon group" /></span>
                 </Link>
 
@@ -192,7 +202,10 @@ const Stories = ({ stories, activeChat, chats, currentChat, user } = {}) => {
 const mapStateToProps = (state) => {
     const { user } = selectAuth(state);
     const { activeChat, chats, currentChat } = selectChatsList(state);
-    return { activeChat, chats, currentChat,  user };
+    const profiles = selectProfiles(state);
+    const anyProfile = profiles.list.size > 0;
+
+    return { activeChat, chats, currentChat, user, anyProfile };
 };
 
 export default connect(mapStateToProps, { setActiveChat })(Stories);
