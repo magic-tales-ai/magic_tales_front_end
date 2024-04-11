@@ -3,11 +3,13 @@ import { Card, CardBody, Nav, Dropdown, DropdownItem, DropdownToggle, DropdownMe
 import { connect, useDispatch } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 
+// Components/Modals
+import withRouter from '../withRouter';
 import { ModalConfirmDelete } from '../Common/Modals/ModalConfirmDelete';
-import { ModalTale } from './ModalTale';
+import { ModalStory } from './ModalStory';
 
 // Actions
-import { setActiveChat } from '../../redux/actions';
+import { setActiveChat, deleteStory as deleteStoryAction } from '../../redux/actions';
 
 // i18n
 import { useTranslation } from 'react-i18next';
@@ -17,13 +19,18 @@ import avatar1 from "../../assets/images/users/avatar-tales-big.png";
 import avatar from "../../assets/images/users/avatar-tales-big.png";
 import avatarDefault from "../../assets/images/users/user-avatar.png";
 
-const CardTale = (props) => {
-    const { id, name, image, description, profile } = props
+// Constants
+import { websocket_commands_messages } from '../../redux/websocket/constants';
+
+// Hooks
+import useSendMessage from '../../hooks/websocket/sendMessage';
+
+const CardStory = ({ story, router: { navigate } }) => {
     const { t } = useTranslation();
-    const navigate = useNavigate();
+    const { sendMessage } = useSendMessage();
     const dispatch = useDispatch();
 
-    const [openModalTale, setOpenModalTale] = useState(false);
+    const [openModalStory, setOpenModalStory] = useState(false);
     const [openModalDelete, setOpenModalDelete] = useState(false);
     const [dropdownOpen, setdropdownOpen] = useState();
     const [dropdownOpenMobile, setDropdownOpenMobile] = useState();
@@ -32,36 +39,43 @@ const CardTale = (props) => {
         setdropdownOpen(!dropdownOpen)
     }
 
-    const goToNewTale = () => {
-        dispatch(setActiveChat('new'))
-        navigate('/dashboard')
+    const newSpinOff = () => {
+        sendMessage({
+            command: websocket_commands_messages.SPIN_OFF,
+            story_id: story.get('id')
+        })
+        navigate('/dashboard');
+    }
+
+    const deleteStory = () => {
+        dispatch(deleteStoryAction(story.get('id')));
     }
 
     const profileInfo = <div className="d-flex">
         <div className="chat-user-emoji bg-primary rounded p-1 text-dark me-2 d-flex align-items-center justify-content-center">
-            <picture>
-                <source srcSet={avatarDefault} className="rounded avatar-xs" />
-                <img src={avatarDefault} className="rounded avatar-xs" alt="avatar" />
-            </picture>
+            {story.get('profile').get('image')
+                ? <img src={'data:image/*;base64,' + story.get('profile').get('image')} className="rounded avatar-xs" />
+                : <img src={avatarDefault} className="rounded avatar-xs" alt="avatar" />
+            }
         </div>
         <div>
-            <p className="mb-0 fw-bold font-size-12">{profile.name}</p>
-            <p className="mb-0 font-size-12 opacity-75">{profile.years + ' ' + t('years')}</p>
+            <p className="mb-0 fw-bold font-size-12">{story.get('profile').get('details').get('name')}</p>
+            <p className="mb-0 font-size-12 opacity-75">{story.get('profile').get('details').get('age') + ' ' + t('years')}</p>
         </div>
     </div>
 
     return (
         <React.Fragment>
-            <Card color="secondary" className="card-library cursor-pointer" onClick={() => setOpenModalTale(true) } >
+            <Card color="secondary" className="card-library cursor-pointer" onClick={() => setOpenModalStory(true)} >
                 <CardBody>
                     <div className="d-flex">
                         <picture>
                             <source srcSet={avatar1} className="rounded avatar-md" />
-                            <img src={avatar1} className="rounded avatar-md me-2 h-auto" alt={name}  />
+                            <img src={avatar1} className="rounded avatar-md me-2 h-auto" alt={story.get('title')} />
                         </picture>
                         <div>
                             <div className="d-flex justify-content-between align-items-center">
-                                <h2 className="font-size-14 mb-0 opacity-75">{name}</h2>
+                                <h2 className="font-size-14 mb-0 opacity-75">{story.get('title')}</h2>
                                 <div className="d-inline-block" onClick={(e) => { e.stopPropagation(); }}>
                                     <div className="flex-lg-column">
                                         <Nav className="side-menu-nav d-block">
@@ -70,7 +84,7 @@ const CardTale = (props) => {
                                                     <i className="ri-more-2-fill font-size-24"></i>
                                                 </DropdownToggle>
                                                 <DropdownMenu className="dropdown-menu-end">
-                                                    <DropdownItem onClick={() => goToNewTale() }> {t('Create spin - off')} </DropdownItem>
+                                                    <DropdownItem onClick={newSpinOff}> {t('Create spin - off')} </DropdownItem>
                                                     <DropdownItem divider className="my-1" />
                                                     <DropdownItem> {t('Download')} </DropdownItem>
                                                     <DropdownItem divider className="my-1" />
@@ -81,14 +95,14 @@ const CardTale = (props) => {
                                     </div>
                                 </div>
                             </div>
-                            <p className="font-size-10 opacity-75">{description}</p>
+                            <p className="font-size-10 opacity-75">{story.get('synopsis')}</p>
                             {profileInfo}
                         </div>
                     </div>
                 </CardBody>
             </Card>
 
-            <ModalConfirmDelete isOpen={openModalDelete} setOpen={setOpenModalDelete} callback={() => { setOpenModalDelete(false) }} title={'Are you sure you want to delete?'} >
+            <ModalConfirmDelete isOpen={openModalDelete} setOpen={setOpenModalDelete} callback={deleteStory} title={'Are you sure you want to delete?'} >
                 <div>
                     <p className="text-center">{t('By deleteing the story, You do not delete the reader profile.')}</p>
 
@@ -97,13 +111,13 @@ const CardTale = (props) => {
                             <div className="d-flex">
                                 <picture>
                                     <source srcSet={avatar1} className="rounded avatar-md" />
-                                    <img src={avatar1} className="rounded avatar-md me-2 h-auto" alt={name} />
+                                    <img src={avatar1} className="rounded avatar-md me-2 h-auto" alt={story.get('title')} />
                                 </picture>
                                 <div>
                                     <div className="d-flex justify-content-between align-items-center">
-                                        <h2 className="font-size-14 mb-0 opacity-75">{name}</h2>
+                                        <h2 className="font-size-14 mb-0 opacity-75">{story.get('title')}</h2>
                                     </div>
-                                    <p className="font-size-10 opacity-75">{description}</p>
+                                    <p className="font-size-10 opacity-75">{story.get('synopsis')}</p>
                                 </div>
                             </div>
                         </CardBody>
@@ -111,12 +125,12 @@ const CardTale = (props) => {
                 </div>
             </ModalConfirmDelete>
 
-            <ModalTale isOpen={openModalTale} setOpen={setOpenModalTale} tale={props} >
+            <ModalStory isOpen={openModalStory} setOpen={setOpenModalStory} story={story} setOpenModalDelete={setOpenModalDelete} >
 
-            </ModalTale>
+            </ModalStory>
 
         </React.Fragment>
     );
 }
 
-export default connect(null, { setActiveChat })(CardTale);
+export default withRouter(connect(null, { setActiveChat })(CardStory));
