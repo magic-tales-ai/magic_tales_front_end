@@ -4,15 +4,15 @@ import { connect } from "react-redux";
 import { TabContent, TabPane } from "reactstrap";
 
 // Components
-import Chats from "../Tabs/Stories";
+import Stories from "../Tabs/Stories";
 import EditProfile from "../Tabs/EditProfile";
 
 import { SidebarFooter } from './SidebarFooter';
 
 const ChatLeftSidebar = (props) => {
     const mobileTabRef = useRef(null);
-    const activeTab = props.activeTab;
-    const hideSidebarFooter = activeTab === 'edit-profile'
+    const { activeTab } = props;
+    const hideSidebarFooter = activeTab === 'edit-profile';
 
     useEffect(() => {
         const handleDocumentClick = (event) => {
@@ -34,7 +34,7 @@ const ChatLeftSidebar = (props) => {
             <div className="chat-leftsidebar border-end flex-column d-none d-lg-flex">
                 <TabContent activeTab={activeTab}>
                     <TabPane tabId="chat" id="pills-chat">
-                        <Chats stories={props.stories} />
+                        <Stories />
                     </TabPane>
                     <TabPane tabId="edit-profile" id="pills-profile">
                         <EditProfile />
@@ -47,7 +47,7 @@ const ChatLeftSidebar = (props) => {
             <div ref={mobileTabRef} className="chat-leftsidebar border-end flex-column d-flex d-lg-none main-menu">
                 <TabContent activeTab={activeTab}>
                     <TabPane tabId="chat" id="pills-chat">
-                        <Chats recentChatList={props.recentChatList} />
+                        <Stories />
                     </TabPane>
                     <TabPane tabId="edit-profile" id="pills-profile">
                         <EditProfile />

@@ -30,11 +30,12 @@ import { ModalConfirmDelete } from '../../Common/Modals/ModalConfirmDelete';
 import { selectAuth } from '../../../redux/auth/selectors';
 import { selectChatsList } from '../../../redux/chats-list/selectors';
 import { selectProfiles } from '../../../redux/profiles-list/selectors';
+import { selectStories } from '../../../redux/stories-list/selectors';
 
 // Constants
 import { websocket_commands_messages } from '../../../redux/websocket/constants';
 
-const Stories = ({ stories, activeChat, chats, currentChat, user, anyProfile } = {}) => {
+const Stories = ({ stories, activeChat, chats, currentChat, user, anyProfile, anyStory } = {}) => {
     const { sendMessage, validateForNewChat } = useSendMessage();
     const dispatch = useDispatch();
     const { t } = useTranslation();
@@ -43,7 +44,8 @@ const Stories = ({ stories, activeChat, chats, currentChat, user, anyProfile } =
     const [dropdownOpen, setdropdownOpen] = useState();
     const [openModalDelete, setOpenModalDelete] = useState(false);
     const [currentStoryId, setCurrentStoryId] = useState();
-    const [disableBtns, setDisableBtns] = useState(false);
+    const [disabledProfiles, setDisabledProfiles] = useState(false);
+    const [disabledLibrery, setDisabledLibrery] = useState(false);
 
     const toggle = (e, id = false) => {
         e.preventDefault();
@@ -69,11 +71,19 @@ const Stories = ({ stories, activeChat, chats, currentChat, user, anyProfile } =
 
     useEffect(() => {
         if(user?.get('id') && !anyProfile) {
-            setDisableBtns(true);
+            setDisabledProfiles(true);
             return;
         }
-        setDisableBtns(false);
+        setDisabledProfiles(false);
     }, [user, anyProfile]);
+
+    useEffect(() => {
+        if(user?.get('id') && !anyStory) {
+            setDisabledLibrery(true);
+            return;
+        }
+        setDisabledLibrery(false);
+    }, [user, anyStory]);
 
     const openStoryChat = (e, story) => {
         e.preventDefault();
@@ -109,11 +119,11 @@ const Stories = ({ stories, activeChat, chats, currentChat, user, anyProfile } =
                     {t('New Tale')}
                 </Button>
 
-                <Link to='/profiles' onClick={(e) => { !user?.get('id') && dispatch(openModalSignin()) && e.preventDefault() }} size="xs" className={`btn btn-outline-primary mx-2 ${disableBtns && 'disabled'}`} >
+                <Link to='/profiles' onClick={(e) => { !user?.get('id') && dispatch(openModalSignin()) && e.preventDefault() }} size="xs" className={`btn btn-outline-primary mx-2 ${disabledProfiles && 'disabled'}`} >
                     <span className="custom-icon"><img src={iconGroup} alt="icon group" /></span>
                 </Link>
 
-                <Link to='/library' onClick={(e) => { !user?.get('id') && dispatch(openModalSignin()) && e.preventDefault() }} size="xs" className="btn btn-outline-primary">
+                <Link to='/library' onClick={(e) => { !user?.get('id') && dispatch(openModalSignin()) && e.preventDefault() }} size="xs" className={`btn btn-outline-primary ${disabledLibrery && 'disabled'}`} >
                     <span className="custom-icon"><img src={iconLibrary} alt="icon library" /></span>
                 </Link>
             </div>
@@ -121,7 +131,7 @@ const Stories = ({ stories, activeChat, chats, currentChat, user, anyProfile } =
             <SimpleBar className="chat-message-list" ref={ref}>
                 <ul className="list-unstyled chat-list chat-user-list px-3" id="chat-list">
                     {
-                        stories?.size > 0 && stories.map((story) => {
+                        stories?.list?.size > 0 && stories.list.map((story) => {
                             return (
                                 <li key={story.get('id')} id={"conversation" + story.get('id')} className={story.get('sessionId') == activeChat ? "active" : ""}>
                                     <Link to="#" onClick={(e) => openStoryChat(e, story)}>
@@ -177,7 +187,7 @@ const Stories = ({ stories, activeChat, chats, currentChat, user, anyProfile } =
                                                     <DropdownMenu className="dropdown-menu-end">
                                                         <DropdownItem onClick={() => { sendMessage({ command: websocket_commands_messages.SPIN_OFF, story_id: story.get('id') }) }}>{t("Create spin - off")}</DropdownItem>
                                                         <DropdownItem divider className="my-1" />
-                                                        <DropdownItem onClick={() => { setCurrentStoryId(story.get('id')); setOpenModalDelete(true) }}className="text-danger">{t("Delete")}</DropdownItem>
+                                                        <DropdownItem onClick={() => { setCurrentStoryId(story.get('id')); setOpenModalDelete(true) }} className="text-danger">{t("Delete")}</DropdownItem>
                                                     </DropdownMenu>
                                                 </Dropdown>
                                             </div>
@@ -204,8 +214,10 @@ const mapStateToProps = (state) => {
     const { activeChat, chats, currentChat } = selectChatsList(state);
     const profiles = selectProfiles(state);
     const anyProfile = profiles.list.size > 0;
+    const stories = selectStories(state);
+    const anyStory = stories.list.size > 0;
 
-    return { activeChat, chats, currentChat, user, anyProfile };
+    return { activeChat, chats, currentChat, user, anyProfile, stories, anyStory };
 };
 
 export default connect(mapStateToProps, { setActiveChat })(Stories);
