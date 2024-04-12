@@ -6,6 +6,8 @@ import {
     LOGIN_USER,
     LOGOUT_USER,
     REGISTER_USER,
+    VALIDATE_USER_REGISTER,
+    RESEND_VERIFICATION_CODE,
     FORGET_PASSWORD,
 } from './constants';
 
@@ -14,10 +16,11 @@ import { WEBSOCKET_MESSAGE, websocket_commands_messages } from '../websocket/con
 import {
     loginUserSuccess,
     registerUserSuccess,
+    validateRegisterSuccess,
     forgetPasswordSuccess,
     apiError,
     logoutUserSuccess,
-    loadMonthStoriesCountSuccess
+    loadMonthStoriesCountSuccess,
 } from './actions';
 
 
@@ -61,8 +64,31 @@ function* logout({ payload: { history } }) {
  */
 function* register({ payload: { user } }) {
     try {
-        const response = yield call(create, 'session/register', user);
+        const parsedUser = { ...user, last_name: user.lastName };
+        delete parsedUser.lastName;
+        const response = yield call(create, 'session/register', parsedUser);
         yield put(registerUserSuccess(response));
+    } catch (error) {
+        yield put(apiError(error));
+    }
+}
+
+/**
+ * Validate the user register
+ */
+
+function* validateRegister({ payload: { email, validationCode } }) {
+    try {
+        const response = yield call(create, 'session/register-validate', { email, validation_code: validationCode });
+        yield put(validateRegisterSuccess(response));
+    } catch (error) {
+        yield put(apiError(error));
+    }
+}
+
+function* resendVerificationCode({ payload: { email } }) {
+    try {
+        const response = yield call(create, 'user/resend-validation-code', { email });
     } catch (error) {
         yield put(apiError(error));
     }
@@ -109,6 +135,14 @@ export function* watchRegisterUser() {
     yield takeEvery(REGISTER_USER, register);
 }
 
+export function* watchValidateUserRegister() {
+    yield takeEvery(VALIDATE_USER_REGISTER, validateRegister);
+}
+
+export function* watchResendVerificationCode() {
+    yield takeEvery(RESEND_VERIFICATION_CODE, resendVerificationCode);
+}
+
 export function* watchForgetPassword() {
     yield takeEvery(FORGET_PASSWORD, forgetPassword);
 }
@@ -122,6 +156,8 @@ function* authSaga() {
         fork(watchLoginUser),
         fork(watchLogoutUser),
         fork(watchRegisterUser),
+        fork(watchValidateUserRegister),
+        fork(watchResendVerificationCode),
         fork(watchForgetPassword),
         fork(watchLoadMonthStoriesCount)
     ]);

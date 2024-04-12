@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import LoginForm from "./Login/Form";
 import RegisterForm from "./Register/Form";
 import ForgetPasswordForm from "./ForgetPassword/Form";
+import ValidateRegistration from "./ValidateRegistration/Form";
 
 // Actions
 import { closeModalSignin, setView } from "../../redux/actions";
@@ -35,6 +36,7 @@ export const ModalSignIn = () => {
     const content = new Map([
         ['login', <LoginForm navigate={changeView} />],
         ['register', <RegisterForm navigate={changeView} />],
+        ['validate-registration', <ValidateRegistration navigate={changeView} />],
         ['forget-password', <ForgetPasswordForm navigate={changeView} />]
     ]);
 

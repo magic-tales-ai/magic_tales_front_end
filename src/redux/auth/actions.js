@@ -5,6 +5,9 @@ import {
     LOGOUT_USER_SUCCESS,
     REGISTER_USER,
     REGISTER_USER_SUCCESS,
+    VALIDATE_USER_REGISTER,
+    VALIDATE_USER_REGISTER_SUCCESS,
+    RESEND_VERIFICATION_CODE,
     FORGET_PASSWORD,
     FORGET_PASSWORD_SUCCESS,
     UPDATE_TOKEN,
@@ -30,6 +33,25 @@ export const registerUser = (user) => ({
 export const registerUserSuccess = (user) => ({
     type: REGISTER_USER_SUCCESS,
     payload: user
+});
+
+export const validateRegister = ({ email, validationCode }) => ({
+    type: VALIDATE_USER_REGISTER,
+    payload: {
+        email,
+        validationCode
+    }
+});
+
+export const resendVerificationCode = ({ email }) => ({
+    type: RESEND_VERIFICATION_CODE,
+    payload: {
+        email
+    }
+})
+
+export const validateRegisterSuccess = () => ({
+    type: VALIDATE_USER_REGISTER_SUCCESS,
 });
 
 export const logoutUser = (history) => ({

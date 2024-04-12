@@ -1,26 +1,26 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import withRouter from "../../../components/withRouter";
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { FormGroup, Alert, Form, Input, Button, FormFeedback, Label, InputGroup } from 'reactstrap';
 
-//Import action
+// Actions
 import { registerUser, apiError } from '../../../redux/actions';
 
-//i18n
+// i18n
 import { useTranslation } from 'react-i18next';
 
-import { createSelector } from 'reselect';
+// Selectors
+import { selectAuth } from '../../../redux/auth/selectors';
 
 /**
  * Register component
  * @param {*} props 
  */
-const RegisterForm = (props) => {
-    const navigate = useNavigate();
+const RegisterForm = ({ user, error, loading, navigate }) => {
     const dispatch = useDispatch();
     const [successRegister, setSuccessRegister] = useState(false)
     const [registering, setRegistering] = useState(false)
@@ -33,13 +33,17 @@ const RegisterForm = (props) => {
         enableReinitialize: true,
 
         initialValues: {
-            username: '',
+            name: '',
+            lastName: '',
             email: '',
+            username: '',
             password: ''
         },
         validationSchema: Yup.object({
+            name: Yup.string().required('Required'),
+            lastName: Yup.string().required('Required'),
+            email: Yup.string().email('Enter a valid email address').required('Required'),
             username: Yup.string().required('Required'),
-            email: Yup.string().email('Enter proper email').required('Required'),
             password: Yup.string().required('Required')
         }),
         onSubmit: values => {
@@ -47,17 +51,6 @@ const RegisterForm = (props) => {
             dispatch(registerUser(values));
         },
     });
-
-    const selectAccount = createSelector(
-        (state) => state.Auth,
-        (account) => ({
-            user: account.get('user'),
-            loading: account.get('loading'),
-            error: account.get('error'),
-        })
-    );
-
-    const { user, error, loading } = useSelector(selectAccount);
 
     const clearError = useCallback(() => {
         dispatch(apiError(""));
@@ -69,7 +62,7 @@ const RegisterForm = (props) => {
 
     useEffect(() => {
         if (successRegister) {
-            setTimeout(() => props.navigate("login"), 3000);
+            setTimeout(() => customNavigate({ to: 'validate-registration' }), 3000);
         }
     }, [successRegister]);
 
@@ -78,16 +71,16 @@ const RegisterForm = (props) => {
     }, [dispatch]);
 
     useEffect(() => {
-        if(registering && !loading) {
+        if (registering && !loading) {
             setRegistering(false)
             setSuccessRegister(!error)
         };
     }, [loading]);
 
-    const customNavigate = (e, to) => {
-        if (props.navigate) {
+    const customNavigate = ({ e, to }) => {
+        if (navigate) {
             e?.preventDefault();
-            props.navigate(to)
+            navigate(to)
         }
     }
 
@@ -95,7 +88,7 @@ const RegisterForm = (props) => {
         <div className="justify-content-center">
             <div className="text-center px-4 px-lg-5 mb-4">
                 <p className="text-reset ff-special fw-normal h1 mb-3">{t('Register')}</p>
-                <Link to="/login" onClick={(e) => { customNavigate(e, 'login') }} className="font-weight-medium text-decoration-underline mb-4 d-inline-block"> {t('Do you have an account?')} </Link>
+                <Link to="/login" onClick={(e) => { customNavigate({ e, to: 'login' }) }} className="font-weight-medium text-decoration-underline mb-4 d-inline-block"> {t('Do you have an account?')} </Link>
 
                 <div className="text-start">
                     <Form
@@ -107,7 +100,7 @@ const RegisterForm = (props) => {
                     >
                         {successRegister ? (
                             <Alert color="success">
-                                Register User Successfully
+                                {t('Register User Successfully')}
                             </Alert>
                         ) : null}
 
@@ -116,6 +109,47 @@ const RegisterForm = (props) => {
                                 <div>{error}</div>
                             </Alert>
                         ) : null}
+
+                        <FormGroup className="mb-3">
+                            <Label className="form-label">{t('Name')}</Label>
+                            <InputGroup className="mb-3 bg-soft-light rounded-3">
+                                <Input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    className="form-control form-control-lg bg-soft-light border-light"
+                                    placeholder="Enter Your Name"
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    value={formik.values.name}
+                                    invalid={formik.touched.name && formik.errors.name ? true : false}
+                                />
+                                {formik.touched.name && formik.errors.name ? (
+                                    <FormFeedback type="invalid">{formik.errors.name}</FormFeedback>
+                                ) : null}
+                            </InputGroup>
+                        </FormGroup>
+
+                        <FormGroup className="mb-3">
+                            <Label className="form-label">{t('Last Name')}</Label>
+                            <InputGroup className="mb-3 bg-soft-light rounded-3">
+                                <Input
+                                    type="text"
+                                    id="lastName"
+                                    name="lastName"
+                                    className="form-control form-control-lg bg-soft-light border-light"
+                                    placeholder="Enter Your Last Name"
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    value={formik.values.lastName}
+                                    invalid={formik.touched.lastName && formik.errors.lastName ? true : false}
+                                />
+                                {formik.touched.lastName && formik.errors.lastName ? (
+                                    <FormFeedback type="invalid">{formik.errors.lastName}</FormFeedback>
+                                ) : null}
+                            </InputGroup>
+                        </FormGroup>
+
                         <FormGroup>
                             <Label className="form-label">{t('Email')}</Label>
                             <InputGroup className="mb-3 bg-soft-light rounded-3">
@@ -180,18 +214,25 @@ const RegisterForm = (props) => {
 
                         <div className="d-grid">
                             <Button color="secondary" size="lg" block className=" waves-effect waves-light" type="submit">
-                                Register</Button>
+                                {t('Register')}
+                            </Button>
                         </div>
 
                     </Form>
                 </div>
 
                 <div className="text-center mt-2">
-                    <Link to="login" onClick={(e) => { customNavigate(e, 'login') }} className="font-size-13"> {t('Already have an account')}? {t('Signin')} </Link>
+                    <Link to="login" onClick={(e) => { customNavigate({e, to: 'login'}) }} className="font-size-13"> {t('Already have an account')}? {t('Signin')} </Link>
                 </div>
             </div>
         </div>
     )
 }
 
-export default withRouter(connect(null, { registerUser, apiError })(RegisterForm));
+const mapStateToProps = (state) => {
+    const { user, error, loading } = selectAuth(state);
+
+    return { user, error, loading };
+};
+
+export default connect(mapStateToProps, { registerUser, apiError })(RegisterForm);

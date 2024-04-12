@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Container, Row, Col, FormGroup, Alert, Form, Input, Button, FormFeedback, InputGroup } from 'reactstrap';
+import { FormGroup, Alert, Form, Input, Button, FormFeedback, InputGroup } from 'reactstrap';
 import { connect, useDispatch } from 'react-redux';
 import { Link, Navigate } from 'react-router-dom';
 import withRouter from "../../../components/withRouter";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-//i18n
+// i18n
 import { useTranslation } from 'react-i18next';
 
-//redux store
+// Actions
 import { loginUser, apiError } from '../../../redux/actions';
 
 /**
@@ -68,11 +68,14 @@ const LoginForm = (props) => {
                 {
                     props.error && <Alert color="danger">{props.error}</Alert>
                 }
+                {
+                    props.error == 'User is not active' && <Link to="/validate-registration" onClick={(e) => { navigate(e, 'validate-registration') }} className="font-weight-medium text-decoration-underline mb-4 d-inline-block"> {t('Activate your user by clicking here')} </Link>
+                }
                 <div>
 
                     <Form onSubmit={formik.handleSubmit}>
 
-                        <div className="mb-3">
+                        <FormGroup className="mb-3">
                             <InputGroup className="mb-3 bg-soft-light rounded-3">
                                 <Input
                                     type="text"
@@ -89,7 +92,7 @@ const LoginForm = (props) => {
                                     <FormFeedback type="invalid">{formik.errors.user}</FormFeedback>
                                 ) : null}
                             </InputGroup>
-                        </div>
+                        </FormGroup>
 
                         <FormGroup className="mb-4">
                             <InputGroup className="mb-3 bg-soft-light rounded-3">

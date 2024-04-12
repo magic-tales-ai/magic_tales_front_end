@@ -5,6 +5,8 @@ import {
     LOGOUT_USER_SUCCESS,
     REGISTER_USER,
     REGISTER_USER_SUCCESS,
+    VALIDATE_USER_REGISTER,
+    VALIDATE_USER_REGISTER_SUCCESS,
     FORGET_PASSWORD,
     FORGET_PASSWORD_SUCCESS,
     UPDATE_TOKEN,
@@ -44,9 +46,11 @@ const Auth = (state = INIT_STATE, action) => {
             });
 
         case REGISTER_USER:
+        case VALIDATE_USER_REGISTER:
             return state.set('loading', true);
 
         case REGISTER_USER_SUCCESS:
+        case VALIDATE_USER_REGISTER_SUCCESS:
             return state.merge({
                 loading: false,
                 error: null
