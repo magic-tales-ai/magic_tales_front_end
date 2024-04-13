@@ -34,7 +34,7 @@ const ChangePasswordForm = (props) => {
     };
 
     useEffect(() => {
-        apiError("");
+        dispatch(apiError(""));
     }, []);
 
     // validation
