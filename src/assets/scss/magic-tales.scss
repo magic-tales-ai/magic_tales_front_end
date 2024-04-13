@@ -407,7 +407,9 @@ p:last-child { margin-bottom: 0; }
 	font-size: 16px;
 	opacity: 1;
 }
-input[name='password'] { border-right: 0 }
+input[name='password'], input[name='newPassword'], input[name='repeatedNewPassword'] {
+	border-right: 0
+}
 .btn-eye {
 	border-left: 0;
 }

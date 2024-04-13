@@ -8,6 +8,8 @@ import {
     VALIDATE_USER_REGISTER,
     VALIDATE_USER_REGISTER_SUCCESS,
     RESEND_VERIFICATION_CODE,
+    CHANGE_PASSWORD,
+    CHANGE_PASSWORD_SUCCESS,
     FORGET_PASSWORD,
     FORGET_PASSWORD_SUCCESS,
     UPDATE_TOKEN,
@@ -71,10 +73,23 @@ export const forgetPassword = (email) => ({
     payload: { email }
 });
 
-export const forgetPasswordSuccess = (passwordResetStatus) => ({
-    type: FORGET_PASSWORD_SUCCESS,
-    payload: passwordResetStatus
+export const forgetPasswordSuccess = () => ({
+    type: FORGET_PASSWORD_SUCCESS
 });
+
+export const changePassword = ({ email, newPassword, repeatedNewPassword, validationCode }) => ({
+    type: CHANGE_PASSWORD,
+    payload: {
+        email,
+        newPassword,
+        repeatedNewPassword,
+        validationCode
+    }
+})
+
+export const changePasswordSuccess = () => ({
+    type: CHANGE_PASSWORD_SUCCESS
+})
 
 export const updateToken = (token) => ({
     type: UPDATE_TOKEN,

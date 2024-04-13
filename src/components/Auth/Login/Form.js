@@ -12,6 +12,9 @@ import { useTranslation } from 'react-i18next';
 // Actions
 import { loginUser, apiError } from '../../../redux/actions';
 
+// Selectors
+import { selectAuth } from '../../../redux/auth/selectors';
+
 /**
  * Login component
  * @param {*} props 
@@ -125,19 +128,14 @@ const LoginForm = (props) => {
                     </Form>
                 </div>
             </div>
-
-
         </div>
-
     )
 }
 
 const mapStateToProps = (state) => {
-    const user = state.Auth.get('user');
-    const loading = state.Auth.get('loading');
-    const error = state.Auth.get('error');
+    const { loading, error } = selectAuth(state)
 
-    return { user, loading, error };
+    return { loading, error };
 };
 
 export default withRouter(connect(mapStateToProps, { loginUser, apiError })(LoginForm));
