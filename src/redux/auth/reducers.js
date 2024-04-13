@@ -9,6 +9,8 @@ import {
     VALIDATE_USER_REGISTER_SUCCESS,
     FORGET_PASSWORD,
     FORGET_PASSWORD_SUCCESS,
+    CHANGE_PASSWORD,
+    CHANGE_PASSWORD_SUCCESS,
     UPDATE_TOKEN,
     LOAD_MONTH_STORIES_COUNT_SUCCESS,
     API_FAILED
@@ -26,6 +28,7 @@ const INIT_STATE = Map({
     user: createNewUser(getLoggedInUser()),
     loading: false,
     isUserLogout: false,
+    currentEmailField: "",
     error: null
 });
 
@@ -46,12 +49,41 @@ const Auth = (state = INIT_STATE, action) => {
             });
 
         case REGISTER_USER:
+            return state.set('loading', true)
+                .set('currentEmailField', action.payload.user.email);
+
+        case REGISTER_USER_SUCCESS:
+            return state.merge({
+                loading: false,
+                error: null
+            });
+
         case VALIDATE_USER_REGISTER:
             return state.set('loading', true);
 
-        case REGISTER_USER_SUCCESS:
         case VALIDATE_USER_REGISTER_SUCCESS:
             return state.merge({
+                currentEmailField: "",
+                loading: false,
+                error: null
+            });
+
+        case FORGET_PASSWORD:
+            return state.set('loading', true)
+                .set('currentEmailField', action.payload.email);
+
+        case FORGET_PASSWORD_SUCCESS:
+            return state.merge({
+                loading: false,
+                error: null
+            });
+
+        case CHANGE_PASSWORD:
+            return state.set('loading', true);
+    
+        case CHANGE_PASSWORD_SUCCESS:
+            return state.merge({
+                currentEmailField: "",
                 loading: false,
                 error: null
             });
@@ -60,16 +92,6 @@ const Auth = (state = INIT_STATE, action) => {
             return state.merge({
                 user: null,
                 isUserLogout: true
-            });
-
-        case FORGET_PASSWORD:
-            return state.set('loading', true);
-
-        case FORGET_PASSWORD_SUCCESS:
-            return state.merge({
-                passwordResetStatus: action.payload,
-                loading: false,
-                error: null
             });
 
         case UPDATE_TOKEN:

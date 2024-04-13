@@ -20,21 +20,19 @@ import { selectAuth } from '../../../redux/auth/selectors';
  * Validate Registration component
  * @param {*} props 
  */
-const ValidateRegistrationForm = ({ user, error, loading, navigate }) => {
+const ValidateRegistrationForm = ({ error, loading, currentEmailField, navigate }) => {
     const dispatch = useDispatch();
     const [successValidation, setSuccessValidation] = useState(false)
     const [validating, setValidating] = useState(false)
-    /* intilize t variable for multi language implementation */
     const { t } = useTranslation();
 
-    // validation
     const formik = useFormik({
 
         enableReinitialize: true,
 
         initialValues: {
-            email: '',
-            validationCode : '',
+            email: currentEmailField || '',
+            validationCode: '',
         },
         validationSchema: Yup.object({
             email: Yup.string().email('Enter a valid email address').required('Required'),
@@ -81,7 +79,7 @@ const ValidateRegistrationForm = ({ user, error, loading, navigate }) => {
     return (
         <div className="justify-content-center">
             <div className="text-center px-4 px-lg-5 mb-4">
-                <p className="text-reset ff-special fw-normal h1 mb-3">{t('Verification')}</p>
+                <p className="text-reset ff-special fw-normal h1 mb-3">{t('Validation')}</p>
                 <div className="text-start">
                     <Form
                         onSubmit={(e) => {
@@ -98,7 +96,7 @@ const ValidateRegistrationForm = ({ user, error, loading, navigate }) => {
 
                         {error && error ? (
                             <Alert color="danger">
-                                <div>{error}</div>
+                                <div>{error.length ? error[0]?.msg || '' : error}</div>
                             </Alert>
                         ) : null}
 
@@ -142,8 +140,9 @@ const ValidateRegistrationForm = ({ user, error, loading, navigate }) => {
                             </InputGroup>
                         </FormGroup>
 
-                        { formik.values.email && !formik.errors.email &&
-                            <Link to="#" onClick={() => { dispatch(resendVerificationCode({ email: formik.values.email })) }} className="font-weight-medium text-decoration-underline mb-4 d-inline-block"> {t('Resend verification code')} </Link>
+                        {(formik.values.email && !formik.errors.email)
+                            ? <Link to="#" onClick={() => { dispatch(resendVerificationCode({ email: formik.values.email })) }} className="pb-2 font-weight-medium text-decoration-underline d-inline-block"> {t('Resend Code')} </Link>
+                            : <span className="pb-2 d-inline-block"> {t('Resend Code')} </span>
                         }
 
                         <div className="d-grid">
@@ -160,9 +159,9 @@ const ValidateRegistrationForm = ({ user, error, loading, navigate }) => {
 }
 
 const mapStateToProps = (state) => {
-    const { user, error, loading } = selectAuth(state);
+    const { error, loading, currentEmailField } = selectAuth(state);
 
-    return { user, error, loading };
+    return { error, loading, currentEmailField };
 };
 
 export default connect(mapStateToProps, { validateRegister, apiError })(ValidateRegistrationForm);

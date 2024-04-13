@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { connect, useDispatch } from 'react-redux';
 import { Link, Navigate } from 'react-router-dom';
 
 //Import formik validation
@@ -12,21 +12,22 @@ import { forgetPassword, apiError } from '../../../redux/actions';
 
 //i18n
 import { useTranslation } from 'react-i18next';
+import { selectAuth } from '../../../redux/auth/selectors';
 
 /**
  * Forget Password component
  * @param {*} props 
  */
-const ForgetPasswordForm = (props) => {
-
-    const clearError = () => {
-        props.apiError("");
-    }
-
-    /* intilize t variable for multi language implementation */
+const SendCodeForm = (props) => {
+    const { loading, error } = props;
     const { t } = useTranslation();
+    const dispatch = useDispatch();
+    const [sending, setSending] = useState(false)
+    const [success, setSuccess] = useState(false)
 
-    useEffect(clearError);
+    useEffect(() => {
+        apiError("");
+    }, []);
 
     // validation
     const formik = useFormik({
@@ -37,36 +38,48 @@ const ForgetPasswordForm = (props) => {
             email: Yup.string().email('Enter a valid email address').required('Required')
         }),
         onSubmit: values => {
-            props.forgetPassword(values.email);
+            setSending(true);
+            dispatch(forgetPassword(values.email));
         },
     });
+
+    useEffect(() => {
+        if (sending && !loading) {
+            setSending(false)
+            setSuccess(!error)
+        };
+    }, [loading]);
+
+    useEffect(() => {
+        if (success) {
+            navigate({ to: 'change-password' });
+        }
+    }, [success]);
+
+    const navigate = ({ e, to }) => {
+        if (props.navigate) {
+            e?.preventDefault();
+            props.navigate(to)
+        }
+    }
 
     if (localStorage.getItem("authUser")) {
         return <Navigate to="/" />;
     }
 
-    const navigate = (e, to) => {
-        if (props.navigate) {
-            e.preventDefault();
-            props.navigate(to)
-        }
-    }
-
     return (
         <div className="justify-content-center">
-            <div className="text-center mb-4">
-                <h4>{t('Reset Password')}</h4>
-            </div>
+            <div className="px-4 px-lg-5 mb-4">
+                <p className="text-reset ff-special fw-normal h1 mb-3">{t('Password Recovery')}</p>
+                <p className="font-weight-medium mb-4 d-inline-block">{t('Enter your Email and we will send you a code!')}</p>
 
-            <div className="p-3">
-                {
-                    props.error && <Alert variant="danger">{props.error}</Alert>
-                }
-                {
-                    props.passwordResetStatus ? <Alert variant="success" className="text-center mb-4">{props.passwordResetStatus}</Alert>
-                        : <Alert variant="success" className="text-center mb-4">{t('Enter your Email and instructions will be sent to you')}!</Alert>
-                }
                 <Form onSubmit={formik.handleSubmit}>
+
+                    {error && error ? (
+                        <Alert color="danger">
+                            <div>{error}</div>
+                        </Alert>
+                    ) : null}
 
                     <FormGroup className="mb-4">
                         <Label className="form-label">{t('Email')}</Label>
@@ -89,14 +102,14 @@ const ForgetPasswordForm = (props) => {
                     </FormGroup>
 
                     <div className="d-grid">
-                        <Button color="primary" block className="waves-effect waves-light" type="submit">{t('Reset')}</Button>
+                        <Button color="secondary" size="lg" block className="waves-effect waves-light" type="submit">{t('Send Code')}</Button>
                     </div>
 
                 </Form>
-            </div>
 
-            <div className="mt-5 text-center">
-                <p>{t('Remember It')} ? <Link to="login" onClick={(e) => { navigate(e, 'login') }} className="font-weight-medium"> {t('Signin')} </Link> </p>
+                <div className="mt-2 text-center">
+                    <p>{t('Remember It')}? <Link to="login" onClick={(e) => { navigate({ e, to: 'login' }) }} className="font-weight-medium"> {t('Signin')} </Link> </p>
+                </div>
             </div>
         </div>
     )
@@ -104,12 +117,9 @@ const ForgetPasswordForm = (props) => {
 
 
 const mapStateToProps = (state) => {
-    const user = state.Auth.get('user');
-    const loading = state.Auth.get('loading');
-    const error = state.Auth.get('error');
-    const passwordResetStatus = state.Auth.get('passwordResetStatus');
+    const { loading, error } = selectAuth(state);
 
-    return { user, loading, error, passwordResetStatus };
+    return { loading, error };
 };
 
-export default connect(mapStateToProps, { forgetPassword, apiError })(ForgetPasswordForm);
+export default connect(mapStateToProps, { forgetPassword, apiError })(SendCodeForm);

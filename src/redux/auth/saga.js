@@ -9,6 +9,7 @@ import {
     VALIDATE_USER_REGISTER,
     RESEND_VERIFICATION_CODE,
     FORGET_PASSWORD,
+    CHANGE_PASSWORD
 } from './constants';
 
 import { WEBSOCKET_MESSAGE, websocket_commands_messages } from '../websocket/constants';
@@ -18,6 +19,7 @@ import {
     registerUserSuccess,
     validateRegisterSuccess,
     forgetPasswordSuccess,
+    changePasswordSuccess,
     apiError,
     logoutUserSuccess,
     loadMonthStoriesCountSuccess,
@@ -99,8 +101,25 @@ function* resendVerificationCode({ payload: { email } }) {
  */
 function* forgetPassword({ payload: { email } }) {
     try {
-        const response = yield call(create, '/forget-pwd', { email });
+        const response = yield call(create, 'session/recover-password', { email });
         yield put(forgetPasswordSuccess(response));
+    } catch (error) {
+        yield put(apiError(error));
+    }
+}
+
+/**
+ * chenge password
+ */
+function* changePassword({ payload: { email, newPassword, repeatedNewPassword, validationCode } }) {
+    try {
+        const response = yield call(create, 'session/recover-password-validate', { 
+            email,
+            new_password: newPassword,
+            repeated_new_password: repeatedNewPassword,
+            validation_code: validationCode
+        });
+        yield put(changePasswordSuccess(response));
     } catch (error) {
         yield put(apiError(error));
     }
@@ -147,6 +166,10 @@ export function* watchForgetPassword() {
     yield takeEvery(FORGET_PASSWORD, forgetPassword);
 }
 
+export function* watchChangePassword() {
+    yield takeEvery(CHANGE_PASSWORD, changePassword);
+}
+
 export function* watchLoadMonthStoriesCount() {
     yield takeEvery(WEBSOCKET_MESSAGE, loadMonthStoriesCount);
 }
@@ -159,6 +182,7 @@ function* authSaga() {
         fork(watchValidateUserRegister),
         fork(watchResendVerificationCode),
         fork(watchForgetPassword),
+        fork(watchChangePassword),
         fork(watchLoadMonthStoriesCount)
     ]);
 }

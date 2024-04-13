@@ -7,6 +7,7 @@ import LoginForm from "./Login/Form";
 import RegisterForm from "./Register/Form";
 import ForgetPasswordForm from "./ForgetPassword/Form";
 import ValidateRegistration from "./ValidateRegistration/Form";
+import ChangePassword from "./ChangePassword/Form";
 
 // Actions
 import { closeModalSignin, setView } from "../../redux/actions";
@@ -37,7 +38,8 @@ export const ModalSignIn = () => {
         ['login', <LoginForm navigate={changeView} />],
         ['register', <RegisterForm navigate={changeView} />],
         ['validate-registration', <ValidateRegistration navigate={changeView} />],
-        ['forget-password', <ForgetPasswordForm navigate={changeView} />]
+        ['forget-password', <ForgetPasswordForm navigate={changeView} />],
+        ['change-password', <ChangePassword navigate={changeView} />]
     ]);
 
     return (
