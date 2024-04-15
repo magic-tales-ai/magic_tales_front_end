@@ -26,7 +26,7 @@ const SendCodeForm = (props) => {
     const [success, setSuccess] = useState(false)
 
     useEffect(() => {
-        apiError("");
+        dispatch(apiError(""));
     }, []);
 
     // validation
