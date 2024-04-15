@@ -91,7 +91,7 @@ const ChangePasswordForm = (props) => {
 
                     {error && error ? (
                         <Alert color="danger">
-                            <div>{error.length ? error[0]?.msg || '' : error}</div>
+                            <div>{Array.isArray(error) ? error[0]?.msg || '' : error}</div>
                         </Alert>
                     ) : null}
 
