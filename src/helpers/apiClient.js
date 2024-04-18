@@ -17,13 +17,13 @@ axios.interceptors.response.use(function (response) {
     switch (error.response?.status) {
         case 500: message = 'Internal Server Error';break;
         case 401:
-            message = error.response?.data?.detail || 'Invalid credentials';
+            message = error.response.data || 'Invalid credentials';
             if(getLoggedInUser()?.token) {
                 window.location.href = "/logout?requireSignIn";
             }
             break;
         case 404: message = "Sorry! the data you are looking for could not be found"; break;
-        default: message = error.response?.data?.detail || error.message || error; break;
+        default: message = error.response.data || error.response.message || error; break;
     }
     return Promise.reject(message);
 });

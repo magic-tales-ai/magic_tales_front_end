@@ -3,6 +3,7 @@ import {
     LOAD_PROFILES_LIST_SUCCESS,
     UPLOAD_PROFILE_IMAGE,
     UPLOAD_PROFILE_IMAGE_SUCCESS,
+    PROFILE_API_FAILED,
     API_FAILED
 } from './constants';
 
@@ -30,6 +31,14 @@ export const uploadProfileImageSuccess = ({ profileId, image }) => ({
         image
     }
 })
+
+export const profileApiError = ({ profileId, error }) => ({
+    type: PROFILE_API_FAILED,
+    payload: {
+        profileId,
+        error
+    }
+});
 
 export const profilesListApiError = (error) => ({
     type: API_FAILED,

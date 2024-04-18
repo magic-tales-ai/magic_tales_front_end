@@ -13,6 +13,12 @@ import {
     CHANGE_PASSWORD_SUCCESS,
     UPDATE_TOKEN,
     LOAD_MONTH_STORIES_COUNT_SUCCESS,
+    UPDATE_USER,
+    UPDATE_USER_SUCCESS,
+    VALIDATE_NEW_USER_EMAIL,
+    VALIDATE_NEW_USER_EMAIL_SUCCESS,
+    CHANGE_PASSWORD_LOGGED_USER,
+    CHANGE_PASSWORD_LOGGED_USER_SUCCESS,
     API_FAILED
 } from './constants';
 
@@ -88,6 +94,8 @@ const Auth = (state = INIT_STATE, action) => {
                 error: null
             });
 
+        /* logged */
+
         case LOGOUT_USER_SUCCESS:
             return state.merge({
                 user: null,
@@ -100,6 +108,30 @@ const Auth = (state = INIT_STATE, action) => {
 
         case LOAD_MONTH_STORIES_COUNT_SUCCESS:
             return state.update('user', user => user.set('monthStoriesCount', action.payload.stories_this_month));
+
+        case UPDATE_USER:
+            return state.set('loading', true);
+
+        case UPDATE_USER_SUCCESS:
+            return state.set('loading', false)
+                .set('error', null)
+                .update('user', user => createNewUser({ ...action.payload, token: user.get('token')}));
+
+        case VALIDATE_NEW_USER_EMAIL:
+            return state.set('loading', true);
+
+        case VALIDATE_NEW_USER_EMAIL_SUCCESS:
+            return state.update('loading', () => false)
+                .update('user', user => user.set('email', action.payload.email));
+
+        case CHANGE_PASSWORD_LOGGED_USER:
+            return state.set('loading', true);
+
+        case CHANGE_PASSWORD_LOGGED_USER_SUCCESS:
+            return state.merge({
+                loading: false,
+                error: null
+            });
 
         case API_FAILED:
             return state.merge({

@@ -1,27 +1,21 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useDispatch } from "react-redux";
-import { FormGroup, Form, InputGroup, Input, FormFeedback, Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { FormGroup, Form, InputGroup, Input, FormFeedback, Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from "reactstrap";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 // i18n
 import { useTranslation } from 'react-i18next';
 
-// Actions
-import { uploadProfileImage } from "../../redux/actions";
-
 // Image default
-import { ReactComponent as ProfileImageDefault } from "../../assets/images/profiles/profile-svgrepo-com.svg";
+import { ReactComponent as ProfileImageDefault } from "../../../assets/images/profiles/profile-svgrepo-com.svg";
 
 // Constants
-import { MAX_IMAGE_SIZE } from "../../constants";
+import { MAX_IMAGE_SIZE, IMAGE_SUPPORTED_FORMATS } from "../../../constants";
 
 export const ModalUpdateImage = (props) => {
-    const { isOpen, setOpen, profile } = props;
+    const { isOpen, setOpen, title, image, loading, update, error } = props;
     const [imageFile, setImageFile] = useState(null)
-    const [uploading, setUploading] = useState(false)
-    const currentImage = profile.get('image')
-    const dispatch = useDispatch();
+    const currentImage = image;
     const { t } = useTranslation();
 
     const toggle = () => {
@@ -35,11 +29,13 @@ export const ModalUpdateImage = (props) => {
     }, [isOpen])
 
     useEffect(() => {
-        if(uploading && !profile.get('loading')) {
-            setUploading(false);
-            toggle();
+        if(formik.isSubmitting && !loading) {
+            formik.setSubmitting(false);
+            if(!error) {
+                toggle();
+            }
         }
-    }, [uploading, profile.get('loading')])
+    }, [loading])
 
     // validation
     const formik = useFormik({
@@ -59,15 +55,14 @@ export const ModalUpdateImage = (props) => {
                 .test('fileFormat', "Not valid!", (value) => {
                     return (
                         value
-                            ? (value.type.startsWith('image/') ? true : false)
+                            ? (IMAGE_SUPPORTED_FORMATS.includes(value.type) ? true : false)
                             : true
                     )
                 }
             )
         }),
         onSubmit: values => {
-            setUploading(true)
-            dispatch(uploadProfileImage({ profileId: profile.get('id'), image: values.image }))
+            update({ image: values.image })
         },
     });
 
@@ -78,17 +73,25 @@ export const ModalUpdateImage = (props) => {
 
     const currentImageUrl = (imageFile && !formik?.errors.image) 
         ? URL.createObjectURL(imageFile) 
-        : 'data:image/*;base64,' + currentImage;
+        : currentImage 
+            ? 'data:image/*;base64,' + currentImage
+            : null;
 
     return (
         <Modal isOpen={isOpen} centered toggle={toggle}>
             <ModalHeader toggle={toggle} cssModule={{ 'modal-title': 'modal-title text-center w-100 opacity-75' }}>
-                {t('Update Profile Image')}
+                {title || t('Update Profile Image')}
             </ModalHeader>
 
             <ModalBody className="modal-profile pb-0">
                 <div className="d-flex justify-content-center text-center">
                     <Form onSubmit={formik.handleSubmit}>
+                        {formik.submitCount > 0 && error && (
+                            <Alert color="danger">
+                                <div>{(error?.detail && Array.isArray(error.detail) ? error.detail[0].msg : error.detail) || error}</div>
+                            </Alert>
+                        )}
+
                         <picture>
                             {currentImageUrl && <img src={currentImageUrl} className={`rounded avatar-lg`} />}
                             {!currentImageUrl && <ProfileImageDefault className={`rounded avatar-lg`} alt="avatar" />}
@@ -100,7 +103,7 @@ export const ModalUpdateImage = (props) => {
                                     type="file"
                                     id="image"
                                     name="image"
-                                    accept="image/*"
+                                    accept={IMAGE_SUPPORTED_FORMATS}
                                     className="form-control form-control-lg border-light bg-soft-light"
                                     onChange={fileHandleChange}
                                     onBlur={formik.handleBlur}
@@ -116,7 +119,7 @@ export const ModalUpdateImage = (props) => {
             </ModalBody>
 
             <ModalFooter>
-                <Button color="primary" className="btn btn-primary flex-fill w-100 w-lg-auto" onClick={formik.handleSubmit}>
+                <Button color="primary" className="btn btn-primary flex-fill w-100 w-lg-auto" onClick={formik.handleSubmit} disabled={formik.isSubmitting}>
                     {t('Accept')}
                 </Button>
                 <Button color="primary" className="btn btn-primary flex-fill w-100 w-lg-auto" onClick={toggle}>

@@ -23,9 +23,12 @@ import { selectAuth } from '../../../redux/auth/selectors';
 const RegisterForm = ({ user, error, loading, navigate }) => {
     const dispatch = useDispatch();
     const [successRegister, setSuccessRegister] = useState(false)
-    const [registering, setRegistering] = useState(false)
-    /* intilize t variable for multi language implementation */
     const { t } = useTranslation();
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handleTogglePassword = () => {
+        setShowPassword(!showPassword);
+    };
 
     // validation
     const formik = useFormik({
@@ -47,18 +50,11 @@ const RegisterForm = ({ user, error, loading, navigate }) => {
             password: Yup.string().required('Required')
         }),
         onSubmit: values => {
-            setRegistering(true)
+            dispatch(apiError(""));
+            formik.isSubmitting(true);
             dispatch(registerUser(values));
         },
     });
-
-    const clearError = useCallback(() => {
-        dispatch(apiError(""));
-    }, [dispatch])
-
-    useEffect(() => {
-        clearError();
-    }, [clearError])
 
     useEffect(() => {
         if (successRegister) {
@@ -67,12 +63,8 @@ const RegisterForm = ({ user, error, loading, navigate }) => {
     }, [successRegister]);
 
     useEffect(() => {
-        dispatch(apiError(""));
-    }, [dispatch]);
-
-    useEffect(() => {
-        if (registering && !loading) {
-            setRegistering(false)
+        if (formik.isSubmitting && !loading) {
+            formik.setSubmitting(false);
             setSuccessRegister(!error)
         };
     }, [loading]);
@@ -104,11 +96,11 @@ const RegisterForm = ({ user, error, loading, navigate }) => {
                             </Alert>
                         ) : null}
 
-                        {error && error ? (
+                        {formik.submitCount > 0 && error && (
                             <Alert color="danger">
-                                <div>{error}</div>
+                                <div>{(error.detail && Array.isArray(error.detail) ? error.detail[0].msg : error.detail) || error}</div>
                             </Alert>
-                        ) : null}
+                        )}
 
                         <FormGroup className="mb-3">
                             <Label className="form-label">{t('Name')}</Label>
@@ -154,7 +146,7 @@ const RegisterForm = ({ user, error, loading, navigate }) => {
                             <Label className="form-label">{t('Email')}</Label>
                             <InputGroup className="mb-3 bg-soft-light rounded-3">
                                 <Input
-                                    type="text"
+                                    type="email"
                                     id="email"
                                     name="email"
                                     className="form-control form-control-lg bg-soft-light border-light"
@@ -194,7 +186,7 @@ const RegisterForm = ({ user, error, loading, navigate }) => {
                             <Label className="form-label">{t('Password')}</Label>
                             <InputGroup className="mb-3 bg-soft-light rounded-3">
                                 <Input
-                                    type="password"
+                                    type={showPassword ? 'text' : 'password'}
                                     id="password"
                                     name="password"
                                     className="form-control form-control-lg bg-soft-light border-light"
@@ -204,6 +196,7 @@ const RegisterForm = ({ user, error, loading, navigate }) => {
                                     value={formik.values.password}
                                     invalid={formik.touched.password && formik.errors.password ? true : false}
                                 />
+                                <Button type="button" color="link py-0 px-2 text-body btn-eye" onClick={handleTogglePassword}><i className="ri-eye-line font-size-24 fw-normal"></i></Button>
                                 {formik.touched.password && formik.errors.password ? (
                                     <FormFeedback type="invalid">{formik.errors.password}</FormFeedback>
                                 ) : null}
@@ -213,7 +206,7 @@ const RegisterForm = ({ user, error, loading, navigate }) => {
 
 
                         <div className="d-grid">
-                            <Button color="secondary" size="lg" block className=" waves-effect waves-light" type="submit">
+                            <Button color="secondary" size="lg" block className="waves-effect waves-light" type="submit" disabled={formik.isSubmitting}>
                                 {t('Register')}
                             </Button>
                         </div>
@@ -222,7 +215,7 @@ const RegisterForm = ({ user, error, loading, navigate }) => {
                 </div>
 
                 <div className="text-center mt-2">
-                    <Link to="login" onClick={(e) => { customNavigate({e, to: 'login'}) }} className="font-size-13"> {t('Already have an account')}? {t('Signin')} </Link>
+                    <Link to="login" onClick={(e) => { customNavigate({ e, to: 'login' }) }} className="font-size-13"> {t('Already have an account')}? {t('Signin')} </Link>
                 </div>
             </div>
         </div>

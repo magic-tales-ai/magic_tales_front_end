@@ -57,6 +57,7 @@
     "return": "return",
     "Save your favourite creations.": "Save your favourite creations.",
     "Send Code": "Send Code",
+    "Settings": "Settings",
     "Sign in": "Sign in",
     "Sign up": "Sign up",
     "Signin": "Signin",
@@ -79,5 +80,17 @@
     "With a sprinkle of AI magic, craft stories that captivate any audience by chatting with our enchanting bot.": "With a sprinkle of AI magic, craft stories that captivate any audience by chatting with our enchanting bot.",
     "With the power of cutting-edge technology, we curate stories that honor every festivity, tradition, and culture, spanning across all major languages.": "With the power of cutting-edge technology, we curate stories that honor every festivity, tradition, and culture, spanning across all major languages.",
     "You can create infinite stories": "You can create infinite stories",
-    "Your Stories, Your Way!": "Your Stories, Your Way!"
+    "Your Stories, Your Way!": "Your Stories, Your Way!",
+    "Profile Picture": "Profile Picture",
+    "Update Profile Picture": "Update Profile Picture",
+    "The format can be: _formats_, but cannot exceed _size_MB.": "The format can be: {{formats}}, but cannot exceed {{size}}MB.",
+    "Successfully Updated": "Successfully Updated",
+    "Contact": "Contact",
+    "This email is linked to your account. If you decide to change it, you will need to revalidate it.": "This email is linked to your account. If you decide to change it, you will need to revalidate it.",
+    "Change Email": "Change Email",
+    "New Email": "New Email",
+    "Email Successfully Updated": "Email Successfully Updated",
+    "Confirm New Email": "Confirm New Email",
+    "Check your current email address": "Check your current email address",
+    "Password Successfully Updated": "Password Successfully Updated"
 }

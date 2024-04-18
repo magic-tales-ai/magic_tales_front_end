@@ -14,6 +14,12 @@ import {
     FORGET_PASSWORD_SUCCESS,
     UPDATE_TOKEN,
     LOAD_MONTH_STORIES_COUNT_SUCCESS,
+    UPDATE_USER,
+    UPDATE_USER_SUCCESS,
+    VALIDATE_NEW_USER_EMAIL,
+    VALIDATE_NEW_USER_EMAIL_SUCCESS,
+    CHANGE_PASSWORD_LOGGED_USER,
+    CHANGE_PASSWORD_LOGGED_USER_SUCCESS,
     API_FAILED
 } from './constants';
 
@@ -56,18 +62,6 @@ export const validateRegisterSuccess = () => ({
     type: VALIDATE_USER_REGISTER_SUCCESS,
 });
 
-export const logoutUser = (history) => ({
-    type: LOGOUT_USER,
-    payload: { history }
-});
-
-export const logoutUserSuccess = () => {
-    return {
-      type: LOGOUT_USER_SUCCESS,
-      payload: {},
-    };
-  };
-
 export const forgetPassword = (email) => ({
     type: FORGET_PASSWORD,
     payload: { email }
@@ -91,6 +85,18 @@ export const changePasswordSuccess = () => ({
     type: CHANGE_PASSWORD_SUCCESS
 })
 
+/* logged */
+
+export const logoutUser = (history) => ({
+    type: LOGOUT_USER,
+    payload: { history }
+});
+
+export const logoutUserSuccess = () => ({
+    type: LOGOUT_USER_SUCCESS,
+    payload: {},
+});
+
 export const updateToken = (token) => ({
     type: UPDATE_TOKEN,
     payload: token
@@ -100,6 +106,36 @@ export const loadMonthStoriesCountSuccess = (status) => ({
     type: LOAD_MONTH_STORIES_COUNT_SUCCESS,
     payload: status
 });
+
+export const updateUser = (data) => ({
+    type: UPDATE_USER,
+    payload: data
+})
+
+export const updateUserSuccess = (data) => ({
+    type: UPDATE_USER_SUCCESS,
+    payload: data
+})
+
+export const velidateNewUserEmail = (data) => ({
+    type: VALIDATE_NEW_USER_EMAIL,
+    payload: data
+})
+
+export const validateNewUserEmailSuccess = (data) => ({
+    type: VALIDATE_NEW_USER_EMAIL_SUCCESS,
+    payload: data
+})
+
+export const updateUserPassword = (data) => ({
+    type: CHANGE_PASSWORD_LOGGED_USER,
+    payload: data
+})
+
+export const updateUserPasswordSuccess = (data) => ({
+    type: CHANGE_PASSWORD_LOGGED_USER_SUCCESS,
+    payload: data
+})
 
 export const apiError = (error) => ({
     type: API_FAILED,

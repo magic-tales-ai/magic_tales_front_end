@@ -22,7 +22,6 @@ const SendCodeForm = (props) => {
     const { loading, error } = props;
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const [sending, setSending] = useState(false)
     const [success, setSuccess] = useState(false)
 
     useEffect(() => {
@@ -38,14 +37,13 @@ const SendCodeForm = (props) => {
             email: Yup.string().email('Enter a valid email address').required('Required')
         }),
         onSubmit: values => {
-            setSending(true);
             dispatch(forgetPassword(values.email));
         },
     });
 
     useEffect(() => {
-        if (sending && !loading) {
-            setSending(false)
+        if (formik.isSubmitting && !loading) {
+            formik.setSubmitting(false);
             setSuccess(!error)
         };
     }, [loading]);
@@ -75,17 +73,17 @@ const SendCodeForm = (props) => {
 
                 <Form onSubmit={formik.handleSubmit}>
 
-                    {error && error ? (
+                    {formik.submitCount > 0 && error && (
                         <Alert color="danger">
-                            <div>{error}</div>
+                            <div>{(error.detail && Array.isArray(error.detail) ? error.detail[0].msg : error.detail) || error}</div>
                         </Alert>
-                    ) : null}
+                    )}
 
-                    <FormGroup className="mb-4">
+                    <FormGroup className="mb-3">
                         <Label className="form-label">{t('Email')}</Label>
                         <InputGroup className="mb-3 bg-soft-light rounded-3">
                             <Input
-                                type="text"
+                                type="email"
                                 id="email"
                                 name="email"
                                 className="form-control form-control-lg border-light bg-soft-light"
@@ -102,7 +100,7 @@ const SendCodeForm = (props) => {
                     </FormGroup>
 
                     <div className="d-grid">
-                        <Button color="secondary" size="lg" block className="waves-effect waves-light" type="submit">{t('Send Code')}</Button>
+                        <Button color="secondary" size="lg" block className="waves-effect waves-light" type="submit" disabled={formik.isSubmitting}>{t('Send Code')}</Button>
                     </div>
 
                 </Form>

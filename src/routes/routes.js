@@ -7,6 +7,7 @@ const SubscriptionPlans = React.lazy(() => import("../pages/SubscriptionPlans"))
 const ReadProfiles = React.lazy(() => import("../pages/ReadProfiles"));
 const Library = React.lazy(() => import("../pages/Library"));
 const Landing = React.lazy(() => import("../pages/Landing"));
+const Settings = React.lazy(() => import("../pages/Settings"));
 
 // auth
 const Logout = React.lazy(() => import("../pages/Auth/Logout"));
@@ -18,6 +19,7 @@ const authProtectedRoutes = [
   { path: "/subscription/plans", component: <SubscriptionPlans /> },
   { path: "/profiles", component: <ReadProfiles /> },
   { path: "/library", component: <Library /> },
+  { path: "/settings", component: <Settings /> },
   { path: "*", component: <Navigate to="/dashboard" /> },
 ];
 

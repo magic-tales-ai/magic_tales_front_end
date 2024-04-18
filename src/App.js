@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
+import './i18n';
 
 import Routes from './routes';
 

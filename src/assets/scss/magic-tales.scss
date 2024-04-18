@@ -407,7 +407,7 @@ p:last-child { margin-bottom: 0; }
 	font-size: 16px;
 	opacity: 1;
 }
-input[name='password'], input[name='newPassword'], input[name='repeatedNewPassword'] {
+input[name='password'], input[name='oldPassword'], input[name='newPassword'], input[name='repeatedNewPassword'] {
 	border-right: 0
 }
 .btn-eye {
@@ -501,6 +501,11 @@ input[name='password'], input[name='newPassword'], input[name='repeatedNewPasswo
 
 .default-fill-profile {
 	fill: #6c757d;
+}
+
+/* settings */
+.container-setting {
+	max-width: 800px;
 }
 
 @keyframes fadeIn {
