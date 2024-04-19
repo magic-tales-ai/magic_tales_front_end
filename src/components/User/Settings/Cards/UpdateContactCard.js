@@ -7,7 +7,7 @@ import { connect, useDispatch } from "react-redux";
 import { selectUser } from "../../../../redux/user/selectors";
 
 // Components
-import { ModalChangeEmail } from "../../../Auth/LoggedIn/ChangeEmail/Modal";
+import { ModalChangeEmail } from "../../../User/Settings/ChangeEmail/Modal";
 
 const UpdateContactCardComponent = ({ user }) => {
     const { t } = useTranslation();
