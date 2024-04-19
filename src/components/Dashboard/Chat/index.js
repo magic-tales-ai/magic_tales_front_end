@@ -258,10 +258,10 @@ function Chat({ activeChat, currentChat, sockets, user }) {
                         </SimpleBar>}
 
                         <div className="d-flex px-3 pb-0 mx-lg-5 p-lg-4 py-lg-0">
-                            <div className={`position-relative ${(currentChat && showWorkingMessage) ? 'invisible' : 'visible'}`}>
-                                <span className="opacity-60"> {t('working')} </span>
+                            <div className={`position-relative ${(currentChat && showWorkingMessage) ? 'visible' : 'invisible'}`}>
+                                <span className="opacity-60">{t('working')}</span>
                                 <span className="animate-typing">
-                                    <span className="dot ms-1"></span>
+                                    <span className="dot"></span>
                                     <span className="dot ms-1"></span>
                                     <span className="dot ms-1"></span>
                                 </span>
