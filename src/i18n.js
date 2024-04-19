@@ -2,15 +2,15 @@ import i18n from "i18next";
 import detector from "i18next-browser-languagedetector";
 import { initReactI18next  } from "react-i18next";
 
-import translationSP from './locales/sp/translation.json';
+// import translationSP from './locales/sp/translation.json';
 import translationENG from './locales/en/translation.json';
 
 //translations
 const resources = {
     sp: {
-        translation: translationSP
+        // translation: translationSP
     },
-    eng: {
+    en: {
         translation: translationENG
     }
 };

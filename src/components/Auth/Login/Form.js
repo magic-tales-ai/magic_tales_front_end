@@ -19,23 +19,15 @@ import { selectAuth } from '../../../redux/auth/selectors';
  * Login component
  * @param {*} props 
  */
-const LoginForm = (props) => {
+const LoginForm = ({ error, loading, ...props }) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
-    
+
     const [showPassword, setShowPassword] = useState(false);
 
     const handleTogglePassword = () => {
         setShowPassword(!showPassword);
-      };
-
-    const clearError = useCallback(() => {
-        dispatch(apiError(""));
-    }, [dispatch])
-
-    useEffect(() => {
-        clearError();
-    }, [clearError])
+    };
 
     // validation
     const formik = useFormik({
@@ -48,16 +40,23 @@ const LoginForm = (props) => {
             password: Yup.string().required('Please Enter Your Password')
         }),
         onSubmit: values => {
-            props.loginUser(values.user, values.password, props.router.navigate);
+            dispatch(apiError(""));
+            dispatch(loginUser(values.user, values.password, props.router.navigate));
         },
     });
+
+    useEffect(() => {
+        if (formik.isSubmitting && !loading) {
+            formik.setSubmitting(false);
+        };
+    }, [loading]);
 
     if (localStorage.getItem("authUser")) {
         return <Navigate to="/dashboard" />;
     }
 
     const navigate = (e, to) => {
-        if(props.navigate) {
+        if (props.navigate) {
             e.preventDefault();
             props.navigate(to)
         }
@@ -68,11 +67,13 @@ const LoginForm = (props) => {
             <div className="text-center px-4 px-lg-5 mb-4">
                 <p className="text-reset ff-special fw-normal h1 mb-3">{t('Login')}</p>
                 <Link to="/register" onClick={(e) => { navigate(e, 'register') }} className="font-weight-medium text-decoration-underline mb-4 d-inline-block"> {t('Do you have an account?')} </Link>
+                {formik.submitCount > 0 && error && (
+                    <Alert color="danger">
+                        <div>{(error?.detail && Array.isArray(error.detail) ? error.detail[0].msg : error.detail) || error}</div>
+                    </Alert>
+                )}
                 {
-                    props.error && <Alert color="danger">{props.error}</Alert>
-                }
-                {
-                    props.error == 'User is not active' && <Link to="/validate-registration" onClick={(e) => { navigate(e, 'validate-registration') }} className="font-weight-medium text-decoration-underline mb-4 d-inline-block"> {t('Activate your user by clicking here')} </Link>
+                    error?.detail && error.detail == 'User is not active' && <Link to="/validate-registration" onClick={(e) => { navigate(e, 'validate-registration') }} className="font-weight-medium text-decoration-underline mb-4 d-inline-block"> {t('Activate your user by clicking here')} </Link>
                 }
                 <div>
 
@@ -97,7 +98,7 @@ const LoginForm = (props) => {
                             </InputGroup>
                         </FormGroup>
 
-                        <FormGroup className="mb-4">
+                        <FormGroup className="mb-3">
                             <InputGroup className="mb-3 bg-soft-light rounded-3">
                                 <Input
                                     type={showPassword ? 'text' : 'password'}
@@ -119,7 +120,7 @@ const LoginForm = (props) => {
                         </FormGroup>
 
                         <div className="d-grid">
-                            <Button color="secondary" size="lg" block className=" waves-effect waves-light" type="submit">{t('Login')}</Button>
+                            <Button color="secondary" size="lg" block className=" waves-effect waves-light" type="submit" disabled={formik.isSubmitting}>{t('Login')}</Button>
                         </div>
 
                         <div className="text-center mt-2">

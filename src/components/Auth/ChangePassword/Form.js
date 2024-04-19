@@ -22,7 +22,6 @@ const ChangePasswordForm = (props) => {
     const { loading, error, currentEmailField } = props;
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const [chanding, setChanging] = useState(false)
     const [success, setSuccess] = useState(false)
     const [showPassword, setShowPassword] = useState(false);
     const [showRepeatedPassword, setRepeatedPassword] = useState(false);
@@ -47,20 +46,19 @@ const ChangePasswordForm = (props) => {
         validationSchema: Yup.object({
             newPassword: Yup.string().required('Required'),
             repeatedNewPassword: Yup.string()
-                .test('passwordsMatch', 'Passwords must match', function(value){
+                .test('passwordsMatch', 'Passwords must match', function (value) {
                     return this.parent.newPassword === value;
                 }).required('Required'),
             validationCode: Yup.string().required('Required'),
         }),
         onSubmit: values => {
-            setChanging(true);
             dispatch(changePassword({ ...values, email: currentEmailField }));
         },
     });
 
     useEffect(() => {
-        if (chanding && !loading) {
-            setChanging(false)
+        if (formik.isSubmitting && !loading) {
+            formik.setSubmitting(false);
             setSuccess(!error)
         };
     }, [loading]);
@@ -89,13 +87,13 @@ const ChangePasswordForm = (props) => {
 
                 <Form onSubmit={formik.handleSubmit}>
 
-                    {error && error ? (
+                    {formik.submitCount > 0 && error && (
                         <Alert color="danger">
-                            <div>{Array.isArray(error) ? error[0]?.msg || '' : error}</div>
+                            <div>{(error.detail && Array.isArray(error.detail) ? error.detail[0].msg : error.detail) || error}</div>
                         </Alert>
-                    ) : null}
+                    )}
 
-                    <FormGroup className="mb-4">
+                    <FormGroup className="mb-3">
                         <Label className="form-label">{t('New Password')}</Label>
                         <InputGroup className="mb-3 bg-soft-light rounded-3">
                             <Input
@@ -116,7 +114,7 @@ const ChangePasswordForm = (props) => {
                         </InputGroup>
                     </FormGroup>
 
-                    <FormGroup className="mb-4">
+                    <FormGroup className="mb-3">
                         <Label className="form-label">{t('Repeat the New Password')}</Label>
                         <InputGroup className="mb-3 bg-soft-light rounded-3">
                             <Input
@@ -137,7 +135,7 @@ const ChangePasswordForm = (props) => {
                         </InputGroup>
                     </FormGroup>
 
-                    <FormGroup className="mb-4">
+                    <FormGroup className="mb-3">
                         <Label className="form-label">{t('Code')}</Label>
                         <InputGroup className="mb-3 bg-soft-light rounded-3">
                             <Input
@@ -146,7 +144,10 @@ const ChangePasswordForm = (props) => {
                                 name="validationCode"
                                 className="form-control form-control-lg border-light bg-soft-light"
                                 placeholder="Enter Code"
-                                onChange={formik.handleChange}
+                                onChange={(e) => {
+                                    const onlyNumbers = e.target.value.replace(/[^0-9]/g, '');
+                                    formik.setFieldValue('validationCode', onlyNumbers);
+                                }}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.validationCode}
                                 invalid={formik.touched.validationCode && formik.errors.validationCode ? true : false}
@@ -158,7 +159,7 @@ const ChangePasswordForm = (props) => {
                     </FormGroup>
 
                     <div className="d-grid">
-                        <Button color="secondary" size="lg" block className="waves-effect waves-light" type="submit">{t('Change Password')}</Button>
+                        <Button color="secondary" size="lg" block className="waves-effect waves-light" type="submit" disabled={formik.isSubmitting}>{t('Change Password')}</Button>
                     </div>
 
                 </Form>

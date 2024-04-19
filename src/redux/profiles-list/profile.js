@@ -1,4 +1,5 @@
 import { Record } from 'immutable';
+import { DEFAULT_PICTURE_B64 } from './constants';
 
 export const Profile = new Record({
     loading: false,
@@ -15,7 +16,7 @@ export const createProfile = (data) => {
         ...data,
         id: data?.id,
         createdAt: data?.created_at,
-        image: data?.image,
+        image: data?.image || DEFAULT_PICTURE_B64,
         details: data?.details ? createDetails(JSON.parse(data?.details)) : null,
         userId: data?.user_id
     })

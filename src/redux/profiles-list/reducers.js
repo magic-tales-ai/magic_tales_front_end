@@ -5,6 +5,7 @@ import {
     LOAD_PROFILES_LIST_SUCCESS,
     UPLOAD_PROFILE_IMAGE,
     UPLOAD_PROFILE_IMAGE_SUCCESS,
+    PROFILE_API_FAILED,
     API_FAILED
 } from './constants';
 
@@ -31,7 +32,6 @@ const ProfilesList = (state = INIT_STATE, action) => {
             });
 
         case UPLOAD_PROFILE_IMAGE:
-            console.log(action.payload)
             return state.update('list', list => {
                 const index = list.findIndex(profile => profile.get('id') === action.payload.profileId);
                 if (index !== -1) {
@@ -45,10 +45,21 @@ const ProfilesList = (state = INIT_STATE, action) => {
                 const index = list.findIndex(profile => profile.get('id') === action.payload.profileId);
                 if (index !== -1) {
                     return list.setIn([index, 'loading'], false)
+                        .setIn([index, 'error'], null)
                         .setIn([index, 'image'], action.payload.image)
                 }
                 return list;
-            });
+            })
+
+        case PROFILE_API_FAILED:
+            return state.update('list', list => {
+                const index = list.findIndex(profile => profile.get('id') === action.payload.profileId);
+                if (index !== -1) {
+                    return list.setIn([index, 'loading'], false)
+                        .setIn([index, 'error'], action.payload.error)
+                }
+                return list;
+            })
 
         case API_FAILED:
             return state.merge({

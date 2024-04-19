@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Modal, ModalHeader, ModalBody } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 
-// Pages
+// Components
 import LoginForm from "./Login/Form";
 import RegisterForm from "./Register/Form";
 import ForgetPasswordForm from "./ForgetPassword/Form";

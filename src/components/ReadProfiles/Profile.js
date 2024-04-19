@@ -7,7 +7,7 @@ import { ModalConfirmDelete } from '../Common/Modals/ModalConfirmDelete';
 import { ModalProfile } from './ModalProfile';
 
 // Actions
-import { setActiveChat, setActiveTab } from '../../redux/actions';
+import { setActiveChat, setActiveTab, uploadProfileImage } from '../../redux/actions';
 
 // i18n
 import { useTranslation } from 'react-i18next';
@@ -22,7 +22,7 @@ import useSendMessage from '../../hooks/websocket/sendMessage';
 import { websocket_commands_messages } from '../../redux/websocket/constants';
 
 // Modals
-import { ModalUpdateImage } from './ModalUpdateImage';
+import { ModalUpdateImage } from '../Common/Modals/ModalUpdateImage';
 
 const Profile = (props) => {
     const { profile, displayActions = true, small = false, enableModal = true } = props;
@@ -49,6 +49,10 @@ const Profile = (props) => {
         dispatch(setActiveChat('new'))
         dispatch(setActiveTab('edit-profile'))
         navigate('/dashboard')
+    }
+
+    const updateImage = ({ image }) => {
+        dispatch(uploadProfileImage({ profileId: profile.get('id'), image }))
     }
 
     const avatar = <picture>
@@ -115,11 +119,19 @@ const Profile = (props) => {
                 </div>
             </ModalConfirmDelete>
 
-            <ModalUpdateImage isOpen={openModalUpdateImageProfile} setOpen={setOpenModalUpdateImageProfile} profile={profile} />
+            <ModalUpdateImage 
+                isOpen={openModalUpdateImageProfile}
+                setOpen={setOpenModalUpdateImageProfile}
+                title={t("Update Profile Image")}
+                image={profile?.get('image')}
+                loading={profile?.get('loading')}
+                update={updateImage}
+                error={profile?.get('error')}
+            />
 
             {enableModal && <ModalProfile isOpen={openModalProfile} setOpen={setOpenModalProfile} profile={profile} />}
         </React.Fragment>
     );
 }
 
-export default connect(null, { setActiveChat, setActiveTab })(Profile);
+export default connect(null, { setActiveChat, setActiveTab, uploadProfileImage })(Profile);

@@ -1,85 +1,74 @@
-import React, { useEffect, useCallback, useState } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import withRouter from "../../withRouter";
+import React, { useEffect, useState } from 'react';
+import { connect, useDispatch } from 'react-redux';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { FormGroup, Alert, Form, Input, Button, FormFeedback, Label, InputGroup } from 'reactstrap';
 
 // Actions
-import { validateRegister, resendVerificationCode, apiError } from '../../../redux/actions';
+import { updateUser, apiError } from '../../../../redux/actions';
 
 // i18n
 import { useTranslation } from 'react-i18next';
 
 // Selectors
-import { selectAuth } from '../../../redux/auth/selectors';
+import { selectAuth } from '../../../../redux/auth/selectors';
 
 /**
- * Validate Registration component
+ * Change Email component
  * @param {*} props 
  */
-const ValidateRegistrationForm = ({ error, loading, currentEmailField, navigate }) => {
-    const dispatch = useDispatch();
-    const [successValidation, setSuccessValidation] = useState(false)
+const ChangeEmailComponent = ({ error, loading, user, ...props }) => {
+    const { nextStep } = props;
     const { t } = useTranslation();
+    const dispatch = useDispatch();
+    const [successUpdated, setSuccessUpdated] = useState(false)
 
     const formik = useFormik({
 
         enableReinitialize: true,
 
         initialValues: {
-            email: currentEmailField || '',
-            validationCode: '',
+            email: "",
+            repeatedNewEmail: ""
         },
         validationSchema: Yup.object({
             email: Yup.string().email('Enter a valid email address').required('Required'),
-            validationCode: Yup.string().required('Required'),
+            repeatedNewEmail: Yup.string()
+                .test('emailsMatch', 'Emails must match', function (value) {
+                    return this.parent.email === value;
+                }).required('Required'),
         }),
-        onSubmit: values => {
+        onSubmit: (values, actions) => {
             dispatch(apiError(""));
-            dispatch(validateRegister(values));
+            dispatch(updateUser(values));
         },
     });
 
     useEffect(() => {
-        if (successValidation) {
-            setTimeout(() => customNavigate({ to: 'login' }), 3000);
-        }
-    }, [successValidation]);
-
-    useEffect(() => {
         if (formik.isSubmitting && !loading) {
             formik.setSubmitting(false);
-            setSuccessValidation(!error)
+            setSuccessUpdated(!error);
         };
     }, [loading]);
 
-    const customNavigate = ({ e, to }) => {
-        if (navigate) {
-            e?.preventDefault();
-            navigate(to)
+    useEffect(() => {
+        if (successUpdated) {
+            nextStep();
         }
-    }
+    }, [successUpdated])
 
     return (
         <div className="justify-content-center">
             <div className="text-center px-4 px-lg-5 mb-4">
-                <p className="text-reset ff-special fw-normal h1 mb-3">{t('Validation')}</p>
+                <p className="text-reset ff-special fw-normal h1 mb-3">{t('Change Email')}</p>
                 <div className="text-start">
                     <Form
                         onSubmit={(e) => {
                             e.preventDefault();
                             formik.handleSubmit();
-                            // return false;
                         }}
                     >
-                        {successValidation ? (
-                            <Alert color="success">
-                                {t('Validation Successfully')}
-                            </Alert>
-                        ) : null}
 
                         {formik.submitCount > 0 && error && (
                             <Alert color="danger">
@@ -88,14 +77,14 @@ const ValidateRegistrationForm = ({ error, loading, currentEmailField, navigate 
                         )}
 
                         <FormGroup>
-                            <Label className="form-label">{t('Email')}</Label>
+                            <Label className="form-label">{t('New Email')}</Label>
                             <InputGroup className="mb-3 bg-soft-light rounded-3">
                                 <Input
                                     type="email"
                                     id="email"
                                     name="email"
                                     className="form-control form-control-lg bg-soft-light border-light"
-                                    placeholder="Enter Email"
+                                    placeholder="Enter New Email"
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
                                     value={formik.values.email}
@@ -108,36 +97,28 @@ const ValidateRegistrationForm = ({ error, loading, currentEmailField, navigate 
                         </FormGroup>
 
                         <FormGroup>
-                            <Label className="form-label">{t('Code')}</Label>
+                            <Label className="form-label">{t('Confirm New Email')}</Label>
                             <InputGroup className="mb-3 bg-soft-light rounded-3">
                                 <Input
-                                    type="text"
-                                    id="validationCode"
-                                    name="validationCode"
+                                    type="email"
+                                    id="repeatedNewEmail"
+                                    name="repeatedNewEmail"
                                     className="form-control form-control-lg bg-soft-light border-light"
-                                    placeholder="Enter Code"
-                                    onChange={(e) => {
-                                        const onlyNumbers = e.target.value.replace(/[^0-9]/g, '');
-                                        formik.setFieldValue('validationCode', onlyNumbers);
-                                    }}
+                                    placeholder="Repeat New Email"
+                                    onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
-                                    value={formik.values.validationCode}
-                                    invalid={formik.touched.validationCode && formik.errors.validationCode ? true : false}
+                                    value={formik.values.repeatedNewEmail}
+                                    invalid={formik.touched.repeatedNewEmail && formik.errors.repeatedNewEmail ? true : false}
                                 />
-                                {formik.touched.validationCode && formik.errors.validationCode ? (
-                                    <FormFeedback type="invalid">{formik.errors.validationCode}</FormFeedback>
+                                {formik.touched.repeatedNewEmail && formik.errors.repeatedNewEmail ? (
+                                    <FormFeedback type="invalid">{formik.errors.repeatedNewEmail}</FormFeedback>
                                 ) : null}
                             </InputGroup>
                         </FormGroup>
 
-                        {(formik.values.email && !formik.errors.email)
-                            ? <Link to="#" onClick={() => { dispatch(resendVerificationCode({ email: formik.values.email })) }} className="pb-2 font-weight-medium text-decoration-underline d-inline-block"> {t('Resend Code')} </Link>
-                            : <span className="pb-2 d-inline-block"> {t('Resend Code')} </span>
-                        }
-
                         <div className="d-grid">
                             <Button color="secondary" size="lg" block className=" waves-effect waves-light" type="submit" disabled={formik.isSubmitting}>
-                                {t('Validate')}
+                                {t('Change Email')}
                             </Button>
                         </div>
 
@@ -149,9 +130,9 @@ const ValidateRegistrationForm = ({ error, loading, currentEmailField, navigate 
 }
 
 const mapStateToProps = (state) => {
-    const { error, loading, currentEmailField } = selectAuth(state);
+    const { error, loading, user } = selectAuth(state);
 
-    return { error, loading, currentEmailField };
+    return { error, loading, user };
 };
 
-export default connect(mapStateToProps, { validateRegister, apiError })(ValidateRegistrationForm);
+export const ChangeEmail = connect(mapStateToProps, { apiError })(ChangeEmailComponent);

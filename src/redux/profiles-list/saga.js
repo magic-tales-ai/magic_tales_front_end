@@ -11,6 +11,7 @@ import {
 import {
     loadProfilesListSuccess,
     uploadProfileImageSuccess,
+    profileApiError,
     profilesListApiError as apiError,
 } from './actions';
 
@@ -31,7 +32,7 @@ function* uploadProfileImage({ payload: { profileId, image } }) {
         const response = yield call(create, `/profile/${profileId}/upload-image`, { image });
         yield put(uploadProfileImageSuccess({ profileId, image: response.image }));
     } catch (error) {
-        yield put(apiError(error));
+        yield put(profileApiError({profileId, error}));
     }
 }
 

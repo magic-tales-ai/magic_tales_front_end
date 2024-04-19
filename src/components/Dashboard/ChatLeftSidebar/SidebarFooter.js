@@ -42,7 +42,7 @@ const SidebarFooterComponent = ({ user, anyProfile }) => {
             <div className="d-flex align-items-center">
                 <div className="chat-user-img online align-self-center me-1 ms-0">
                     <div className="avatar-xs">
-                        <img src={avatar1} alt="user-avatar" className="profile-user rounded img-fluid" />
+                        {user?.get('image') && <img src={'data:image/*;base64,' + user?.get('image')} className={`rounded avatar-xs`} alt="avatar" />}
                     </div>
                 </div>
                 <div className="flex-grow-1 overflow-hidden">
@@ -58,9 +58,9 @@ const SidebarFooterComponent = ({ user, anyProfile }) => {
                 <DropdownItem href="/profiles"> {t('Manage Profiles')} </DropdownItem>
                 <DropdownItem divider />
             </>}
-            <DropdownItem href="/"> {t('Settings')} </DropdownItem>
+            <DropdownItem href="/settings"> {t('Settings')} </DropdownItem>
             <DropdownItem divider />
-            <DropdownItem href="/logout"> {t('Log out')} </DropdownItem>
+            <DropdownItem href="/logout"> {t('Logout')} </DropdownItem>
         </DropdownMenu>
         </Dropdown>
     </>
