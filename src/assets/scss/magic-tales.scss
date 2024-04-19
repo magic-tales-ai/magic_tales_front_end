@@ -11,6 +11,15 @@
     height: auto !important;
 }
 .btn-link { text-decoration: none; font-weight: 500; font-size: 1.13rem; }
+.opacity-60 {
+	opacity: 60%;
+}
+.visible {
+	visibility: visible !important;
+}
+.invisible {
+	visibility: hidden !important;
+}
 .lista-infinite-stories {
 	max-width: 1187px;
 }

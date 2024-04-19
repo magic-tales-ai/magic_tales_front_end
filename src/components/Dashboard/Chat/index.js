@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button } from "reactstrap";
 import { connect, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
@@ -54,6 +54,26 @@ function Chat({ activeChat, currentChat, sockets, user }) {
     const lastStatusMessage = statusMessages?.last();
     const lastStatusMessageIndex = messages?.indexOf(lastStatusMessage)
 
+    const [showWorkingMessage, setShowWorkingMessage] = useState(false);
+
+    useEffect(() => {
+        if (!currentChat) {
+            setShowWorkingMessage(false);
+            return;
+        }
+
+        if (!currentChat?.get('aiIsWorking')) {
+            setShowWorkingMessage(false);
+            return;
+        }
+
+        const timeoutId = setTimeout(() => {
+            setShowWorkingMessage(true);
+        }, 200);
+
+        return () => clearTimeout(timeoutId);
+    }, [, currentChat]);
+
     useEffect(() => {
         if (!activeChat) {
             const dataConversationLS = getConversationLS();
@@ -83,7 +103,7 @@ function Chat({ activeChat, currentChat, sockets, user }) {
     }, [currentChat, user])
 
     useEffect(() => {
-        simpleBarRef.current.recalculate();
+        simpleBarRef.current?.recalculate();
         scrolltoBottom();
 
         if (currentChat && currentChat.get('isFinished') && !user?.get('id')) {
@@ -144,7 +164,7 @@ function Chat({ activeChat, currentChat, sockets, user }) {
     }
 
     const scrolltoBottom = () => {
-        if (simpleBarRef.current.el) {
+        if (simpleBarRef.current?.el) {
             simpleBarRef.current.getScrollElement().scrollTop = simpleBarRef.current.getScrollElement().scrollHeight;
         }
     }
@@ -159,10 +179,10 @@ function Chat({ activeChat, currentChat, sockets, user }) {
 
                     <div className="chat-content">
 
-                        <SimpleBar
+                        {currentChat && <SimpleBar
                             style={{ maxHeight: "100%" }}
                             ref={simpleBarRef}
-                            className={`chat-conversation ms-lg-5 p-3 p-lg-4 ${currentChat?.isFinished ? 'isFinish' : ''}`}
+                            className={`chat-conversation ms-lg-5 p-3 pb-0 p-lg-4 ${currentChat?.get('isFinished') ? 'isFinish' : ''}`}
                             id="messages">
                             <ul className="list-unstyled mb-0 me-lg-5">
                                 {
@@ -235,7 +255,18 @@ function Chat({ activeChat, currentChat, sockets, user }) {
                                     )
                                 }
                             </ul>
-                        </SimpleBar>
+                        </SimpleBar>}
+
+                        <div className="d-flex px-3 pb-0 mx-lg-5 p-lg-4 py-lg-0">
+                            <div className={`position-relative ${(currentChat && showWorkingMessage) ? 'invisible' : 'visible'}`}>
+                                <span className="opacity-60"> {t('working')} </span>
+                                <span className="animate-typing">
+                                    <span className="dot ms-1"></span>
+                                    <span className="dot ms-1"></span>
+                                    <span className="dot ms-1"></span>
+                                </span>
+                            </div>
+                        </div>
 
                         <div className="circular-progress d-none d-lg-block">
                             {currentChat?.showProgressBar && !currentChat?.isFinished &&
@@ -291,7 +322,7 @@ function Chat({ activeChat, currentChat, sockets, user }) {
                             </Link>
                         </div>
                     ) : currentChat ? (
-                        <ChatInput onaddMessage={addMessage} />
+                        <ChatInput onaddMessage={addMessage} disabled={currentChat.get('aiIsWorking')} />
                     ) : null}
 
                 </div>
