@@ -9,7 +9,7 @@ import { openModalConfirmChangeChat } from '../../redux/modal-confirm-change-cha
 import { requirementsForNewChat } from '../../redux/chats-list/helper';
 
 // Selectors
-import { selectAuth } from '../../redux/auth/selectors';
+import { selectUser } from '../../redux/user/selectors';
 import { selectChatsList } from '../../redux/chats-list/selectors';
 
 // Constants
@@ -23,7 +23,7 @@ const useSendMessage = () => {
         websocket_commands_messages.CONVERSATION_RECOVERY
     ])
     const currentSocketUid = useRef(null)
-    const { user } = useSelector(selectAuth);
+    const { user } = useSelector(selectUser);
     const websocket = useSelector(state => state.Websocket);
     const { activeChat, currentChat, chats } = useSelector(selectChatsList);
 

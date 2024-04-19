@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { openModalSignin } from "../../../redux/actions";
 
 // Selectors
-import { selectAuth } from "../../../redux/auth/selectors";
+import { selectUser } from "../../../redux/user/selectors";
 import { selectProfiles } from "../../../redux/profiles-list/selectors";
 
 const SidebarFooterComponent = ({ user, anyProfile }) => {
@@ -116,7 +116,7 @@ const SidebarFooterComponent = ({ user, anyProfile }) => {
 
 
 const mapStateToProps = (state) => {
-    const { user } = selectAuth(state);
+    const { user } = selectUser(state);
     const profiles = selectProfiles(state);
     const anyProfile = profiles.list.size > 0;
 

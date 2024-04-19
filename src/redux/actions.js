@@ -1,4 +1,5 @@
 export * from './auth/actions';
+export * from './user/actions';
 export * from './chats-list/actions';
 export * from './stories-list/actions';
 export * from './websocket/actions';

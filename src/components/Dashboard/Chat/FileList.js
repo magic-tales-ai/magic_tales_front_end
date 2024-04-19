@@ -14,7 +14,7 @@ import { openModalSignin } from '../../../redux/actions';
 function FileList(props) {
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const user = useSelector(state => state.Auth.get('user'));
+    const user = useSelector(state => state.User);
     const [files] = useState(props.files);
     
     const handleDownload = (e) => {

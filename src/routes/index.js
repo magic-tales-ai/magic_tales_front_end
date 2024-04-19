@@ -9,13 +9,13 @@ import { authProtectedRoutes, publicRoutes } from './routes';
 import Layout from "../layouts/GeneralLayout/";
 
 // Selectors
-import { selectAuth } from '../redux/auth/selectors';
+import { selectUser } from '../redux/user/selectors';
 
 /**
  * Main Route component
  */
 const Routes = () => {
-    const { user } = useSelector(selectAuth)
+    const { user } = useSelector(selectUser)
 
     return (
         // rendering the router with layout

@@ -12,8 +12,7 @@ import { ModalConfirmChangeChat } from '../components/Dashboard/ModalConfirmChan
 import { loadStoriesList, loadProfilesList } from '../redux/actions';
 
 // Selectors
-import { selectStories } from '../redux/stories-list/selectors';
-import { selectAuth } from '../redux/auth/selectors';
+import { selectUser } from '../redux/user/selectors';
 import { selectChatsList } from '../redux/chats-list/selectors';
 
 const Dashboard = ({ currentChatDone, user }) => {
@@ -41,7 +40,7 @@ const Dashboard = ({ currentChatDone, user }) => {
 };
 
 const mapStateToProps = (state) => {
-    const { user } = selectAuth(state);
+    const { user } = selectUser(state);
     const { currentChat } = selectChatsList(state)
     const currentChatDone = currentChat?.get('isFinished')
 
