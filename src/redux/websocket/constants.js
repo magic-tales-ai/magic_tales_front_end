@@ -14,5 +14,7 @@ export const websocket_commands_messages = {
     STATUS_UPDATE: 'status_update',
     CONVERSATION_RECOVERY: 'conversation_recovery',
     LINK_USER_WITH_CONVERSATIONS: 'link_user_with_conversations',
-    ASK_FOR_REGISTRATION: 'ask_for_registration'
+    ASK_FOR_REGISTRATION: 'ask_for_registration',
+    AI_IS_WORKING: 'ai_is_working',
+    AI_DONE_WORKING: 'ai_done_working'
 }

@@ -16,6 +16,7 @@ export const Chat = new Record({
     numberProgressUpdate: 0,
     storyId: null,
     storyParentId: null,
+    aiIsWorking: false,
     messages: new List(),
 });
 

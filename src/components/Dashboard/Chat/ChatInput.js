@@ -3,6 +3,7 @@ import { Button, Input, Row, Col, UncontrolledTooltip, ButtonDropdown, DropdownT
 import EmojiPicker from 'emoji-picker-react';
 
 function ChatInput(props) {
+    const { disabled } = props;
     const [textMessage, settextMessage] = useState("");
     const [isOpen, setisOpen] = useState(false);
     const [file, setfile] = useState({
@@ -64,19 +65,19 @@ function ChatInput(props) {
 
     return (
         <React.Fragment>
-            <div className="chat-input-section p-3 mx-lg-5 p-lg-4 mb-0 ">
+            <div className="chat-input-section px-3 pb-3 mx-lg-5 p-lg-4 pt-lg-0 mb-0 ">
                 <Form onSubmit={(e) => onaddMessage(e, textMessage)} >
                     <Row className='g-0'>
                         <Col>
                             <div>
-                                <Input type="text" value={textMessage} onChange={handleChange} className="form-control form-control-lg border bg-secondary" placeholder="Write here" />
+                                <Input type="text" value={textMessage} onChange={handleChange} className="form-control form-control-lg border bg-secondary" placeholder="Write here" disabled={disabled} />
                             </div>
                         </Col>
                         <Col xs="auto">
                             <div className="chat-input-links">
                                 <ul className="list-inline mb-0 ms-0">
                                     <li className="list-inline-item">
-                                        <Button type="submit" color="light" className="font-size-16 fw-normal btn-lg chat-send waves-effect waves-light text-white">
+                                        <Button type="submit" color="light" className="font-size-16 fw-normal btn-lg chat-send waves-effect waves-light text-white" disabled={disabled}>
                                             <i className="ri-send-plane-2-fill"></i>
                                         </Button>
                                         {/*version voice*/}
