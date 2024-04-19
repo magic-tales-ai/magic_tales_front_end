@@ -164,14 +164,14 @@ const ChatsList = (state = INIT_STATE, action) => {
                 case websocket_commands_messages.AI_IS_WORKING:
                     return state.withMutations(currentState => {
                         currentState.updateIn(['chats', message.uid], chat => {
-                            return chat.set('aiIsWorking', true);
+                            return chat?.set('aiIsWorking', true);
                         });
                     })
 
                 case websocket_commands_messages.AI_DONE_WORKING:
                     return state.withMutations(currentState => {
                         currentState.updateIn(['chats', message.uid], chat => {
-                            return chat.set('aiIsWorking', false);
+                            return chat?.set('aiIsWorking', false);
                         });
                     })
 

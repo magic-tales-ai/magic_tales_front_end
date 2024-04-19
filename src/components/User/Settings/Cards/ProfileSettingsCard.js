@@ -6,14 +6,11 @@ import { connect, useDispatch } from "react-redux";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-
 // Selectors
-import { selectAuth } from "../../../redux/auth/selectors";
-
-// Components
+import { selectUser } from "../../../../redux/user/selectors";
 
 // Actions
-import { updateUser, apiError } from "../../../redux/actions";
+import { updateUser, apiError } from "../../../../redux/actions";
 
 const ProfileSettingsCardComponent = ({ user, loading, error }) => {
     const dispatch = useDispatch();
@@ -149,7 +146,7 @@ const ProfileSettingsCardComponent = ({ user, loading, error }) => {
 }
 
 const mapStateToProps = (state) => {
-    const { user, error, loading } = selectAuth(state);
+    const { user, error, loading } = selectUser(state);
 
     return { user, error, loading };
 };

@@ -12,14 +12,6 @@ import {
     CHANGE_PASSWORD_SUCCESS,
     FORGET_PASSWORD,
     FORGET_PASSWORD_SUCCESS,
-    UPDATE_TOKEN,
-    LOAD_MONTH_STORIES_COUNT_SUCCESS,
-    UPDATE_USER,
-    UPDATE_USER_SUCCESS,
-    VALIDATE_NEW_USER_EMAIL,
-    VALIDATE_NEW_USER_EMAIL_SUCCESS,
-    CHANGE_PASSWORD_LOGGED_USER,
-    CHANGE_PASSWORD_LOGGED_USER_SUCCESS,
     API_FAILED
 } from './constants';
 
@@ -31,6 +23,16 @@ export const loginUser = (user, password, history) => ({
 export const loginUserSuccess = (user) => ({
     type: LOGIN_USER_SUCCESS,
     payload: user
+});
+
+export const logoutUser = (history) => ({
+    type: LOGOUT_USER,
+    payload: { history }
+});
+
+export const logoutUserSuccess = () => ({
+    type: LOGOUT_USER_SUCCESS,
+    payload: {},
 });
 
 export const registerUser = (user) => ({
@@ -83,58 +85,6 @@ export const changePassword = ({ email, newPassword, repeatedNewPassword, valida
 
 export const changePasswordSuccess = () => ({
     type: CHANGE_PASSWORD_SUCCESS
-})
-
-/* logged */
-
-export const logoutUser = (history) => ({
-    type: LOGOUT_USER,
-    payload: { history }
-});
-
-export const logoutUserSuccess = () => ({
-    type: LOGOUT_USER_SUCCESS,
-    payload: {},
-});
-
-export const updateToken = (token) => ({
-    type: UPDATE_TOKEN,
-    payload: token
-})
-
-export const loadMonthStoriesCountSuccess = (status) => ({
-    type: LOAD_MONTH_STORIES_COUNT_SUCCESS,
-    payload: status
-});
-
-export const updateUser = (data) => ({
-    type: UPDATE_USER,
-    payload: data
-})
-
-export const updateUserSuccess = (data) => ({
-    type: UPDATE_USER_SUCCESS,
-    payload: data
-})
-
-export const velidateNewUserEmail = (data) => ({
-    type: VALIDATE_NEW_USER_EMAIL,
-    payload: data
-})
-
-export const validateNewUserEmailSuccess = (data) => ({
-    type: VALIDATE_NEW_USER_EMAIL_SUCCESS,
-    payload: data
-})
-
-export const updateUserPassword = (data) => ({
-    type: CHANGE_PASSWORD_LOGGED_USER,
-    payload: data
-})
-
-export const updateUserPasswordSuccess = (data) => ({
-    type: CHANGE_PASSWORD_LOGGED_USER_SUCCESS,
-    payload: data
 })
 
 export const apiError = (error) => ({

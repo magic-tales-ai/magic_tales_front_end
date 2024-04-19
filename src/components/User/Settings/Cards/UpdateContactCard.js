@@ -4,10 +4,10 @@ import { Card, CardBody, Button, Form, Label, InputGroup, FormGroup, Input } fro
 import { connect, useDispatch } from "react-redux";
 
 // Selectors
-import { selectAuth } from "../../../redux/auth/selectors";
+import { selectUser } from "../../../../redux/user/selectors";
 
 // Components
-import { ModalChangeEmail } from "../../Auth/LoggedIn/ChangeEmail/Modal";
+import { ModalChangeEmail } from "../../../User/Settings/ChangeEmail/Modal";
 
 const UpdateContactCardComponent = ({ user }) => {
     const { t } = useTranslation();
@@ -54,7 +54,7 @@ const UpdateContactCardComponent = ({ user }) => {
 }
 
 const mapStateToProps = (state) => {
-    const { user } = selectAuth(state);
+    const { user } = selectUser(state);
 
     return { user };
 };

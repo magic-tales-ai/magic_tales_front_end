@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Modal, ModalHeader, ModalBody } from "reactstrap";
 
 // Components
-import { ChangeEmail } from "./ChangeEmail";
-import { ValidateEmail } from "./ValidateEmail";
+import { ChangeEmail } from "./ChangeEmailForm";
+import { ValidateEmail } from "./ValidateEmailForm";
 
 
 export const ModalChangeEmail = ({ isOpen, setOpen }) => {

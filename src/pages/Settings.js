@@ -7,10 +7,10 @@ import withRouter from '../components/withRouter';
 import { useTranslation } from 'react-i18next';
 
 // Components
-import { UpdateProfileImageCard } from '../components/User/Settings/UpdateProfileImageCard';
-import { ProfileSettingsCard } from '../components/User/Settings/ProfileSettingsCard';
-import { UpdateContactCard } from '../components/User/Settings/UpdateContactCard';
-import { SecurityCard }  from '../components/User/Settings/SecurityCard';
+import { UpdateProfileImageCard } from '../components/User/Settings/Cards/UpdateProfileImageCard';
+import { ProfileSettingsCard } from '../components/User/Settings/Cards/ProfileSettingsCard';
+import { UpdateContactCard } from '../components/User/Settings/Cards/UpdateContactCard';
+import { SecurityCard }  from '../components/User/Settings/Cards/SecurityCard';
 
 /**
  * Settings component

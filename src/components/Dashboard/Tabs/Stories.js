@@ -27,7 +27,7 @@ import useSendMessage from '../../../hooks/websocket/sendMessage';
 import { ModalConfirmDelete } from '../../Common/Modals/ModalConfirmDelete';
 
 // Selectors
-import { selectAuth } from '../../../redux/auth/selectors';
+import { selectUser } from "../../../redux/user/selectors";
 import { selectChatsList } from '../../../redux/chats-list/selectors';
 import { selectProfiles } from '../../../redux/profiles-list/selectors';
 import { selectStories } from '../../../redux/stories-list/selectors';
@@ -210,7 +210,7 @@ const Stories = ({ stories, activeChat, chats, currentChat, user, anyProfile, an
 }
 
 const mapStateToProps = (state) => {
-    const { user } = selectAuth(state);
+    const { user } = selectUser(state);
     const { activeChat, chats, currentChat } = selectChatsList(state);
     const profiles = selectProfiles(state);
     const anyProfile = profiles.list.size > 0;

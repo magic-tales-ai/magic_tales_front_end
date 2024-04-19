@@ -10,6 +10,8 @@ export const User = new Record({
     token: "",
     image: DEFAULT_PICTURE_B64,
     monthStoriesCount: 0,
+    loading: false,
+    error: null
 });
 
 export const createNewUser = (data) => {

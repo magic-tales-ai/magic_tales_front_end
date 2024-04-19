@@ -18,10 +18,10 @@ import { selectModalSignIn } from "../../redux/modal-signin/selectors";
 export const ModalSignIn = () => {
     const dispatch = useDispatch()
     const { isOpen, view } = useSelector(selectModalSignIn);
-    const user = useSelector(state => state.Auth?.get('user'));
+    const user = useSelector(state => state.User);
 
     useEffect(() => {
-        if(user?.get('id')) {
+        if(user?.get('id') && isOpen) {
             toggle();
         }
     }, [user])

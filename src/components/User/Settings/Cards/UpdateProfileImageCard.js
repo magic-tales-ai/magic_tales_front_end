@@ -4,19 +4,19 @@ import { Card, CardBody, Button } from "reactstrap";
 import { connect, useDispatch } from "react-redux";
 
 // Image default
-import { ReactComponent as ProfileImageDefault } from "../../../assets/images/profiles/profile-svgrepo-com.svg";
+import { ReactComponent as ProfileImageDefault } from "../../../../assets/images/profiles/profile-svgrepo-com.svg";
 
 // Selectors
-import { selectAuth } from "../../../redux/auth/selectors";
+import { selectUser } from "../../../../redux/user/selectors";
 
 // Components
-import { ModalUpdateImage } from "../../Common/Modals/ModalUpdateImage";
+import { ModalUpdateImage } from "../../../Common/Modals/ModalUpdateImage";
 
 // Constants
-import { MAX_IMAGE_SIZE, IMAGE_SUPPORTED_FORMATS_TEXTS } from "../../../constants";
+import { MAX_IMAGE_SIZE, IMAGE_SUPPORTED_FORMATS_TEXTS } from "../../../../constants";
 
 // Actions
-import { updateUser } from "../../../redux/actions";
+import { updateUser } from "../../../../redux/actions";
 
 const UpdateProfileImageCardComponent = ({ user, loading, error }) => {
     const { t } = useTranslation();
@@ -61,7 +61,7 @@ const UpdateProfileImageCardComponent = ({ user, loading, error }) => {
 }
 
 const mapStateToProps = (state) => {
-    const { user, loading, error } = selectAuth(state);
+    const { user, loading, error } = selectUser(state);
 
     return { user, loading, error };
 };

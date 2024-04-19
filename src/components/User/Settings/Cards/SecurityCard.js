@@ -4,7 +4,7 @@ import { Card, CardBody, Button, Label } from "reactstrap";
 import { connect } from "react-redux";
 
 // Components
-import { ModalChangePassword } from "../../Auth/LoggedIn/ChangePassword/Modal";
+import { ModalChangePassword } from "../../../User/Settings/ChangePassword/Modal";
 
 const SecurityCardComponent = () => {
     const { t } = useTranslation();
@@ -30,7 +30,7 @@ const SecurityCardComponent = () => {
 }
 
 const mapStateToProps = (state) => {
-
+    return {}
 };
 
 export const SecurityCard = connect(mapStateToProps)(SecurityCardComponent);

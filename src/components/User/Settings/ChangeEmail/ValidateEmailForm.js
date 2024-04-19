@@ -14,7 +14,7 @@ import { velidateNewUserEmail, apiError } from '../../../../redux/actions';
 import { useTranslation } from 'react-i18next';
 
 // Selectors
-import { selectAuth } from '../../../../redux/auth/selectors';
+import { selectUser } from '../../../../redux/user/selectors';
 
 /**
  * Validate Change Email component
@@ -120,7 +120,7 @@ const ValidateEmailComponent = ({ error, loading, user, ...props }) => {
 }
 
 const mapStateToProps = (state) => {
-    const { error, loading, user } = selectAuth(state);
+    const { error, loading, user } = selectUser(state);
     return { error, loading, user };
 };
 

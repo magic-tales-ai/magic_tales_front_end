@@ -38,7 +38,7 @@ import { getConversationLS, moveGuestToUserConversation } from '../../../redux/c
 
 // Selectors
 import { selectChatsList } from '../../../redux/chats-list/selectors';
-import { selectAuth } from '../../../redux/auth/selectors';
+import { selectUser } from '../../../redux/user/selectors';
 
 // Constants
 import { websocket_commands_messages } from '../../../redux/websocket/constants';
@@ -334,7 +334,7 @@ function Chat({ activeChat, currentChat, sockets, user }) {
 const mapStateToProps = (state) => {
     const { activeChat, currentChat } = selectChatsList(state);
     const sockets = state.Websocket?.sockets
-    const { user } = selectAuth(state);
+    const { user } = selectUser(state);
     return { activeChat, currentChat, sockets, user };
 };
 
