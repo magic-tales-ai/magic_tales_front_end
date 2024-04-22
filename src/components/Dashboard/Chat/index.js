@@ -254,19 +254,24 @@ function Chat({ activeChat, currentChat, sockets, user }) {
                                         </li>
                                     )
                                 }
+
+                                {currentChat && showWorkingMessage && <li className="sender">
+                                    <div className="conversation-list">
+                                        <div className="user-chat-content">
+                                            <div className="ctext-wrap">
+                                                <div className="ctext-wrap-content">
+                                                    <span className="animate-typing">
+                                                        <span className="dot"></span>
+                                                        <span className="dot ms-1"></span>
+                                                        <span className="dot ms-1"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>}
                             </ul>
                         </SimpleBar>}
-
-                        <div className="d-flex px-3 pb-0 mx-lg-5 p-lg-4 py-lg-0">
-                            <div className={`position-relative ${(currentChat && showWorkingMessage) ? 'visible' : 'invisible'}`}>
-                                <span className="opacity-60">{t('working')}</span>
-                                <span className="animate-typing">
-                                    <span className="dot"></span>
-                                    <span className="dot ms-1"></span>
-                                    <span className="dot ms-1"></span>
-                                </span>
-                            </div>
-                        </div>
 
                         <div className="circular-progress d-none d-lg-block">
                             {currentChat?.showProgressBar && !currentChat?.isFinished &&
