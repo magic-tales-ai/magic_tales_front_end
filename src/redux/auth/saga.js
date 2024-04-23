@@ -10,6 +10,7 @@ import {
     RESEND_VERIFICATION_CODE,
     FORGET_PASSWORD,
     CHANGE_PASSWORD,
+    CREATE_USER_TRY_MODE
 } from './constants';
 
 import {
@@ -18,8 +19,9 @@ import {
     validateRegisterSuccess,
     forgetPasswordSuccess,
     changePasswordSuccess,
-    apiError,
     logoutUserSuccess,
+    createUserTryModeSuccess,
+    apiError,
 } from './actions';
 
 
@@ -105,7 +107,7 @@ function* forgetPassword({ payload: { email } }) {
 }
 
 /**
- * chenge password
+ * change password
  */
 function* changePassword({ payload: { email, newPassword, repeatedNewPassword, validationCode } }) {
     try {
@@ -116,6 +118,19 @@ function* changePassword({ payload: { email, newPassword, repeatedNewPassword, v
             validation_code: validationCode
         });
         yield put(changePasswordSuccess(response));
+    } catch (error) {
+        yield put(apiError(error));
+    }
+}
+
+/**
+ * create user try mode
+ */
+function* createUserTryMode() {
+    try {
+        const response = yield call(create, 'user/try-mode');
+        const { token, user_id } = response;
+        yield put(createUserTryModeSuccess({ token, userId: user_id }));
     } catch (error) {
         yield put(apiError(error));
     }
@@ -149,6 +164,10 @@ export function* watchChangePassword() {
     yield takeEvery(CHANGE_PASSWORD, changePassword);
 }
 
+export function* watchCreateUserTryMode() {
+    yield takeEvery(CREATE_USER_TRY_MODE, createUserTryMode);
+}
+
 function* authSaga() {
     yield all([
         fork(watchLoginUser),
@@ -158,6 +177,7 @@ function* authSaga() {
         fork(watchResendVerificationCode),
         fork(watchForgetPassword),
         fork(watchChangePassword),
+        fork(watchCreateUserTryMode)
     ]);
 }
 
