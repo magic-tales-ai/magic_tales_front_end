@@ -34,7 +34,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import useSendMessage from '../../../hooks/websocket/sendMessage';
 
 // Helpers
-import { getConversationLS, moveGuestToUserConversation } from '../../../redux/chats-list/helper';
+import { getConversationLS } from '../../../redux/chats-list/helper';
 
 // Selectors
 import { selectChatsList } from '../../../redux/chats-list/selectors';
@@ -75,7 +75,7 @@ function Chat({ activeChat, currentChat, sockets, user, tryModeToken }) {
         return () => clearTimeout(timeoutId);
     }, [, currentChat]);
 
-    useEffect(() => {console.log(user, tryModeToken)
+    useEffect(() => {
         if (!activeChat && (user || tryModeToken)) {
             const dataConversationLS = getConversationLS();
             if (dataConversationLS?.uid) {

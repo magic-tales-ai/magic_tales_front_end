@@ -24,6 +24,7 @@ import {
     apiError,
 } from './actions';
 
+import { moveGuestToUserConversation } from '../chats-list/helper';
 
 /**
  * Sets the session
@@ -40,6 +41,7 @@ function* login({ payload: { user, password, history } }) {
     try {
         const response = yield call(create, 'session/login', { user, password });
         localStorage.setItem("authUser", JSON.stringify(response));
+        localStorage.removeItem('guestConversationData');
         yield put(loginUserSuccess(response));
         history('/dashboard');
     } catch (error) {
@@ -64,9 +66,11 @@ function* logout({ payload: { history } }) {
  */
 function* register({ payload: { user } }) {
     try {
-        const parsedUser = { ...user, last_name: user.lastName };
+        const parsedUser = { ...user, last_name: user.lastName, try_mode_user_id: user.tryModeId };
         delete parsedUser.lastName;
+        delete parsedUser.tryModeId;
         const response = yield call(create, 'session/register', parsedUser);
+        moveGuestToUserConversation({ userId: parsedUser.try_mode_user_id })
         yield put(registerUserSuccess(response));
     } catch (error) {
         yield put(apiError(error));
