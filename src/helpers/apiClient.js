@@ -61,9 +61,11 @@ class APIClient {
         if (useFormData) {
             const formData = new FormData();
 
-            Object.entries(data).forEach(([key, value]) => {
-                formData.append(key, value);
-            });
+            if(data){
+                Object.entries(data).forEach(([key, value]) => {
+                    formData.append(key, value);
+                });
+            }
 
             return axios.post(url, formData, {
                 headers: {
