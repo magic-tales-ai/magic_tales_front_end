@@ -15,7 +15,7 @@ import ChatInput from "./ChatInput";
 import FileList from "./FileList";
 
 // Actions
-import { setActiveChat, openModalSignin, newUserMessage } from "../../../redux/actions";
+import { setActiveChat, openModalSignin, newUserMessage, createUserTryMode } from "../../../redux/actions";
 
 // Images
 import avatar4 from "../../../assets/images/users/avatar-4.jpg";
@@ -34,16 +34,17 @@ import 'react-circular-progressbar/dist/styles.css';
 import useSendMessage from '../../../hooks/websocket/sendMessage';
 
 // Helpers
-import { getConversationLS, moveGuestToUserConversation } from '../../../redux/chats-list/helper';
+import { getConversationLS } from '../../../redux/chats-list/helper';
 
 // Selectors
 import { selectChatsList } from '../../../redux/chats-list/selectors';
 import { selectUser } from '../../../redux/user/selectors';
+import { selectAuth } from '../../../redux/auth/selectors';
 
 // Constants
 import { websocket_commands_messages } from '../../../redux/websocket/constants';
 
-function Chat({ activeChat, currentChat, sockets, user }) {
+function Chat({ activeChat, currentChat, sockets, user, tryModeToken }) {
     const { t } = useTranslation();
     const { sendMessage } = useSendMessage();
     const dispatch = useDispatch();
@@ -75,7 +76,7 @@ function Chat({ activeChat, currentChat, sockets, user }) {
     }, [, currentChat]);
 
     useEffect(() => {
-        if (!activeChat) {
+        if (!activeChat && (user || tryModeToken)) {
             const dataConversationLS = getConversationLS();
             if (dataConversationLS?.uid) {
                 sendMessage({
@@ -89,18 +90,13 @@ function Chat({ activeChat, currentChat, sockets, user }) {
                 })
             }
         }
-    }, [sockets, user?.get('id')])
+    }, [sockets, user?.get('id'), tryModeToken])
 
     useEffect(() => {
-        const dataConversationLS = getConversationLS();
-        if (currentChat && user?.get('id') && !dataConversationLS?.userId && currentChat.get('uid') === dataConversationLS?.uid) {
-            sendMessage({
-                command: websocket_commands_messages.LINK_USER_WITH_CONVERSATIONS,
-                session_ids: [dataConversationLS?.uid]
-            })
-            moveGuestToUserConversation()
+        if(!user?.get('id')) {
+            dispatch(createUserTryMode());
         }
-    }, [currentChat, user])
+    }, [])
 
     useEffect(() => {
         simpleBarRef.current?.recalculate();
@@ -340,7 +336,8 @@ const mapStateToProps = (state) => {
     const { activeChat, currentChat } = selectChatsList(state);
     const sockets = state.Websocket?.sockets
     const { user } = selectUser(state);
-    return { activeChat, currentChat, sockets, user };
+    const { tryModeToken } = selectAuth(state);
+    return { activeChat, currentChat, sockets, user, tryModeToken };
 };
 
 export default withRouter(connect(mapStateToProps, { setActiveChat, newUserMessage })(Chat));

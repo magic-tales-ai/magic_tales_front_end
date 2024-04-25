@@ -6,6 +6,8 @@ export const selectAuth = createSelector(
         loading: auth.get('loading'),
         isUserLogout: auth.get('isUserLogout'),
         currentEmailField: auth.get('currentEmailField'),
+        tryModeToken: auth.get('tryModeToken'),
+        tryModeId: auth.get('tryModeId'),
         error: auth.get('error'),
     }),
 );
