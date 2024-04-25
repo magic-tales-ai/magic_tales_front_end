@@ -10,6 +10,7 @@ import { requirementsForNewChat } from '../../redux/chats-list/helper';
 
 // Selectors
 import { selectUser } from '../../redux/user/selectors';
+import { selectAuth } from '../../redux/auth/selectors';
 import { selectChatsList } from '../../redux/chats-list/selectors';
 
 // Constants
@@ -24,6 +25,7 @@ const useSendMessage = () => {
     ])
     const currentSocketUid = useRef(null)
     const { user } = useSelector(selectUser);
+    const { tryModeToken, tryModeId } = useSelector(selectAuth);
     const websocket = useSelector(state => state.Websocket);
     const { activeChat, currentChat, chats } = useSelector(selectChatsList);
 
@@ -52,6 +54,10 @@ const useSendMessage = () => {
         if (user?.get('token')) {
             wsmessage.token = user.get('token').replace('Bearer ', '');
             wsmessage.user_id = user.get('id')
+        }
+        else if(tryModeToken) {
+            wsmessage.token = tryModeToken;
+            wsmessage.user_id = tryModeId
         }
 
         return wsmessage;

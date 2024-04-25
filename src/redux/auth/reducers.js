@@ -10,7 +10,9 @@ import {
     FORGET_PASSWORD_SUCCESS,
     CHANGE_PASSWORD,
     CHANGE_PASSWORD_SUCCESS,
-    API_FAILED
+    API_FAILED,
+    CREATE_USER_TRY_MODE,
+    CREATE_USER_TRY_MODE_SUCCESS
 } from './constants';
 
 import { setAuthorization } from '../../helpers/apiClient';
@@ -26,12 +28,15 @@ const Auth = (state = new AuthRecord, action) => {
         case LOGIN_USER:
         case VALIDATE_USER_REGISTER:
         case CHANGE_PASSWORD:
+        case CREATE_USER_TRY_MODE:
             return state.set('loading', true);
 
         case LOGIN_USER_SUCCESS:
             return state.merge({
                 loading: false,
-                error: null
+                error: null,
+                tryModeToken: null,
+                tryModeId: null
             });
 
         case LOGOUT_USER_SUCCESS:
@@ -72,6 +77,14 @@ const Auth = (state = new AuthRecord, action) => {
                 currentEmailField: "",
                 loading: false,
                 error: null
+            });
+
+        case CREATE_USER_TRY_MODE_SUCCESS:
+            return state.merge({
+                loading: false,
+                error: null,
+                tryModeToken: action.payload.token,
+                tryModeId: action.payload.userId
             });
 
         case API_FAILED:

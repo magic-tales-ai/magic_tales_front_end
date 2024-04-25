@@ -12,6 +12,8 @@ import {
     CHANGE_PASSWORD_SUCCESS,
     FORGET_PASSWORD,
     FORGET_PASSWORD_SUCCESS,
+    CREATE_USER_TRY_MODE,
+    CREATE_USER_TRY_MODE_SUCCESS,
     API_FAILED
 } from './constants';
 
@@ -86,6 +88,16 @@ export const changePassword = ({ email, newPassword, repeatedNewPassword, valida
 export const changePasswordSuccess = () => ({
     type: CHANGE_PASSWORD_SUCCESS
 })
+
+export const createUserTryMode = () => ({
+    type: CREATE_USER_TRY_MODE
+})
+
+export const createUserTryModeSuccess = ({ token, userId }) => ({
+    type: CREATE_USER_TRY_MODE_SUCCESS,
+    payload: { token, userId }
+});
+
 
 export const apiError = (error) => ({
     type: API_FAILED,
