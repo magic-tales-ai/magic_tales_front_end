@@ -29,13 +29,13 @@ function getConversationLS() {
     return conversation;
 }
 
-function moveGuestToUserConversation() {
-    const user = getLoggedInUser();
+function moveGuestToUserConversation({ userId }) {
+    const id = userId || getLoggedInUser()?.id;
     const guestConversation = JSON.parse(localStorage.getItem('guestConversationData'));
     
-    if(user && guestConversation) {
-        guestConversation.userId = user?.id;
-        localStorage.setItem(user.id + 'userConversationData', JSON.stringify(guestConversation));
+    if(id && guestConversation) {
+        guestConversation.userId = id;
+        localStorage.setItem(id + 'userConversationData', JSON.stringify(guestConversation));
         localStorage.removeItem('guestConversationData');
     }
 }
