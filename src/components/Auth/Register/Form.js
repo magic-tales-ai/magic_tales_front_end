@@ -20,7 +20,7 @@ import { selectAuth } from '../../../redux/auth/selectors';
  * Register component
  * @param {*} props 
  */
-const RegisterForm = ({ user, error, loading, navigate }) => {
+const RegisterForm = ({ tryModeId, error, loading, navigate }) => {
     const dispatch = useDispatch();
     const [successRegister, setSuccessRegister] = useState(false)
     const { t } = useTranslation();
@@ -51,8 +51,7 @@ const RegisterForm = ({ user, error, loading, navigate }) => {
         }),
         onSubmit: values => {
             dispatch(apiError(""));
-            formik.isSubmitting(true);
-            dispatch(registerUser(values));
+            dispatch(registerUser({...values, tryModeId}));
         },
     });
 
@@ -65,7 +64,7 @@ const RegisterForm = ({ user, error, loading, navigate }) => {
     useEffect(() => {
         if (formik.isSubmitting && !loading) {
             formik.setSubmitting(false);
-            setSuccessRegister(!error)
+            setSuccessRegister(!error);
         };
     }, [loading]);
 
@@ -223,9 +222,9 @@ const RegisterForm = ({ user, error, loading, navigate }) => {
 }
 
 const mapStateToProps = (state) => {
-    const { user, error, loading } = selectAuth(state);
+    const { tryModeId, error, loading } = selectAuth(state);
 
-    return { user, error, loading };
+    return { tryModeId, error, loading };
 };
 
 export default connect(mapStateToProps, { registerUser, apiError })(RegisterForm);

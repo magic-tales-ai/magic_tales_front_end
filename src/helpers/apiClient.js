@@ -6,7 +6,7 @@ import { getLoggedInUser } from './authUtils';
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 // content type
-axios.defaults.headers.post['Content-Type'] = 'application/json';
+axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 
 // intercepting to capture errors
 axios.interceptors.response.use(function (response) {
@@ -57,24 +57,15 @@ class APIClient {
     /**
      * post given data to url
      */
-    create = (url, data, useFormData = true) => {
-        if (useFormData) {
-            const formData = new FormData();
-
-            if(data){
-                Object.entries(data).forEach(([key, value]) => {
-                    formData.append(key, value);
-                });
-            }
-
-            return axios.post(url, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
+    create = (url, data) => {
+        const formData = new FormData();
+        if (data) {
+            Object.entries(data).forEach(([key, value]) => {
+                formData.append(key, value);
             });
         }
 
-        return axios.post(url, data);
+        return axios.post(url, formData);
     }
 
     /**
