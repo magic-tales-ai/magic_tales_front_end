@@ -55,12 +55,12 @@ const SidebarFooterComponent = ({ user, anyProfile }) => {
         </DropdownToggle>
         <DropdownMenu className="dropdown-menu-end">
             {!disableOptionsProfile && <>
-                <DropdownItem href="/profiles"> {t('Manage Profiles')} </DropdownItem>
+                <Link to="/profiles" size="xs" className="dropdown-item"> {t('Manage Profiles')} </Link>
                 <DropdownItem divider />
             </>}
-            <DropdownItem href="/settings"> {t('Settings')} </DropdownItem>
+            <Link to="/settings" size="xs" className="dropdown-item"> {t('Settings')} </Link>
             <DropdownItem divider />
-            <DropdownItem href="/logout"> {t('Logout')} </DropdownItem>
+            <Link to="/logout" size="xs" className="dropdown-item"> {t('Logout')} </Link>
         </DropdownMenu>
         </Dropdown>
     </>
