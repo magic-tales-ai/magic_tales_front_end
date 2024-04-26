@@ -5,6 +5,10 @@ import { Link } from "react-router-dom";
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import SimpleBar from "simplebar-react";
 
+// Marker
+import DOMPurify from 'dompurify';
+import {marked} from 'marked';
+
 // Router
 import withRouter from "../../../components/withRouter";
 
@@ -43,6 +47,13 @@ import { selectAuth } from '../../../redux/auth/selectors';
 
 // Constants
 import { websocket_commands_messages } from '../../../redux/websocket/constants';
+
+function displayMessage(message) {
+    const htmlContent = marked.parse(message);
+    const htmlContentSanitizado = DOMPurify.sanitize(htmlContent);
+    return {__html: htmlContentSanitizado};
+}
+
 
 function Chat({ activeChat, currentChat, sockets, user, tryModeToken }) {
     const { t } = useTranslation();
@@ -189,9 +200,7 @@ function Chat({ activeChat, currentChat, sockets, user, tryModeToken }) {
                                                     {
                                                         chat.message && chat.type !== 'system' && chat.type !== 'status' &&
                                                         <div className="ctext-wrap">
-                                                            <div className="ctext-wrap-content">
-                                                                <p>{chat.message}</p>
-                                                            </div>
+                                                            <div className="ctext-wrap-content" dangerouslySetInnerHTML={displayMessage(chat.message)}></div>
                                                         </div>
                                                     }
                                                     {
