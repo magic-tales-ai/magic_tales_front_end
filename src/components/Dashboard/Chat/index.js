@@ -104,7 +104,7 @@ function Chat({ activeChat, currentChat, sockets, user, tryModeToken }) {
     }, [sockets, user?.get('id'), tryModeToken])
 
     useEffect(() => {
-        if(!user?.get('id')) {
+        if(!user?.get('id') && !tryModeToken) {
             dispatch(createUserTryMode());
         }
     }, [])

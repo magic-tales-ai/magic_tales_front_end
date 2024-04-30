@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, ModalHeader, ModalBody } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -10,7 +10,7 @@ import ValidateRegistration from "./ValidateRegistration/Form";
 import ChangePassword from "./ChangePassword/Form";
 
 // Actions
-import { closeModalSignin, setView } from "../../redux/actions";
+import { closeModalSignin, setView, setActiveChat, createUserTryMode } from "../../redux/actions";
 
 // Selectors
 import { selectModalSignIn } from "../../redux/modal-signin/selectors";
@@ -19,6 +19,8 @@ export const ModalSignIn = () => {
     const dispatch = useDispatch()
     const { isOpen, view } = useSelector(selectModalSignIn);
     const user = useSelector(state => state.User);
+    const [previousView, setPreviousView] = useState(null);
+    const [newRegister, setNewRegister] = useState(false);
 
     useEffect(() => {
         if(user?.get('id') && isOpen) {
@@ -26,11 +28,31 @@ export const ModalSignIn = () => {
         }
     }, [user])
 
+    useEffect(() => {
+        if(previousView === 'register' && view === 'validate-registration') {
+            setNewRegister(true);
+        }
+    }, [view])
+
+    useEffect(() => {
+        if(newRegister && !isOpen && (view === 'validate-registration' || view === 'login')) {
+            // new temporary user for new chat
+            dispatch(createUserTryMode());
+            // for the dashboard to create a new chat
+            dispatch(setActiveChat(null));
+        }
+        
+        if(!isOpen) {
+            setNewRegister(false);
+        }
+    }, [isOpen])
+
     const toggle = () => {
         dispatch(closeModalSignin());
     }
 
     const changeView = (view) => {
+        setPreviousView(view)
         dispatch(setView({ view }))
     }
 

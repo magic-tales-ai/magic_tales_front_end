@@ -15,12 +15,13 @@ import { useTranslation } from 'react-i18next';
 
 // Selectors
 import { selectAuth } from '../../../redux/auth/selectors';
+import { selectCurrentChatWebsocket } from '../../../redux/websocket/selectors';
 
 /**
  * Register component
  * @param {*} props 
  */
-const RegisterForm = ({ tryModeId, error, loading, navigate }) => {
+const RegisterForm = ({ currentChatWebsocket, tryModeId, error, loading, navigate }) => {
     const dispatch = useDispatch();
     const [successRegister, setSuccessRegister] = useState(false)
     const { t } = useTranslation();
@@ -57,6 +58,7 @@ const RegisterForm = ({ tryModeId, error, loading, navigate }) => {
 
     useEffect(() => {
         if (successRegister) {
+            currentChatWebsocket?.close()
             setTimeout(() => customNavigate({ to: 'validate-registration' }), 3000);
         }
     }, [successRegister]);
@@ -223,8 +225,9 @@ const RegisterForm = ({ tryModeId, error, loading, navigate }) => {
 
 const mapStateToProps = (state) => {
     const { tryModeId, error, loading } = selectAuth(state);
+    const { currentChatWebsocket } = selectCurrentChatWebsocket(state)
 
-    return { tryModeId, error, loading };
+    return { currentChatWebsocket, tryModeId, error, loading };
 };
 
 export default connect(mapStateToProps, { registerUser, apiError })(RegisterForm);

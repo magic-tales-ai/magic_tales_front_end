@@ -30,9 +30,6 @@ const ChatsList = (state = INIT_STATE, action) => {
                     progressUntilThisMessage: state.getIn(['chats', state.get('activeChat'), 'progress'])
                 });
 
-                // Update LS on new user message
-                handleSaveConversationLS({ uid: state.get('activeChat'), storyParentId: state.get('storyParentId') });
-
                 return state.withMutations(currentState => {
                     currentState.updateIn(['chats', state.get('activeChat')], chat => {
                         return chat.set('messages', chat.get('messages').push(newMessage))
@@ -56,6 +53,9 @@ const ChatsList = (state = INIT_STATE, action) => {
                     newChat = createNewChat({
                         ...message,
                     })
+
+                    // Update LS on new user message
+                    handleSaveConversationLS({ uid: newChat.get('uid'), storyParentId: newChat.get('storyParentId') });
 
                     return state.set('activeChat', newChat.uid)
                         .update('chats', chats => chats.set(newChat.uid, newChat));
@@ -176,11 +176,15 @@ const ChatsList = (state = INIT_STATE, action) => {
                     })
 
                 case websocket_commands_messages.CONVERSATION_RECOVERY:
-                    return state.withMutations(currentState => {
-                        currentState.updateIn(['chats', message.uid], _ => {
-                            return recoverChat(message);
+                    if(!payload.ack) {// Temporary fix, now recovery can bring another recovery command
+                        return state.withMutations(currentState => {
+                            currentState.updateIn(['chats', message.uid], _ => {
+                                return recoverChat(message);
+                            })
                         })
-                    })
+                    } 
+                    
+                    return state
 
                 default:
                     return state;
