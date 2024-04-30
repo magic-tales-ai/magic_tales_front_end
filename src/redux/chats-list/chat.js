@@ -36,7 +36,7 @@ export const recoverChat = ({ uid, data }) => {
         .set('activeChat', uid)
         .set('chats', new Map([[uid, createNewChat({ uid })]]))
 
-    data.conversations?.map(interaction => {
+    data?.conversations?.map(interaction => {
         const { command, details } = interaction;
         const { token, ...detailsWithoutToken } = details;
 
