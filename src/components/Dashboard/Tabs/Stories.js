@@ -34,6 +34,7 @@ import { selectStories } from '../../../redux/stories-list/selectors';
 
 // Constants
 import { websocket_commands_messages } from '../../../redux/websocket/constants';
+import { ModalStory } from '../../Library/ModalStory';
 
 const Stories = ({ stories, activeChat, chats, currentChat, user, anyProfile, anyStory } = {}) => {
     const { sendMessage, validateForNewChat } = useSendMessage();
@@ -42,6 +43,7 @@ const Stories = ({ stories, activeChat, chats, currentChat, user, anyProfile, an
     const ref = useRef();
 
     const [dropdownOpen, setdropdownOpen] = useState();
+    const [openModalStory, setOpenModalStory] = useState(false);
     const [openModalDelete, setOpenModalDelete] = useState(false);
     const [currentStoryId, setCurrentStoryId] = useState();
     const [disabledProfiles, setDisabledProfiles] = useState(false);
@@ -88,19 +90,21 @@ const Stories = ({ stories, activeChat, chats, currentChat, user, anyProfile, an
     const openStoryChat = (e, story) => {
         e.preventDefault();
         
-        if(chats.get(story.get('sessionId'))) { // chat already loaded
-            validateForNewChat({ _callback: () => {
-                dispatch(setActiveChat(story.get('sessionId')))
-            }})
-        }
-        else {
-            sendMessage({
-                command: 'conversation_recovery', 
-                uid: story.get('sessionId')
-            })
-        }
+        setCurrentStoryId(story.get('id'));
+        setOpenModalStory(true);
+        // if(chats.get(story.get('sessionId'))) { // chat already loaded
+        //     validateForNewChat({ _callback: () => {
+        //         dispatch(setActiveChat(story.get('sessionId')))
+        //     }})
+        // }
+        // else {
+        //     sendMessage({
+        //         command: 'conversation_recovery', 
+        //         uid: story.get('sessionId')
+        //     })
+        // }
 
-        closeMenu()
+        closeMenu();
     }
 
     return (
@@ -201,6 +205,8 @@ const Stories = ({ stories, activeChat, chats, currentChat, user, anyProfile, an
                     <Button color="link" size="sm" className="border-0 my-2 text-body mx-auto">View all</Button>
                 </div> */}
             </SimpleBar>
+
+            {currentStoryId && <ModalStory isOpen={openModalStory} setOpen={setOpenModalStory} story={stories.list.find(story => story?.get('id') == currentStoryId)} />}
 
             <ModalConfirmDelete isOpen={openModalDelete} setOpen={setOpenModalDelete} callback={() => { dispatch(deleteStory(currentStoryId)) }} title={'Are you sure you want to delete?'} >
                 <p className='text-left'>You will not be able to recover this story</p>
