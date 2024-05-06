@@ -49,8 +49,8 @@ export const Header = () => {
                 <div className="container-fluid">
                     <a href="#" className="navbar-brand"><span>{t('Magic Tales')}</span></a>
                     <div className="ms-auto">
-                        <Link to="/dashboard" className="btn btn-primary rounded-pill me-3 me-xs-0" type="button" id="btn-try-free">{t('Try to free')}</Link>
-                        <Link to="/dashboard" onClick={() => { dispatch(openModalSignin()) }} className="btn btn-primary rounded-pill" type="button" id="btn-login">{t('Login')}</Link>
+                        <Link to="/dashboard" className="min-width btn btn-primary rounded-pill me-3 me-xs-0" type="button" id="btn-try-free">{t('Try to free')}</Link>
+                        <Link to="/dashboard" onClick={() => { dispatch(openModalSignin()) }} className="min-width btn btn-primary rounded-pill" type="button" id="btn-login">{t('Login')}</Link>
                     </div>
                 </div>
             </nav>

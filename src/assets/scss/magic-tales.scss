@@ -45,7 +45,7 @@
 .jump-animation {
 	height: 35px;
 	position: relative;
-	width: 20px;
+	width: 22px;
 	margin: 0 auto;
 }
 .jump-animation svg {
@@ -107,6 +107,9 @@
 		--bs-btn-padding-x: 1.2rem !important;
 		--bs-btn-padding-y: 0.5rem !important;
 		--bs-btn-font-weight: 700 !important;
+		&.min-width {
+				min-width: 134px;
+		}
 	}
 	a {
 		color: white;
