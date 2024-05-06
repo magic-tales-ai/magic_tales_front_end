@@ -42,6 +42,31 @@
     background-color: #000;
 }
 
+.jump-animation {
+	height: 35px;
+	position: relative;
+	width: 20px;
+	margin: 0 auto;
+}
+.jump-animation svg {
+	animation-name: jumping;
+	animation-duration: 1s;
+	animation-iteration-count: infinite;
+	animation-timing-function: ease-out;
+	animation-direction: alternate-reverse;
+	position: absolute;
+	left: calc(50% - 10px);
+}
+
+@keyframes jumping {
+  0% {
+  	top: 15px;
+  }
+  100% {
+  	top: 0px;
+  }
+}
+
 .container-landing{
 	width: 100%;
   	font-size: 14px;

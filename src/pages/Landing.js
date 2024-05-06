@@ -42,7 +42,7 @@ const Landing = () => {
 			<main>
 				<Hero />
 
-				<div className="container py-5 text-center">
+				<div className="container py-5 text-center" id="inicio">
 					<div className="title-infinte-stories mx-auto">
 						<h2 className="fw-normal">{t('You can create infinite stories')}</h2>
 						<p className="mb-5 px-5">{t('With a sprinkle of AI magic, craft stories that captivate any audience by chatting with our enchanting bot.')}</p>
