@@ -78,8 +78,8 @@ const Landing = () => {
 							</ul>
 						</div>
 					</div>
-					<ButtonNextSection className="scrollRight d-none d-md-block" scrollTo="whyMagicTales"/>
-					<ButtonNextSection className="scrollRight d-md-none" scrollTo="unveilNarratives"/>
+					<ButtonNextSection className="scrollArrow d-none d-md-block" scrollTo="whyMagicTales"/>
+					<ButtonNextSection className="scrollArrow d-md-none" scrollTo="unveilNarratives"/>
 				</div>
 
 				<div id="whyMagicTales" className="vh-100 d-md-flex w-100 align-items-center justify-content-center position-relative d-none">
@@ -89,7 +89,7 @@ const Landing = () => {
 							<p className="mb-5 px-5 opacity-75 mb-md-0">{t('Uncover a wealth of unique features and unparalleled benefits that distinguish us from the ordinary. Allow us to illustrate why MagicTales stands as the ultimate destination for those in search of captivating, personalized narratives.')}</p>
 						</div>
 					</div>
-					<ButtonNextSection className="scrollRight" scrollTo="unveilNarratives"/>
+					<ButtonNextSection className="scrollArrow" scrollTo="unveilNarratives"/>
 				</div>
 
 				<div id="unveilNarratives" className="vh-100 d-flex w-100 align-items-center justify-content-center position-relative">
@@ -111,7 +111,7 @@ const Landing = () => {
 							</div>
 						</div>
 					</div>
-					<ButtonNextSection className="scrollRight" scrollTo="healingThroughStories"/>
+					<ButtonNextSection className="scrollArrow" scrollTo="healingThroughStories"/>
 				</div>
 
 				<div id="healingThroughStories" className="vh-100 d-flex w-100 align-items-center justify-content-center position-relative">
@@ -131,7 +131,7 @@ const Landing = () => {
 							</div>
 						</div>
 					</div>
-					<ButtonNextSection className="scrollRight" scrollTo="discoverMagic"/>
+					<ButtonNextSection className="scrollArrow" scrollTo="discoverMagic"/>
 				</div>
 
 				<div id="discoverMagic" className="vh-100 d-flex w-100 align-items-center justify-content-center position-relative">
@@ -151,7 +151,7 @@ const Landing = () => {
 							</div>
 						</div>
 					</div>
-					<ButtonNextSection className="scrollRight" scrollTo="notJustTales"/>
+					<ButtonNextSection className="scrollArrow" scrollTo="notJustTales"/>
 				</div>
 
 				<div id="notJustTales" className="vh-100 d-flex w-100 align-items-center justify-content-center position-relative">
@@ -171,7 +171,7 @@ const Landing = () => {
 							</div>
 						</div>
 					</div>
-					<ButtonNextSection className="scrollRight" scrollTo="storiesWay"/>
+					<ButtonNextSection className="scrollArrow" scrollTo="storiesWay"/>
 				</div>
 
 				<div id="storiesWay" className="vh-100 d-flex w-100 align-items-center justify-content-center position-relative">
@@ -191,7 +191,7 @@ const Landing = () => {
 							</div>
 						</div>
 					</div>
-					<ButtonNextSection className="scrollRight" scrollTo="globalStorytelling"/>
+					<ButtonNextSection className="scrollArrow" scrollTo="globalStorytelling"/>
 				</div>
 
 				<div id="globalStorytelling" className="vh-100 d-flex w-100 align-items-center justify-content-center position-relative">
@@ -206,7 +206,7 @@ const Landing = () => {
 							<img src={section8} className="mx-auto img-fluid mb-5" />
 						</picture>
 					</div>
-					<ButtonNextSection className="scrollRight" scrollTo="plansList"/>
+					<ButtonNextSection className="scrollArrow" scrollTo="plansList"/>
 				</div>
 
 				<PlansList />

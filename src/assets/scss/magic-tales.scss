@@ -67,10 +67,11 @@
   }
 }
 
-.scrollRight {
+.scrollArrow {
 	position: absolute;
+	top: calc(100vh - 60px);
 	right: 25px;
-	top: calc(50vh - 17px);
+	z-index: 1000;
 }
 
 .container-landing{
