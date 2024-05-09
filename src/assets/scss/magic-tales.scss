@@ -67,6 +67,12 @@
   }
 }
 
+.scrollRight {
+	position: absolute;
+	right: 25px;
+	top: calc(50vh - 17px);
+}
+
 .container-landing{
 	width: 100%;
   	font-size: 14px;

@@ -59,40 +59,40 @@ const Landing = () => {
 			<main>
 				<Hero />
 
-				<div id="inicio" className="vh-100 d-md-flex w-100 align-items-center justify-content-center py-5">
-				<div className="container py-5 text-center">
-					<div className="title-infinte-stories mx-auto">
-						<h2 className="fw-normal">{t('You can create infinite stories')}</h2>
-						<p className="mb-5 px-5">{t('With a sprinkle of AI magic, craft stories that captivate any audience by chatting with our enchanting bot.')}</p>
+				<div id="inicio" className="vh-100 d-md-flex w-100 align-items-center justify-content-center py-5 position-relative">
+					<div className="container py-5 text-center">
+						<div className="title-infinte-stories mx-auto">
+							<h2 className="fw-normal">{t('You can create infinite stories')}</h2>
+							<p className="mb-5 px-5">{t('With a sprinkle of AI magic, craft stories that captivate any audience by chatting with our enchanting bot.')}</p>
+						</div>
+						<picture>
+							<source srcSet={section2dk} media="(min-width: 768px)" />
+							<img src={section2} className="mx-auto img-fluid mb-5 d-block" />
+						</picture>
+						<div className="mx-auto px-3 d-inline-block lista-infinite-stories mb-3">
+							<ul className="list-unstyled text-start lista-img d-md-flex">
+								<li className="mb-4 col-md-3"><img src={library} width="24" /><span className="opacity-75">{t('Save your favourite creations.')}</span></li>
+								<li className="mb-4 col-md-3"><img src={readerProfile} width="24" /><span className="opacity-75">{t("Have multiple reader's profiles.")}</span></li>
+								<li className="mb-4 col-md-3"><img src={ghost} width="24" /><span className="opacity-75">{t('Create tailor made characters with their own personallities.')}</span></li>
+								<li className="col-md-3"><img src={languages} width="24" /><span className="opacity-75">{t('Choose and combine languages freely.')}</span></li>
+							</ul>
+						</div>
 					</div>
-					<picture>
-						<source srcSet={section2dk} media="(min-width: 768px)" />
-						<img src={section2} className="mx-auto img-fluid mb-5 d-block" />
-					</picture>
-					<div className="mx-auto px-3 d-inline-block lista-infinite-stories mb-3">
-						<ul className="list-unstyled text-start lista-img d-md-flex">
-							<li className="mb-4 col-md-3"><img src={library} width="24" /><span className="opacity-75">{t('Save your favourite creations.')}</span></li>
-							<li className="mb-4 col-md-3"><img src={readerProfile} width="24" /><span className="opacity-75">{t("Have multiple reader's profiles.")}</span></li>
-							<li className="mb-4 col-md-3"><img src={ghost} width="24" /><span className="opacity-75">{t('Create tailor made characters with their own personallities.')}</span></li>
-							<li className="col-md-3"><img src={languages} width="24" /><span className="opacity-75">{t('Choose and combine languages freely.')}</span></li>
-						</ul>
-					</div>
-					<ButtonNextSection className="d-none d-md-block" scrollTo="whyMagicTales"/>
-					<ButtonNextSection className="d-md-none" scrollTo="unveilNarratives"/>
-				</div>
+					<ButtonNextSection className="scrollRight d-none d-md-block" scrollTo="whyMagicTales"/>
+					<ButtonNextSection className="scrollRight d-md-none" scrollTo="unveilNarratives"/>
 				</div>
 
-				<div id="whyMagicTales" className="vh-100 d-md-flex w-100 align-items-center justify-content-center d-none">
+				<div id="whyMagicTales" className="vh-100 d-md-flex w-100 align-items-center justify-content-center position-relative d-none">
 					<div className="container py-5 text-center">
 						<div className="title-why-magic py-5 mx-auto">
 							<h2 className="mb-4 h1">{t('Why MagicTales?')}</h2>
 							<p className="mb-5 px-5 opacity-75 mb-md-0">{t('Uncover a wealth of unique features and unparalleled benefits that distinguish us from the ordinary. Allow us to illustrate why MagicTales stands as the ultimate destination for those in search of captivating, personalized narratives.')}</p>
 						</div>
-						<ButtonNextSection scrollTo="unveilNarratives"/>
 					</div>
+					<ButtonNextSection className="scrollRight" scrollTo="unveilNarratives"/>
 				</div>
 
-				<div id="unveilNarratives" className="vh-100 d-flex w-100 align-items-center justify-content-center">
+				<div id="unveilNarratives" className="vh-100 d-flex w-100 align-items-center justify-content-center position-relative">
 					<div className="container py-5 text-center text-md-start section-3">
 						<div className="row pb-5">
 							<div className="col-md-6">
@@ -110,11 +110,11 @@ const Landing = () => {
 								</picture>
 							</div>
 						</div>
-						<ButtonNextSection scrollTo="healingThroughStories"/>
 					</div>
+					<ButtonNextSection className="scrollRight" scrollTo="healingThroughStories"/>
 				</div>
 
-				<div id="healingThroughStories" className="vh-100 d-flex w-100 align-items-center justify-content-center">
+				<div id="healingThroughStories" className="vh-100 d-flex w-100 align-items-center justify-content-center position-relative">
 					<div className="container py-5 text-center text-md-start">
 						<div className="row flex-row-reverse pb-5">
 							<div className="col-md-6">
@@ -130,11 +130,11 @@ const Landing = () => {
 								</picture>
 							</div>
 						</div>
-						<ButtonNextSection scrollTo="discoverMagic"/>
 					</div>
+					<ButtonNextSection className="scrollRight" scrollTo="discoverMagic"/>
 				</div>
 
-				<div id="discoverMagic" className="vh-100 d-flex w-100 align-items-center justify-content-center">
+				<div id="discoverMagic" className="vh-100 d-flex w-100 align-items-center justify-content-center position-relative">
 					<div className="container py-5 text-center text-md-start">
 						<div className="row pb-5">
 							<div className="col-md-6">
@@ -150,11 +150,11 @@ const Landing = () => {
 								</picture>
 							</div>
 						</div>
-						<ButtonNextSection scrollTo="notJustTales"/>
 					</div>
+					<ButtonNextSection className="scrollRight" scrollTo="notJustTales"/>
 				</div>
 
-				<div id="notJustTales" className="vh-100 d-flex w-100 align-items-center justify-content-center">
+				<div id="notJustTales" className="vh-100 d-flex w-100 align-items-center justify-content-center position-relative">
 					<div className="container py-5 text-center text-md-start">
 						<div className="row flex-row-reverse">
 							<div className="col-md-6">
@@ -170,11 +170,11 @@ const Landing = () => {
 								</picture>
 							</div>
 						</div>
-						<ButtonNextSection scrollTo="storiesWay"/>
 					</div>
+					<ButtonNextSection className="scrollRight" scrollTo="storiesWay"/>
 				</div>
 
-				<div id="storiesWay" className="vh-100 d-flex w-100 align-items-center justify-content-center">
+				<div id="storiesWay" className="vh-100 d-flex w-100 align-items-center justify-content-center position-relative">
 					<div className="container py-5 text-center text-md-start">
 						<div className="row pb-5">
 							<div className="col-md-6">
@@ -190,11 +190,11 @@ const Landing = () => {
 								</picture>
 							</div>
 						</div>
-						<ButtonNextSection scrollTo="globalStorytelling"/>
 					</div>
+					<ButtonNextSection className="scrollRight" scrollTo="globalStorytelling"/>
 				</div>
 
-				<div id="globalStorytelling" className="vh-100 d-flex w-100 align-items-center justify-content-center">
+				<div id="globalStorytelling" className="vh-100 d-flex w-100 align-items-center justify-content-center position-relative">
 					<div className="container py-5 text-center">
 						<img src={separador} width="210" className="mx-auto mb-5" />
 						<div className="title-global-storytelling mx-auto mb-5">
@@ -205,8 +205,8 @@ const Landing = () => {
 							<source srcSet={section8dk} media="(min-width: 768px)" />
 							<img src={section8} className="mx-auto img-fluid mb-5" />
 						</picture>
-						<ButtonNextSection scrollTo="plansList"/>
 					</div>
+					<ButtonNextSection className="scrollRight" scrollTo="plansList"/>
 				</div>
 
 				<PlansList />
