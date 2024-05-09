@@ -32,6 +32,23 @@ import languages from '../assets/images/landing/languages.svg'
 
 import separador from '../assets/images/landing/separador.svg'
 
+function ButtonNextSection({scrollTo, className}){
+
+	function scrollToNext(elem) {
+	    document.getElementById(elem).scrollIntoView({ behavior: 'smooth', block: 'start' });
+	};
+
+	return (
+		<button data-scrollTo={scrollTo} onClick={() => scrollToNext(scrollTo)} className={`${className} text-dark btn border-0 d-block mx-auto btn-link jump-animation`}>
+	        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" className="bi bi-chevron-double-down" viewBox="0 0 16 16">
+	          <path fillRule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+	          <path fillRule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+	        </svg>
+	    </button>
+	)
+};
+
+
 const Landing = () => {
 	const { t } = useTranslation();
 	
@@ -42,7 +59,8 @@ const Landing = () => {
 			<main>
 				<Hero />
 
-				<div className="container py-5 text-center" id="inicio">
+				<div id="inicio" className="vh-100 d-md-flex w-100 align-items-center justify-content-center py-5">
+				<div className="container py-5 text-center">
 					<div className="title-infinte-stories mx-auto">
 						<h2 className="fw-normal">{t('You can create infinite stories')}</h2>
 						<p className="mb-5 px-5">{t('With a sprinkle of AI magic, craft stories that captivate any audience by chatting with our enchanting bot.')}</p>
@@ -51,7 +69,7 @@ const Landing = () => {
 						<source srcSet={section2dk} media="(min-width: 768px)" />
 						<img src={section2} className="mx-auto img-fluid mb-5 d-block" />
 					</picture>
-					<div className="mx-auto px-3 d-inline-block lista-infinite-stories">
+					<div className="mx-auto px-3 d-inline-block lista-infinite-stories mb-3">
 						<ul className="list-unstyled text-start lista-img d-md-flex">
 							<li className="mb-4 col-md-3"><img src={library} width="24" /><span className="opacity-75">{t('Save your favourite creations.')}</span></li>
 							<li className="mb-4 col-md-3"><img src={readerProfile} width="24" /><span className="opacity-75">{t("Have multiple reader's profiles.")}</span></li>
@@ -59,20 +77,24 @@ const Landing = () => {
 							<li className="col-md-3"><img src={languages} width="24" /><span className="opacity-75">{t('Choose and combine languages freely.')}</span></li>
 						</ul>
 					</div>
+					<ButtonNextSection className="d-none d-md-block" scrollTo="whyMagicTales"/>
+					<ButtonNextSection className="d-md-none" scrollTo="unveilNarratives"/>
+				</div>
 				</div>
 
-				<div className="vh-100 d-md-flex w-100 align-items-center justify-content-center d-none">
+				<div id="whyMagicTales" className="vh-100 d-md-flex w-100 align-items-center justify-content-center d-none">
 					<div className="container py-5 text-center">
 						<div className="title-why-magic py-5 mx-auto">
 							<h2 className="mb-4 h1">{t('Why MagicTales?')}</h2>
 							<p className="mb-5 px-5 opacity-75 mb-md-0">{t('Uncover a wealth of unique features and unparalleled benefits that distinguish us from the ordinary. Allow us to illustrate why MagicTales stands as the ultimate destination for those in search of captivating, personalized narratives.')}</p>
 						</div>
+						<ButtonNextSection scrollTo="unveilNarratives"/>
 					</div>
 				</div>
 
-				<div className="vh-100 d-flex w-100 align-items-center justify-content-center">
+				<div id="unveilNarratives" className="vh-100 d-flex w-100 align-items-center justify-content-center">
 					<div className="container py-5 text-center text-md-start section-3">
-						<div className="row">
+						<div className="row pb-5">
 							<div className="col-md-6">
 								<div className="txt-columna mx-auto">
 									<h2 className="mb-5">{t('Unveil narratives')} 📚</h2>
@@ -84,16 +106,17 @@ const Landing = () => {
 							<div className="col-md-6">
 								<picture>
 									<source srcSet={section3dk} media="(min-width: 768px)" />
-									<img src={section3} alt="Stories card" className="mx-auto img-fluid mb-5 mb-md-0 d-block" />
+									<img src={section3} alt="Stories card" className="mx-auto img-fluid d-block" />
 								</picture>
 							</div>
 						</div>
+						<ButtonNextSection scrollTo="healingThroughStories"/>
 					</div>
 				</div>
 
-				<div className="vh-100 d-flex w-100 align-items-center justify-content-center">
+				<div id="healingThroughStories" className="vh-100 d-flex w-100 align-items-center justify-content-center">
 					<div className="container py-5 text-center text-md-start">
-						<div className="row flex-row-reverse">
+						<div className="row flex-row-reverse pb-5">
 							<div className="col-md-6">
 								<div className="txt-columna mx-auto">
 									<h2 className="mb-5">{t('Healing Through Stories')} 📖</h2>
@@ -107,12 +130,13 @@ const Landing = () => {
 								</picture>
 							</div>
 						</div>
+						<ButtonNextSection scrollTo="discoverMagic"/>
 					</div>
 				</div>
 
-				<div className="vh-100 d-flex w-100 align-items-center justify-content-center">
+				<div id="discoverMagic" className="vh-100 d-flex w-100 align-items-center justify-content-center">
 					<div className="container py-5 text-center text-md-start">
-						<div className="row">
+						<div className="row pb-5">
 							<div className="col-md-6">
 								<div className="txt-columna mx-auto">
 									<h2 className="mb-5">{t('Discover the Magic in Everyday Moments!')} ✨</h2>
@@ -126,10 +150,11 @@ const Landing = () => {
 								</picture>
 							</div>
 						</div>
+						<ButtonNextSection scrollTo="notJustTales"/>
 					</div>
 				</div>
 
-				<div className="vh-100 d-flex w-100 align-items-center justify-content-center">
+				<div id="notJustTales" className="vh-100 d-flex w-100 align-items-center justify-content-center">
 					<div className="container py-5 text-center text-md-start">
 						<div className="row flex-row-reverse">
 							<div className="col-md-6">
@@ -145,12 +170,13 @@ const Landing = () => {
 								</picture>
 							</div>
 						</div>
+						<ButtonNextSection scrollTo="storiesWay"/>
 					</div>
 				</div>
 
-				<div className="vh-100 d-flex w-100 align-items-center justify-content-center">
+				<div id="storiesWay" className="vh-100 d-flex w-100 align-items-center justify-content-center">
 					<div className="container py-5 text-center text-md-start">
-						<div className="row">
+						<div className="row pb-5">
 							<div className="col-md-6">
 								<div className="txt-columna mx-auto">
 									<h2 className="mb-5">{t('Your Stories, Your Way!')} 📱</h2>
@@ -164,10 +190,11 @@ const Landing = () => {
 								</picture>
 							</div>
 						</div>
+						<ButtonNextSection scrollTo="globalStorytelling"/>
 					</div>
 				</div>
 
-				<div className="vh-100 d-flex w-100 align-items-center justify-content-center">
+				<div id="globalStorytelling" className="vh-100 d-flex w-100 align-items-center justify-content-center">
 					<div className="container py-5 text-center">
 						<img src={separador} width="210" className="mx-auto mb-5" />
 						<div className="title-global-storytelling mx-auto mb-5">
@@ -176,8 +203,9 @@ const Landing = () => {
 						</div>
 						<picture>
 							<source srcSet={section8dk} media="(min-width: 768px)" />
-							<img src={section8} className="mx-auto img-fluid" />
+							<img src={section8} className="mx-auto img-fluid mb-5" />
 						</picture>
+						<ButtonNextSection scrollTo="plansList"/>
 					</div>
 				</div>
 
