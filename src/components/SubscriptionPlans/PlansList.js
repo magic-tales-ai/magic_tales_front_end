@@ -33,7 +33,7 @@ export const PlansList = () => {
     }, [])
 
     return (
-        <div className="vh-100 w-100 align-items-center justify-content-center planes-box bg-black">
+        <div id="plansList" className="vh-100 w-100 d-flex flex-column align-items-center justify-content-center planes-box bg-black">
             <div className="container py-5 text-center">
                 <div className="title-plan mx-auto mb-4">
                     <h1 className="ff-special fw-normal mb-4">{t('Choose Your Ideal Plan')}</h1>

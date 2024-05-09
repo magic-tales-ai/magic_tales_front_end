@@ -42,6 +42,38 @@
     background-color: #000;
 }
 
+.jump-animation {
+	height: 35px;
+	position: relative;
+	width: 22px;
+	margin: 0 auto;
+}
+.jump-animation svg {
+	animation-name: jumping;
+	animation-duration: 1s;
+	animation-iteration-count: infinite;
+	animation-timing-function: ease-out;
+	animation-direction: alternate-reverse;
+	position: absolute;
+	left: calc(50% - 10px);
+}
+
+@keyframes jumping {
+  0% {
+  	top: 15px;
+  }
+  100% {
+  	top: 0px;
+  }
+}
+
+.scrollArrow {
+	position: absolute;
+	top: calc(100vh - 60px);
+	right: 25px;
+	z-index: 1000;
+}
+
 .container-landing{
 	width: 100%;
   	font-size: 14px;
@@ -82,6 +114,9 @@
 		--bs-btn-padding-x: 1.2rem !important;
 		--bs-btn-padding-y: 0.5rem !important;
 		--bs-btn-font-weight: 700 !important;
+		&.min-width {
+				min-width: 134px;
+		}
 	}
 	a {
 		color: white;
