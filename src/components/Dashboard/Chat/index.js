@@ -19,7 +19,7 @@ import ChatInput from "./ChatInput";
 import FileList from "./FileList";
 
 // Actions
-import { setActiveChat, openModalSignin, newUserMessage, createUserTryMode } from "../../../redux/actions";
+import { setActiveChat, openModalSignin, closeModalSignin, newUserMessage, createUserTryMode } from "../../../redux/actions";
 
 // Images
 import avatar4 from "../../../assets/images/users/avatar-4.jpg";
@@ -47,6 +47,7 @@ import { selectAuth } from '../../../redux/auth/selectors';
 
 // Constants
 import { websocket_commands_messages } from '../../../redux/websocket/constants';
+import { selectModalSignIn } from '../../../redux/modal-signin/selectors';
 
 function displayMessage(message) {
     const htmlContent = marked.parse(message);
@@ -55,7 +56,7 @@ function displayMessage(message) {
 }
 
 
-function Chat({ activeChat, currentChat, sockets, user, tryModeToken }) {
+function Chat({ activeChat, currentChat, sockets, user, tryModeToken, isOpenModalSignIn }) {
     const { t } = useTranslation();
     const { sendMessage } = useSendMessage();
     const dispatch = useDispatch();
@@ -67,6 +68,30 @@ function Chat({ activeChat, currentChat, sockets, user, tryModeToken }) {
     const lastStatusMessageIndex = messages?.indexOf(lastStatusMessage)
 
     const [showWorkingMessage, setShowWorkingMessage] = useState(false);
+    const [preventChatLoading, setPreventChatLoading] = useState(false);
+
+    useEffect(() => {
+        if(isOpenModalSignIn) {
+            dispatch(setActiveChat(null));
+            setPreventChatLoading(true);
+        }
+        return () => {
+            setPreventChatLoading(false);
+            dispatch(closeModalSignin());
+        }
+    }, [])
+
+    useEffect(() => {
+        if(!user?.get('id') && !tryModeToken) {
+            dispatch(createUserTryMode());
+        }
+    }, [])
+
+    useEffect(() => {
+        if(!isOpenModalSignIn) {
+            setPreventChatLoading(false);
+        }
+    }, [isOpenModalSignIn])
 
     useEffect(() => {
         if (!currentChat) {
@@ -87,6 +112,10 @@ function Chat({ activeChat, currentChat, sockets, user, tryModeToken }) {
     }, [, currentChat]);
 
     useEffect(() => {
+        if(preventChatLoading) {
+            return;
+        }
+
         if (!activeChat && (user || tryModeToken)) {
             const dataConversationLS = getConversationLS();
             if (dataConversationLS?.uid) {
@@ -101,13 +130,7 @@ function Chat({ activeChat, currentChat, sockets, user, tryModeToken }) {
                 })
             }
         }
-    }, [sockets, user?.get('id'), tryModeToken])
-
-    useEffect(() => {
-        if(!user?.get('id') && !tryModeToken) {
-            dispatch(createUserTryMode());
-        }
-    }, [])
+    }, [sockets, user?.get('id'), tryModeToken, preventChatLoading])
 
     useEffect(() => {
         simpleBarRef.current?.recalculate();
@@ -342,12 +365,13 @@ function Chat({ activeChat, currentChat, sockets, user, tryModeToken }) {
 }
 
 const mapStateToProps = (state) => {
+    const { isOpen } = selectModalSignIn(state);
     const { activeChat, currentChat } = selectChatsList(state);
     const sockets = state.Websocket?.sockets
     const { user } = selectUser(state);
     const { tryModeToken } = selectAuth(state);
-    return { activeChat, currentChat, sockets, user, tryModeToken };
+    return { activeChat, currentChat, sockets, user, tryModeToken, isOpenModalSignIn: isOpen };
 };
 
-export default withRouter(connect(mapStateToProps, { setActiveChat, newUserMessage })(Chat));
+export default withRouter(connect(mapStateToProps, { setActiveChat, newUserMessage, closeModalSignin })(Chat));
 
