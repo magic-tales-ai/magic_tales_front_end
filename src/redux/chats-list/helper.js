@@ -78,7 +78,7 @@ function requirementsForNewChat({ currentChat }) {
         return requirements;
     }
 
-    if(!currentChat.get('isFinished') && currentChat.get('hasUserMessages')) {
+    if(!currentChat.get('isFinished')) {
         requirements.confirmation = true;
     }
 

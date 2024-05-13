@@ -114,7 +114,7 @@ const Stories = ({ stories, activeChat, chats, currentChat, user, anyProfile, an
             </div>
 
             <div className="d-flex p-3">
-                <Button color="primary" className="d-flex flex-fill" onClick={() => { sendMessage({ command: websocket_commands_messages.NEW_TALE }) }}>
+                <Button color="primary" className="d-flex flex-fill" disabled={currentChat && currentChat.get('aiIsWorking')} onClick={() => { sendMessage({ command: websocket_commands_messages.NEW_TALE }) }}>
                     <span className="custom-icon me-3"><img src={iconFile} alt="icon file" /></span>
                     {t('New Tale')}
                 </Button>
