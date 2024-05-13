@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { Card, CardBody, Nav, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from "reactstrap";
-import { connect, useDispatch } from "react-redux";
-import { useNavigate } from 'react-router-dom';
+import { connect } from "react-redux";
 
 // Components/Modals
 import withRouter from '../withRouter';
-import { ModalConfirmDelete } from '../Common/Modals/ModalConfirmDelete';
+import { ModalDeleteStory } from './ModalDeleteStory';
 import { ModalStory } from './ModalStory';
 
 // Actions
-import { setActiveChat, deleteStory as deleteStoryAction } from '../../redux/actions';
+import { setActiveChat } from '../../redux/actions';
 
 // i18n
 import { useTranslation } from 'react-i18next';
@@ -28,12 +27,10 @@ import useSendMessage from '../../hooks/websocket/sendMessage';
 const CardStory = ({ story, router: { navigate } }) => {
     const { t } = useTranslation();
     const { sendMessage } = useSendMessage();
-    const dispatch = useDispatch();
 
     const [openModalStory, setOpenModalStory] = useState(false);
     const [openModalDelete, setOpenModalDelete] = useState(false);
     const [dropdownOpen, setdropdownOpen] = useState();
-    const [dropdownOpenMobile, setDropdownOpenMobile] = useState();
 
     const toggle = () => {
         setdropdownOpen(!dropdownOpen)
@@ -45,10 +42,6 @@ const CardStory = ({ story, router: { navigate } }) => {
             story_id: story.get('id')
         })
         navigate('/dashboard');
-    }
-
-    const deleteStory = () => {
-        dispatch(deleteStoryAction(story.get('id')));
     }
 
     const profileInfo = <div className="d-flex">
@@ -102,32 +95,9 @@ const CardStory = ({ story, router: { navigate } }) => {
                 </CardBody>
             </Card>
 
-            <ModalConfirmDelete isOpen={openModalDelete} setOpen={setOpenModalDelete} callback={deleteStory} title={'Are you sure you want to delete?'} >
-                <div>
-                    <p className="text-center">{t('By deleteing the story, You do not delete the reader profile.')}</p>
+            <ModalDeleteStory isOpen={openModalDelete} setOpen={setOpenModalDelete} story={story} />
 
-                    <Card color="secondary" className="card-library mx-auto my-4">
-                        <CardBody>
-                            <div className="d-flex">
-                                <picture>
-                                    <source srcSet={avatar1} className="rounded avatar-md" />
-                                    <img src={avatar1} className="rounded avatar-md me-2 h-auto" alt={story.get('title')} />
-                                </picture>
-                                <div>
-                                    <div className="d-flex justify-content-between align-items-center">
-                                        <h2 className="font-size-14 mb-0 opacity-75">{story.get('title')}</h2>
-                                    </div>
-                                    <p className="font-size-10 opacity-75">{story.get('synopsis')}</p>
-                                </div>
-                            </div>
-                        </CardBody>
-                    </Card>
-                </div>
-            </ModalConfirmDelete>
-
-            <ModalStory isOpen={openModalStory} setOpen={setOpenModalStory} story={story} setOpenModalDelete={setOpenModalDelete} >
-
-            </ModalStory>
+            <ModalStory isOpen={openModalStory} setOpen={setOpenModalStory} story={story} setOpenModalDelete={setOpenModalDelete} />
 
         </React.Fragment>
     );

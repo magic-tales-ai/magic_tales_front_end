@@ -4,6 +4,7 @@ import { useDispatch, connect } from "react-redux";
 
 // Components
 import withRouter from "../../components/withRouter";
+import { ModalDeleteStory } from "./ModalDeleteStory";
 
 // i18n
 import { useTranslation } from 'react-i18next';
@@ -31,11 +32,11 @@ const ModalStoryComponent = (props) => {
     const dispatch = useDispatch();
     const { sendMessage, validateForNewChat } = useSendMessage();
     const { t } = useTranslation();
+    const [openModalDelete, setOpenModalDelete] = useState(false);
     const {
         isOpen,
         setOpen,
         story,
-        setOpenModalDelete,
         chats,
         router: { navigate }
     } = props;
@@ -44,15 +45,7 @@ const ModalStoryComponent = (props) => {
         setOpen(!isOpen)
     }
 
-    // const getCharactersNames = () => {
-    //     const charactersNames = characters.map(c => c.name);
-    //     return charactersNames.join(', ')
-    // }
-
-    // const getGenresNames = () => {
-    //     const genresNames = genres.map(g => g.name);
-    //     return genresNames.join(', ')
-    // }
+    console.log(story)
 
     const openChat = () => {
         if (chats.get(story.get('sessionId'))) { // chat already loaded
@@ -148,6 +141,8 @@ const ModalStoryComponent = (props) => {
 
                 </ModalBody>
             </Modal >
+
+            <ModalDeleteStory isOpen={openModalDelete} setOpen={setOpenModalDelete} story={story} />
         </React.Fragment>
     )
 }
