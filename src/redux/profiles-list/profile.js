@@ -12,12 +12,18 @@ export const Profile = new Record({
 });
 
 export const createProfile = (data) => {
+    let details;
+    try {
+        details = createDetails(JSON.parse(data?.details))
+    } catch(e) {
+        details = null
+    }
     return new Profile({
         ...data,
         id: data?.id,
         createdAt: data?.created_at,
         image: data?.image || DEFAULT_PICTURE_B64,
-        details: data?.details ? createDetails(JSON.parse(data?.details)) : null,
+        details: details,
         userId: data?.user_id
     })
 }
