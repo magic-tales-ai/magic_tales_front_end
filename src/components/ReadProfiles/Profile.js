@@ -25,7 +25,7 @@ import { websocket_commands_messages } from '../../redux/websocket/constants';
 import { ModalUpdateImage } from '../Common/Modals/ModalUpdateImage';
 
 const Profile = (props) => {
-    const { profile, displayActions = true, small = false, enableModal = true } = props;
+    const { profile, displayActions = true, small = false, enableModal = true, extendedDetails = false } = props;
     const { t } = useTranslation();
     const { sendMessage } = useSendMessage();
     const navigate = useNavigate();
@@ -63,11 +63,11 @@ const Profile = (props) => {
     </picture>
 
     const profileInfo = <div className="profile-info">
-        <h6 className="mb-0 profile-name"> {profile.get('details').get('name') + ' ' + profile.get('details').get('lastName')} </h6>
-        <p className="profile-year mb-2 font-size-12"> {profile.get('details').get('age') + ' ' + t('years')} </p>
+        <h6 className="mb-0 profile-name"> {profile.get('name') + ' ' + profile.get('lastName')} </h6>
+        {profile.get('age') !== '' && <p className="profile-year mb-2 font-size-12"> {profile.get('age') + ' ' + t('years')} </p>}
 
-        {!small && <p className="font-size-12">
-            {profile.get('details').get('description')}
+        {!small && <p className={`font-size-12 details ${extendedDetails ? 'extended-details' : ''}`}>
+            {profile.get('details')}
         </p>}
     </div>
 

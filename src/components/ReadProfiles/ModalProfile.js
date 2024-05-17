@@ -53,7 +53,7 @@ export const ModalProfile = (props) => {
             </ModalHeader>
 
             <ModalBody className="modal-profile">
-                <div className="d-flex justify-content-center text-center"><Profile profile={profile} enableModal={false} /></div>
+                <div className="d-flex justify-content-center text-center"><Profile profile={profile} enableModal={false} extendedDetails={true} /></div>
             </ModalBody>
 
             <ModalFooter>
@@ -65,7 +65,6 @@ export const ModalProfile = (props) => {
                     <i className="ri-pencil-line me-2 fw-normal font-size-24"></i>
                     {t('Edit Profile')}
                 </Button>
-
             </ModalFooter>
         </Modal >
     )

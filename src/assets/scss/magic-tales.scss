@@ -447,6 +447,13 @@ p:last-child { margin-bottom: 0; }
 .reader-list-profile .filter-profile .profile-info > * {
 	opacity: 0.8;
 }
+.profile-info .details:not(.extended-details) {
+	display: -webkit-box;
+    max-width: 200px;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
 .reader-list-profile .filter-profile .profile-name {
 	font-size: 16px;
 	opacity: 1;
