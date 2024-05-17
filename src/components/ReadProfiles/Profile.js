@@ -63,7 +63,7 @@ const Profile = (props) => {
     </picture>
 
     const profileInfo = <div className="profile-info">
-        <h6 className="mb-0 profile-name"> {profile.get('name') + ' ' + profile.get('lastName')} </h6>
+        <h6 className="mb-0 profile-name"> {profile.get('name')} </h6>
         {profile.get('age') !== '' && <p className="profile-year mb-2 font-size-12"> {profile.get('age') + ' ' + t('years')} </p>}
 
         {!small && <p className={`font-size-12 details ${extendedDetails ? 'extended-details' : ''}`}>

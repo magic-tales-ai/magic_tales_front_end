@@ -9,7 +9,6 @@ export const Profile = new Record({
     image: null,
     details: "",
     name: "",
-    lastName: "",
     age: null,
     userId: null,
 });
@@ -22,7 +21,6 @@ export const createProfile = (data) => {
         image: data?.image || DEFAULT_PICTURE_B64,
         details: data?.details,
         name: data?.name ?? "",
-        lastName: data?.last_name ?? "",
         age: data?.age ?? "",
         userId: data?.user_id
     })

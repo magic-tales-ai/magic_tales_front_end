@@ -112,7 +112,7 @@ const ModalStoryComponent = (props) => {
                                     </div>
                                     <div>
                                         <p className="mb-0 text-body"> {story.get('profile').get('name')} </p>
-                                        <span> {story.get('profile').get('age') + ' ' + t('years')} </span>
+                                        {story.get('profile').get('age') !== '' && <span> {story.get('profile').get('age') + ' ' + t('years')} </span>}
                                     </div>
                                 </div>
                             </div>
