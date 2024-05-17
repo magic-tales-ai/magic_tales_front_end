@@ -12,9 +12,6 @@ import { setActiveChat, setActiveTab, uploadProfileImage } from '../../redux/act
 // i18n
 import { useTranslation } from 'react-i18next';
 
-// Image default
-import { ReactComponent as ProfileImageDefault } from "../../assets/images/profiles/profile-svgrepo-com.svg";
-
 // Hooks
 import useSendMessage from '../../hooks/websocket/sendMessage';
 
@@ -57,8 +54,7 @@ const Profile = (props) => {
 
     const avatar = <picture>
         {profile.get('image') 
-            ? <img src={'data:image/*;base64,' + profile.get('image')} className={`rounded avatar-${small ? 'xs' : 'md'}`} alt="avatar" />
-            : <ProfileImageDefault className={`rounded avatar-${small ? 'xs' : 'md'}`} alt="avatar" />
+            && <img src={'data:image/*;base64,' + profile.get('image')} className={`rounded avatar-${small ? 'xs' : 'md'}`} alt="avatar" />
         }
     </picture>
 
