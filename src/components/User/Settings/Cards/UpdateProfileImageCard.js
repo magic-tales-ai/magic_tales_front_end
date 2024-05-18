@@ -3,9 +3,6 @@ import { useTranslation } from "react-i18next";
 import { Card, CardBody, Button } from "reactstrap";
 import { connect, useDispatch } from "react-redux";
 
-// Image default
-import { ReactComponent as ProfileImageDefault } from "../../../../assets/images/profiles/profile-svgrepo-com.svg";
-
 // Selectors
 import { selectUser } from "../../../../redux/user/selectors";
 
@@ -35,7 +32,6 @@ const UpdateProfileImageCardComponent = ({ user, loading, error }) => {
                     <div className="d-md-flex align-items-center">
                         <picture className="me-md-5">
                             {user?.get('image') && <img src={'data:image/*;base64,' + user.get('image')} className={`rounded avatar-md`} alt="avatar" />}
-                            {!user?.get('image') && <ProfileImageDefault className={`rounded avatar-md`} alt="avatar" />}
                         </picture>
 
                         <div className="mt-2 mt-md-0">

@@ -52,8 +52,8 @@ const CardStory = ({ story, router: { navigate } }) => {
             }
         </div>
         <div>
-            <p className="mb-0 fw-bold font-size-12">{story.get('profile').get('details').get('name')}</p>
-            <p className="mb-0 font-size-12 opacity-75">{story.get('profile').get('details').get('age') + ' ' + t('years')}</p>
+            <p className="mb-0 fw-bold font-size-12">{story.get('profile').get('name')}</p>
+            <p className="mb-0 font-size-12 opacity-75">{story.get('profile').get('age') + ' ' + t('years')}</p>
         </div>
     </div>
 

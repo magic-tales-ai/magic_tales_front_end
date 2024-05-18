@@ -7,7 +7,9 @@ export const Profile = new Record({
     createdAt: "",
     id: null,
     image: null,
-    details: null,
+    details: "",
+    name: "",
+    age: null,
     userId: null,
 });
 
@@ -17,23 +19,9 @@ export const createProfile = (data) => {
         id: data?.id,
         createdAt: data?.created_at,
         image: data?.image || DEFAULT_PICTURE_B64,
-        details: data?.details ? createDetails(JSON.parse(data?.details)) : null,
+        details: data?.details,
+        name: data?.name ?? "",
+        age: data?.age ?? "",
         userId: data?.user_id
-    })
-}
-
-
-export const Details = new Record({
-    name: "",
-    lastName: "",
-    age: null,
-});
-
-export const createDetails = (data) => {
-    return new Details({
-        ...data,
-        name: data?.name,
-        lastName: data?.last_name,
-        age: data?.age
     })
 }

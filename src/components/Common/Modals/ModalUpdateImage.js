@@ -6,9 +6,6 @@ import * as Yup from 'yup';
 // i18n
 import { useTranslation } from 'react-i18next';
 
-// Image default
-import { ReactComponent as ProfileImageDefault } from "../../../assets/images/profiles/profile-svgrepo-com.svg";
-
 // Constants
 import { MAX_IMAGE_SIZE, IMAGE_SUPPORTED_FORMATS } from "../../../constants";
 
@@ -94,7 +91,6 @@ export const ModalUpdateImage = (props) => {
 
                         <picture>
                             {currentImageUrl && <img src={currentImageUrl} className={`rounded avatar-lg`} />}
-                            {!currentImageUrl && <ProfileImageDefault className={`rounded avatar-lg`} alt="avatar" />}
                         </picture>
 
                         <FormGroup className="mb-0">

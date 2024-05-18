@@ -44,7 +44,7 @@ const Library = ({ stories }) => {
     }, [])
 
     useEffect(() => {
-        applyFilters()
+        // applyFilters()
     }, [filters])
 
     const applyFilters = () => {
