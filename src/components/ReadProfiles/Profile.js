@@ -12,9 +12,6 @@ import { setActiveChat, setActiveTab, uploadProfileImage } from '../../redux/act
 // i18n
 import { useTranslation } from 'react-i18next';
 
-// Image default
-import { ReactComponent as ProfileImageDefault } from "../../assets/images/profiles/profile-svgrepo-com.svg";
-
 // Hooks
 import useSendMessage from '../../hooks/websocket/sendMessage';
 
@@ -25,7 +22,7 @@ import { websocket_commands_messages } from '../../redux/websocket/constants';
 import { ModalUpdateImage } from '../Common/Modals/ModalUpdateImage';
 
 const Profile = (props) => {
-    const { profile, displayActions = true, small = false, enableModal = true } = props;
+    const { profile, displayActions = true, small = false, enableModal = true, extendedDetails = false } = props;
     const { t } = useTranslation();
     const { sendMessage } = useSendMessage();
     const navigate = useNavigate();
@@ -57,17 +54,16 @@ const Profile = (props) => {
 
     const avatar = <picture>
         {profile.get('image') 
-            ? <img src={'data:image/*;base64,' + profile.get('image')} className={`rounded avatar-${small ? 'xs' : 'md'}`} alt="avatar" />
-            : <ProfileImageDefault className={`rounded avatar-${small ? 'xs' : 'md'}`} alt="avatar" />
+            && <img src={'data:image/*;base64,' + profile.get('image')} className={`rounded avatar-${small ? 'xs' : 'md'}`} alt="avatar" />
         }
     </picture>
 
     const profileInfo = <div className="profile-info">
-        <h6 className="mb-0 profile-name"> {profile.get('details').get('name') + ' ' + profile.get('details').get('lastName')} </h6>
-        <p className="profile-year mb-2 font-size-12"> {profile.get('details').get('age') + ' ' + t('years')} </p>
+        <h6 className="mb-0 profile-name"> {profile.get('name')} </h6>
+        {profile.get('age') !== '' && <p className="profile-year mb-2 font-size-12"> {profile.get('age') + ' ' + t('years')} </p>}
 
-        {!small && <p className="font-size-12">
-            {profile.get('details').get('description')}
+        {!small && <p className={`font-size-12 details ${extendedDetails ? 'extended-details' : ''}`}>
+            {profile.get('details')}
         </p>}
     </div>
 
