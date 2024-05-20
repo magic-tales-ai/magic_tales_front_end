@@ -403,6 +403,9 @@ p:last-child { margin-bottom: 0; }
 	border-top-right-radius: 0;
 	border-bottom-right-radius: 0;
 }
+.chat-input-section input[type="text"].caret-transparent{
+	caret-color: transparent;
+}
 .chat-input-links .btn {
 	border-top-left-radius: 0;
 	border-bottom-left-radius: 0;
