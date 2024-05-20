@@ -3,12 +3,6 @@ import { Nav, Dropdown, DropdownItem, DropdownToggle, DropdownMenu, Button } fro
 import { Link } from "react-router-dom";
 import { useDispatch, connect } from 'react-redux';
 
-// Constants
-import { FULL_PLAN_CODE, FREE_PLAN_CODE } from "../../../constants";
-
-// Imgs 
-import avatar1 from "../../../assets/images/users/avatar-1.jpg";
-
 // i18n
 import { useTranslation } from 'react-i18next';
 
@@ -18,8 +12,9 @@ import { openModalSignin } from "../../../redux/actions";
 // Selectors
 import { selectUser } from "../../../redux/user/selectors";
 import { selectProfiles } from "../../../redux/profiles-list/selectors";
+import { selectPlans } from "../../../redux/plans-list/selectors";
 
-const SidebarFooterComponent = ({ user, anyProfile }) => {
+const SidebarFooterComponent = ({ user, plansList, anyProfile }) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const [dropdownOpen, setdropdownOpen] = useState(false)
@@ -65,27 +60,41 @@ const SidebarFooterComponent = ({ user, anyProfile }) => {
         </Dropdown>
     </>
 
-    const subscriptionInfo = user?.get('currentPlan')?.code !== FULL_PLAN_CODE
-        ?
-        <>
-            {!user?.get('currentPlan') || (user.get('currentPlan').code === FREE_PLAN_CODE)
-                ?
-                <Link to="/subscription/plans" className="d-flex btn btn-outline-primary text-start mb-2">
-                    <i className="ri-star-line me-2"></i>
-                    {t('Upgrade Suscription')}
-                </Link>
-                :
-                <>
-                <p>Used {user?.get('monthStoriesCount')} of {user?.get('currentPlan')?.maxStoriesForMonth} tales.</p>
+    const bestPlan = plansList.reduce((bestPlan, currentPlan) => {
+        return currentPlan.get('price') > bestPlan.get('price') 
+            ?   currentPlan
+            :   bestPlan
+    })
 
-                <Link to="/subscription/plans" className="d-flex btn btn-outline-primary text-start mb-2">
-                    <i className="ri-star-line me-2"></i>
-                    {t('Upgrade to Plus')}
-                </Link>
-                </>
-            }
-        </>
-        : ''
+    const subscriptionInfo = user?.get('plan')?.get('id') !== bestPlan?.get('id')
+        ?
+            <React.Fragment>
+                {!user?.get('plan') || (user.get('plan').get('price') === 0)
+                    ?
+                        <Link to="/subscription/plans" className="d-flex btn btn-outline-primary text-start mb-2">
+                            <i className="ri-star-line me-2"></i>
+                            {t('Upgrade Suscription')}
+                        </Link>
+                    :
+                        <React.Fragment>
+                            <p>
+                                {t("Used _month_stories_count_ of _stories_per_month_ tales.",
+                                    {
+                                        monthStoriesCount: user?.get('monthStoriesCount'),
+                                        storiesPerMonth: user?.get('plan')?.get('storiesPerMonth')
+                                    })
+                                }
+                            </p>
+
+                            <Link to="/subscription/plans" className="d-flex btn btn-outline-primary text-start mb-2">
+                                <i className="ri-star-line me-2"></i>
+                                {t('Upgrade to Plus')}
+                            </Link>
+                        </React.Fragment>
+                }
+            </React.Fragment>
+        : 
+            null
 
     const btnJoinMagicTales = <>
         <Button size="lg" color="outline-primary w-100" type="button" onClick={() => dispatch(openModalSignin())}>
@@ -117,10 +126,11 @@ const SidebarFooterComponent = ({ user, anyProfile }) => {
 
 const mapStateToProps = (state) => {
     const { user } = selectUser(state);
+    const { list } = selectPlans(state);
     const profiles = selectProfiles(state);
     const anyProfile = profiles.list.size > 0;
 
-    return { user, anyProfile };
+    return { user, plansList: list, anyProfile };
 };
 
 export const SidebarFooter = connect(mapStateToProps, { openModalSignin })(SidebarFooterComponent);

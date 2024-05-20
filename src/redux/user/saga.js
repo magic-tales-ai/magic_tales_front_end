@@ -3,6 +3,7 @@ import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 import { APIClient } from '../../helpers/apiClient';
 
 import {
+    LOAD_MONTH_STORIES_COUNT,
     UPDATE_USER,
     CHANGE_PASSWORD_LOGGED_USER,
     VALIDATE_NEW_USER_EMAIL,
@@ -32,7 +33,7 @@ const get = new APIClient().get;
  */
 function* loadMonthStoriesCount({ payload }) {
     try {
-        if(payload.message.command == websocket_commands_messages.DONE) {
+        if(!payload || payload.message.command == websocket_commands_messages.DONE) {
             if(localStorage.getItem("authUser")) {
                 const response = yield call(get, 'user/month-stories-count');
                 yield put(loadMonthStoriesCountSuccess(response));
@@ -93,7 +94,7 @@ function* updateUserPassword({ payload: { oldPassword, newPassword, repeatedNewP
 }
 
 export function* watchLoadMonthStoriesCount() {
-    yield takeEvery(WEBSOCKET_MESSAGE, loadMonthStoriesCount);
+    yield takeEvery([WEBSOCKET_MESSAGE, LOAD_MONTH_STORIES_COUNT], loadMonthStoriesCount);
 }
 
 export function* watchUpdateUser() {

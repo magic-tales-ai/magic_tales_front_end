@@ -56,6 +56,7 @@
     "Patricia Smith": "Patricia Smith",
     "Pay monthly": "Pay monthly",
     "Pay yearly": "Pay yearly",
+    "Plans": "Plans",
     "Popular": "Popular",
     "Profile Picture": "Profile Picture",
     "Register": "Register",
@@ -85,6 +86,7 @@
     "Update Profile Picture": "Update Profile Picture",
     "Upgrade for more": "Upgrade for more",
     "Upgrade Suscription": "Upgrade Suscription",
+    "Used _month_stories_count_ of _stories_per_month_ tales.": "Used {{monthStoriesCount}} of {{storiesPerMonth}} tales.",
     "Username": "Username",
     "Validate": "Validate",
     "Validation Successfully": "Validation Successfully",
@@ -93,5 +95,6 @@
     "With a sprinkle of AI magic, craft stories that captivate any audience by chatting with our enchanting bot.": "With a sprinkle of AI magic, craft stories that captivate any audience by chatting with our enchanting bot.",
     "With the power of cutting-edge technology, we curate stories that honor every festivity, tradition, and culture, spanning across all major languages.": "With the power of cutting-edge technology, we curate stories that honor every festivity, tradition, and culture, spanning across all major languages.",
     "You can create infinite stories": "You can create infinite stories",
+    "Your current plan": "Your current plan",
     "Your Stories, Your Way!": "Your Stories, Your Way!"
 }

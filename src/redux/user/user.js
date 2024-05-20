@@ -1,6 +1,8 @@
 import { Record } from 'immutable';
 import { DEFAULT_PICTURE_B64 } from './constants';
 
+import { createPlan } from '../plans-list/plan';
+
 export const User = new Record({
     id: null,
     username: "",
@@ -10,6 +12,7 @@ export const User = new Record({
     token: "",
     image: DEFAULT_PICTURE_B64,
     monthStoriesCount: 0,
+    plan: null,
     loading: false,
     error: null
 });
@@ -23,6 +26,7 @@ export const createNewUser = (data) => {
         ...data,
         image: data?.image || DEFAULT_PICTURE_B64,
         monthStoriesCount: data?.month_stories_count,
-        lastName: data?.last_name
+        lastName: data?.last_name,
+        plan: createPlan(data?.plan)
     })
 }

@@ -1,5 +1,6 @@
 import {
     UPDATE_TOKEN,
+    LOAD_MONTH_STORIES_COUNT,
     LOAD_MONTH_STORIES_COUNT_SUCCESS,
     UPDATE_USER,
     UPDATE_USER_SUCCESS,
@@ -13,6 +14,10 @@ import {
 export const updateToken = (token) => ({
     type: UPDATE_TOKEN,
     payload: token
+})
+
+export const loadMonthStoriesCount = () => ({
+    type: LOAD_MONTH_STORIES_COUNT
 })
 
 export const loadMonthStoriesCountSuccess = (status) => ({

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Label, Input } from 'reactstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
+import { connect } from 'react-redux';
 
 // Import action
 import { loadPlansList } from '../../redux/actions';
 
 // Selector
 import { selectPlans } from '../../redux/plans-list/selectors';
+import { selectUser } from '../../redux/user/selectors';
 
 // Components
 import Plan from "./Plan";
@@ -15,13 +15,11 @@ import Plan from "./Plan";
 // i18n
 import { useTranslation } from 'react-i18next';
 
-export const PlansList = () => {
-    const dispatch = useDispatch();
+const PlansListComponent = (props) => {
+    const { plans, user } = props;
     const { t } = useTranslation()
     const [state, setState] = useState(true);
     const [pay, setPay] = useState('monthly');
-
-    const plans = useSelector(selectPlans)
 
     const changePlan = () => {
         pay === 'monthly' ? setPay('yearly') : setPay('monthly');
@@ -29,11 +27,11 @@ export const PlansList = () => {
     }
 
     useEffect(() => {
-        dispatch(loadPlansList())
+        props.loadPlansList()
     }, [])
 
     return (
-        <div id="plansList" className="vh-100 w-100 d-flex flex-column align-items-center justify-content-center planes-box bg-black">
+        <div id="plansList" className="w-100 d-flex flex-column align-items-center justify-content-center planes-box bg-black">
             <div className="container py-5 text-center">
                 <div className="title-plan mx-auto mb-4">
                     <h1 className="ff-special fw-normal mb-4">{t('Choose Your Ideal Plan')}</h1>
@@ -48,11 +46,11 @@ export const PlansList = () => {
                 </div>
             </div>
 
-            <div className="d-sm-flex justify-content-center planes-cards gap-3 pb-5">
+            <div className="d-sm-flex justify-content-center planes-cards gap-3">
             {plans?.list?.map((p, i) => {
                 return (
                     <React.Fragment key={`plan-${p.get('id')}`}>
-                        <Plan plan={p} pay={pay} />
+                        <Plan plan={p} pay={pay} currentPlan={user && p.get('id') === user.get('plan').get('id')} />
                     </React.Fragment>
                 )
             })}
@@ -60,3 +58,12 @@ export const PlansList = () => {
         </div>
     );
 }
+
+const mapStateToProps = (state) => {
+    const plans = selectPlans(state);
+    const { user } = selectUser(state);
+
+    return { plans, user };
+};
+
+export const PlansList = connect(mapStateToProps, { loadPlansList })(PlansListComponent);

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { connect, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 
 // Components
 import ChatLeftSidebar from "../components/Dashboard/ChatLeftSidebar";
@@ -9,19 +9,20 @@ import Chat from "../components/Dashboard/Chat/index";
 import { ModalConfirmChangeChat } from '../components/Dashboard/ModalConfirmChangeChat';
 
 // Actions
-import { loadStoriesList, loadProfilesList } from '../redux/actions';
+import { loadStoriesList, loadProfilesList, loadPlansList, loadMonthStoriesCount } from '../redux/actions';
 
 // Selectors
 import { selectUser } from '../redux/user/selectors';
 import { selectChatsList } from '../redux/chats-list/selectors';
 
-const Dashboard = ({ currentChatDone, user }) => {
-    const dispatch = useDispatch();
+const Dashboard = ({ currentChatDone, user, ...props }) => {
 
     useEffect(() => {
         if(user?.get('id')) {
-            dispatch(loadProfilesList());
-            dispatch(loadStoriesList());
+            props.loadProfilesList();
+            props.loadStoriesList();
+            props.loadPlansList();
+            props.loadMonthStoriesCount();
         }
     }, [user, currentChatDone])
 
@@ -47,4 +48,4 @@ const mapStateToProps = (state) => {
     return { user, currentChatDone };
 };
 
-export default connect(mapStateToProps)(Dashboard);
+export default connect(mapStateToProps, { loadStoriesList, loadProfilesList, loadPlansList, loadMonthStoriesCount })(Dashboard);

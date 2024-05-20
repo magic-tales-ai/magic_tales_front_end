@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 const Plan = (props) => {
     const { t } = useTranslation()
-    const { plan, pay = 'monthly' } = props
+    const { plan, pay = 'monthly', currentPlan } = props
     const annualPrice = plan.get('price') * 12 * (plan.get('discountPerYear') / 100)
 
     return (
@@ -39,13 +39,18 @@ const Plan = (props) => {
             </ul>
             <div className="mt-auto">
                 {plan.get('saveUpMessage') && <p>{plan.get('saveUpMessage')}</p>}
-                <Button color="outline-secondary" className="w-100" type="button" disabled={!plan.get('enabled')}>
-                    { plan.get('enabled') 
-                        ? plan.get('price') === 0 
-                            ? t("Try for free")
-                            : t("Get Started")
-                        : t("Soon")
-                    } <i className="ri-arrow-right-line fw-normal align-middle"></i>
+                <Button color="outline-secondary" className="w-100" type="button" disabled={!plan.get('enabled') || currentPlan}>
+                    {currentPlan 
+                        ? <> {t("Your current plan")} </>
+                        : <> {plan.get('enabled') 
+                            ? plan.get('price') === 0 
+                                ? t("Try for free")
+                                : t("Get Started")
+                            : t("Soon")}
+                        </>
+                    }
+                    
+                    <i className="ri-arrow-right-line fw-normal align-middle"></i>
                 </Button>
             </div>
         </Card>
