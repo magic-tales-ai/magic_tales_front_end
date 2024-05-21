@@ -63,10 +63,10 @@ const useSendMessage = () => {
         return wsmessage;
     };
 
-    const sendMessage = async (message) => {
+    const sendMessage = async ({needValidate = true, ...message}) => {
         var wsmessage = buildWsMessage(message);
 
-        if (commandForNewChat.current.includes(wsmessage.command) && currentSocketUid.current) {
+        if (needValidate && commandForNewChat.current.includes(wsmessage.command) && currentSocketUid.current) {
             validateForNewChat({
                 _callback: (requirements) => {
                     if (requirements.sendCommand) {

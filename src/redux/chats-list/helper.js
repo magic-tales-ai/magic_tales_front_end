@@ -20,10 +20,13 @@ function handleSaveConversationLS({ uid, storyParentId = null }) {
 
 function getConversationLS() {
     const user = getLoggedInUser();
-    var conversation = JSON.parse(localStorage.getItem('guestConversationData'));
+    var conversation;
 
-    if(user && !conversation) {
+    if(user) {
         conversation = JSON.parse(localStorage.getItem(user.id + 'userConversationData'));
+    }
+    else {
+        conversation = JSON.parse(localStorage.getItem('guestConversationData'));
     }
 
     return conversation;
