@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Input, Row, Col, UncontrolledTooltip, ButtonDropdown, DropdownToggle, DropdownMenu, Label, Form } from "reactstrap";
-import EmojiPicker from 'emoji-picker-react';
+import { Button, Input, Row, Col, Form } from "reactstrap";
 
 function ChatInput(props) {
     const { disabled } = props;
@@ -70,7 +69,7 @@ function ChatInput(props) {
                     <Row className='g-0'>
                         <Col>
                             <div>
-                                <Input type="text" value={textMessage} onChange={handleChange} className="form-control form-control-lg border bg-secondary" placeholder="Write here" disabled={disabled} />
+                                <Input type="text" value={textMessage} onChange={(e) => { !disabled && handleChange(e) }} className={`form-control form-control-lg border bg-secondary ${disabled ? 'caret-transparent' : ''}`} placeholder="Write here" />
                             </div>
                         </Col>
                         <Col xs="auto">

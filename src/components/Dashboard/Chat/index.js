@@ -116,17 +116,19 @@ function Chat({ activeChat, currentChat, sockets, user, tryModeToken, isOpenModa
             return;
         }
 
-        if (!activeChat && (user || tryModeToken)) {
+        if (user || tryModeToken) {
             const dataConversationLS = getConversationLS();
             if (dataConversationLS?.uid) {
                 sendMessage({
                     command: websocket_commands_messages.CONVERSATION_RECOVERY,
-                    uid: dataConversationLS.uid
+                    uid: dataConversationLS.uid,
+                    needValidate: false
                 })
             }
             else {
                 sendMessage({
-                    command: websocket_commands_messages.NEW_TALE
+                    command: websocket_commands_messages.NEW_TALE,
+                    needValidate: false
                 })
             }
         }
