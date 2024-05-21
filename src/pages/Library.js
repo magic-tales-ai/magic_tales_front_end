@@ -138,7 +138,7 @@ const Library = ({ stories }) => {
 
             <div className="p-3 pt-0 pt-lg-4 p-lg-4 flex-wrap d-flex flex-column flex-lg-row-reverse justify-content-center library-storys gap-3">
                 {stories.list.map(story => {
-                    return <CardStory key={'card-story-'+story.uid} story={story} />
+                    return <CardStory key={'card-story-'+story.get('id')} story={story} />
                 })
                 }
             </div>

@@ -45,8 +45,6 @@ const ModalStoryComponent = (props) => {
         setOpen(!isOpen)
     }
 
-    console.log(story)
-
     const openChat = () => {
         if (chats.get(story.get('sessionId'))) { // chat already loaded
             validateForNewChat({

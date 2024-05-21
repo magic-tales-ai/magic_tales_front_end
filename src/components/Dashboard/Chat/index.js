@@ -7,7 +7,7 @@ import SimpleBar from "simplebar-react";
 
 // Marker
 import DOMPurify from 'dompurify';
-import {marked} from 'marked';
+import { marked } from 'marked';
 
 // Router
 import withRouter from "../../../components/withRouter";
@@ -52,7 +52,7 @@ import { selectModalSignIn } from '../../../redux/modal-signin/selectors';
 function displayMessage(message) {
     const htmlContent = marked.parse(message);
     const htmlContentSanitizado = DOMPurify.sanitize(htmlContent);
-    return {__html: htmlContentSanitizado};
+    return { __html: htmlContentSanitizado };
 }
 
 
@@ -71,7 +71,7 @@ function Chat({ activeChat, currentChat, sockets, user, tryModeToken, isOpenModa
     const [preventChatLoading, setPreventChatLoading] = useState(false);
 
     useEffect(() => {
-        if(isOpenModalSignIn) {
+        if (isOpenModalSignIn) {
             dispatch(setActiveChat(null));
             setPreventChatLoading(true);
         }
@@ -82,16 +82,22 @@ function Chat({ activeChat, currentChat, sockets, user, tryModeToken, isOpenModa
     }, [])
 
     useEffect(() => {
-        if(!user?.get('id') && !tryModeToken) {
+        if (!user?.get('id') && !tryModeToken) {
             dispatch(createUserTryMode());
         }
     }, [])
 
     useEffect(() => {
-        if(!isOpenModalSignIn) {
+        if (!isOpenModalSignIn) {
             setPreventChatLoading(false);
         }
     }, [isOpenModalSignIn])
+
+    useEffect(() => {
+        if (showWorkingMessage) {
+            scrolltoBottom();
+        }
+    }, [showWorkingMessage])
 
     useEffect(() => {
         if (!currentChat) {
@@ -112,26 +118,29 @@ function Chat({ activeChat, currentChat, sockets, user, tryModeToken, isOpenModa
     }, [, currentChat]);
 
     useEffect(() => {
-        if(preventChatLoading) {
+        if (preventChatLoading || !(user || tryModeToken)) {
             return;
         }
 
-        if (user || tryModeToken) {
-            const dataConversationLS = getConversationLS();
-            if (dataConversationLS?.uid) {
-                sendMessage({
-                    command: websocket_commands_messages.CONVERSATION_RECOVERY,
-                    uid: dataConversationLS.uid,
-                    needValidate: false
-                })
-            }
-            else {
-                sendMessage({
-                    command: websocket_commands_messages.NEW_TALE,
-                    needValidate: false
-                })
-            }
+        const dataConversationLS = getConversationLS();
+        const hasConversationLS = dataConversationLS && dataConversationLS.uid;
+
+        if (hasConversationLS && dataConversationLS.uid === activeChat) {
+            return;
         }
+
+        const messageParams = hasConversationLS
+            ? {
+                command: websocket_commands_messages.CONVERSATION_RECOVERY,
+                uid: dataConversationLS.uid,
+                needValidate: false,
+            }
+            : {
+                command: websocket_commands_messages.NEW_TALE,
+                needValidate: false,
+            };
+
+        sendMessage(messageParams);
     }, [sockets, user?.get('id'), tryModeToken, preventChatLoading])
 
     useEffect(() => {
