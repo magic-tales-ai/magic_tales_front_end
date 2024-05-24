@@ -273,7 +273,7 @@ function Chat({ activeChat, currentChat, sockets, user, tryModeToken, isOpenModa
                                                         </div>
                                                     }
                                                     {
-                                                        chat.type === 'system' &&
+                                                        chat.type === 'system' && chat?.message &&
                                                         <div className="ctext-wrap">
                                                             <div className="ctext-wrap-content">
                                                                 <p className="mb-0 text-system" dangerouslySetInnerHTML={{
