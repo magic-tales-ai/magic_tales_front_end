@@ -7,7 +7,8 @@ import {
     VALIDATE_NEW_USER_EMAIL_SUCCESS,
     CHANGE_PASSWORD_LOGGED_USER,
     CHANGE_PASSWORD_LOGGED_USER_SUCCESS,
-    USER_API_FAILED
+    USER_API_FAILED,
+    DEFAULT_PICTURE_B64
 } from './constants';
 
 import {
@@ -52,13 +53,19 @@ const User = (state = INIT_STATE, action) => {
             return state.set('monthStoriesCount', action.payload.stories_this_month);
 
         case UPDATE_USER_SUCCESS:
+            return createNewUser({
+                ...action.payload, 
+                token: state.token, 
+                monthStoriesCount: state.monthStoriesCount
+            });
+
         case VALIDATE_NEW_USER_EMAIL_SUCCESS:
             return state.merge({
                 ...action.payload,
+                image: action.payload.image ?? DEFAULT_PICTURE_B64,
                 loading: false,
                 error: null
             })
-
 
         case CHANGE_PASSWORD_LOGGED_USER_SUCCESS:
             return state.merge({

@@ -5,10 +5,6 @@ import { Link } from "react-router-dom";
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import SimpleBar from "simplebar-react";
 
-// Marker
-import DOMPurify from 'dompurify';
-import { marked } from 'marked';
-
 // Router
 import withRouter from "../../../components/withRouter";
 
@@ -39,6 +35,7 @@ import useSendMessage from '../../../hooks/websocket/sendMessage';
 
 // Helpers
 import { getConversationLS } from '../../../redux/chats-list/helper';
+import { displayText } from '../../../helpers/app';
 
 // Selectors
 import { selectChatsList } from '../../../redux/chats-list/selectors';
@@ -48,13 +45,6 @@ import { selectAuth } from '../../../redux/auth/selectors';
 // Constants
 import { websocket_commands_messages } from '../../../redux/websocket/constants';
 import { selectModalSignIn } from '../../../redux/modal-signin/selectors';
-
-function displayMessage(message) {
-    const htmlContent = marked.parse(message);
-    const htmlContentSanitizado = DOMPurify.sanitize(htmlContent);
-    return { __html: htmlContentSanitizado };
-}
-
 
 function Chat({ activeChat, currentChat, sockets, user, tryModeToken, isOpenModalSignIn }) {
     const { t } = useTranslation();
@@ -234,7 +224,7 @@ function Chat({ activeChat, currentChat, sockets, user, tryModeToken, isOpenModa
                                                     {
                                                         chat.message && chat.type !== 'system' && chat.type !== 'status' &&
                                                         <div className="ctext-wrap">
-                                                            <div className="ctext-wrap-content" dangerouslySetInnerHTML={displayMessage(chat.message)}></div>
+                                                            <div className="ctext-wrap-content" dangerouslySetInnerHTML={displayText(chat.message)}></div>
                                                         </div>
                                                     }
                                                     {

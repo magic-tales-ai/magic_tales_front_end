@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import withRouter from "../../withRouter";
@@ -22,7 +22,8 @@ import { selectAuth } from '../../../redux/auth/selectors';
  */
 const ValidateRegistrationForm = ({ error, loading, currentEmailField, navigate }) => {
     const dispatch = useDispatch();
-    const [successValidation, setSuccessValidation] = useState(false)
+    const [successValidation, setSuccessValidation] = useState(false);
+    const currentEmail = useRef(currentEmailField)
     const { t } = useTranslation();
 
     const formik = useFormik({
@@ -30,7 +31,7 @@ const ValidateRegistrationForm = ({ error, loading, currentEmailField, navigate 
         enableReinitialize: true,
 
         initialValues: {
-            email: currentEmailField || '',
+            email: currentEmail.current || '',
             validationCode: '',
         },
         validationSchema: Yup.object({
@@ -41,6 +42,10 @@ const ValidateRegistrationForm = ({ error, loading, currentEmailField, navigate 
             dispatch(apiError(""));
             dispatch(validateRegister(values));
         },
+        handleReset: e => {
+            console.log(e);
+            e.preventDefault();
+        }
     });
 
     useEffect(() => {
@@ -136,7 +141,7 @@ const ValidateRegistrationForm = ({ error, loading, currentEmailField, navigate 
                         }
 
                         <div className="d-grid">
-                            <Button color="secondary" size="lg" block className=" waves-effect waves-light" type="submit" disabled={formik.isSubmitting}>
+                            <Button color="secondary" size="lg" block className="waves-effect waves-light" type="submit" disabled={formik.isSubmitting}>
                                 {t('Validate')}
                             </Button>
                         </div>

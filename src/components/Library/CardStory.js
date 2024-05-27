@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Card, CardBody, Nav, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from "reactstrap";
 import { connect } from "react-redux";
+import SimpleBar from "simplebar-react";
 
 // Components/Modals
 import withRouter from '../withRouter';
@@ -23,6 +24,9 @@ import { websocket_commands_messages } from '../../redux/websocket/constants';
 
 // Hooks
 import useSendMessage from '../../hooks/websocket/sendMessage';
+
+// Helpers
+import { displayText } from '../../helpers/app';
 
 const CardStory = ({ story, router: { navigate } }) => {
     const { t } = useTranslation();
@@ -88,7 +92,11 @@ const CardStory = ({ story, router: { navigate } }) => {
                                     </div>
                                 </div>
                             </div>
-                            <p className="font-size-10 opacity-75">{story.get('synopsis')}</p>
+                            
+                            <SimpleBar className="story-card-synopsis">
+                                <p className="font-size-10 opacity-75" dangerouslySetInnerHTML={displayText(story.get('synopsis'))}></p>
+                            </SimpleBar>
+
                             {profileInfo}
                         </div>
                     </div>

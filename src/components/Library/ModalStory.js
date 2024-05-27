@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Badge } from "reactstrap";
 import { useDispatch, connect } from "react-redux";
 
@@ -27,6 +27,9 @@ import { setActiveChat } from "../../redux/actions";
 
 // Constants
 import { websocket_commands_messages } from "../../redux/websocket/constants";
+
+// Helper
+import { displayText } from "../../helpers/app";
 
 const ModalStoryComponent = (props) => {
     const dispatch = useDispatch();
@@ -69,6 +72,7 @@ const ModalStoryComponent = (props) => {
             story_id: story.get('id')
         })
         navigate('/dashboard');
+        toggle();
     }
 
     return (
@@ -85,7 +89,6 @@ const ModalStoryComponent = (props) => {
                                 </picture>
                             </div>
                             <div className="d-none d-lg-block">
-                                <Button onClick={openChat} color="primary" className="d-flex align-items-center mb-2 w-100 text-start font-size-16"><i className="ri-share-box-fill me-2 fw-normal font-size-20"></i>{t('Open chat')}</Button>
                                 <Button color="primary" className="d-flex align-items-center mb-2 w-100 text-start font-size-16"><i className="ri-download-2-line me-2 fw-normal font-size-20"></i>{t('Download')}</Button>
                                 <Button onClick={newSpinOff} color="primary" className="d-flex align-items-center mb-2 w-100 text-start font-size-16"><span className="custom-icon me-2 font-size-20"><img src={iconFile} alt="icon file" /></span>{t('Create spin - off')}</Button>
                                 <Button onClick={() => setOpenModalDelete(true)} color="outline-danger" className="d-flex align-items-center w-100 text-start font-size-16"><i className="ri-delete-bin-6-line me-2 fw-normal font-size-20"></i>{t('Delete')}</Button>
@@ -119,7 +122,7 @@ const ModalStoryComponent = (props) => {
                                 <h6 className="fw-normal opacity-75 mb-3"> {t('Tale Summary')} </h6>
                                 <div className="border-light border p-2 rounded-3">
                                     <p className="text-uppercase text-body mb-1">{t('Storyline')}</p>
-                                    <p className="font-size-12">{story.get('synopsis')}</p>
+                                    <p className="font-size-12" dangerouslySetInnerHTML={displayText(story.get('synopsis'))}></p>
                                     <hr />
                                     <p className="text-uppercase text-body mb-1">{t('Characters')}</p>
                                     {/* <p className="font-size-12">{getCharactersNames()}</p> */}
@@ -130,7 +133,6 @@ const ModalStoryComponent = (props) => {
                             </div>
                         </div>
                         <div className="d-lg-none">
-                            <Button onClick={openChat} color="primary" className="d-flex align-items-center mb-2 w-100 text-start font-size-16"><i className="ri-share-box-fill me-2 fw-normal font-size-20"></i>{t('Open chat')}</Button>
                             <Button color="primary" className="d-flex align-items-center mb-2 w-100 text-start font-size-16"><i className="ri-download-2-line me-2 fw-normal font-size-20"></i>{t('Download')}</Button>
                             <Button onClick={newSpinOff} color="primary" className="d-flex align-items-center mb-2 w-100 text-start font-size-16"><span className="custom-icon me-2 font-size-20"><img src={iconFile} alt="icon file" /></span>{t('Create spin - off')}</Button>
                             <Button onClick={() => setOpenModalDelete(true)} color="outline-danger" className="d-flex align-items-center w-100 text-start font-size-16"><i className="ri-delete-bin-6-line me-2 fw-normal font-size-20"></i>{t('Delete')}</Button>

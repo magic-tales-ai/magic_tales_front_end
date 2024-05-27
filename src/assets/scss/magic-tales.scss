@@ -435,6 +435,10 @@ p:last-child { margin-bottom: 0; }
 	max-width: 100%;
 }
 .card-library { max-width: 288px; }
+.story-card-synopsis {
+	max-height: 200px;
+	margin: 10px 0 10px 0;
+}
 .library-tales .chat-user-emoji { width: 36px; height:36px; }
 .filter-profile { width: 144px; }
 .active.filter-profile.border-light,
