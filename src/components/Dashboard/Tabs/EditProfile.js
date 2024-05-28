@@ -1,45 +1,55 @@
-import React from 'react';
-import { Button, Card, CardBody } from "reactstrap";
+import React, { useEffect, useRef } from 'react';
+import { Button } from "reactstrap";
 import { connect, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
 
-//actions
-import { setActiveTab } from "../../../redux/actions";
+// Actions
+import { setActiveTab, setActiveChat, setCurrentProfileId } from "../../../redux/actions";
 
-//i18n
+// i18n
 import { useTranslation } from 'react-i18next';
 
-//image default
+// Image default
 import avatar1 from "../../../assets/images/users/avatar-1.jpg";
 
-const defaultProfile = {
-    id: 0,
-    name: 'Carlos',
-    image: '',
-    years: 8,
-    description: "Smiles a lot, like magic, is strong",
-    characteristics: [
-        "Carlos easily makes friends with his love for wizards and dragons.",
-        "He's a funny kid who loves making his friends laugh.",
-        "Carlos is curious and loves asking questions about magic and science.",
-        "He's a budding artist who enjoys drawing and painting.",
-        "Carlos is compassionate and enjoys helping and comforting his friends.",
-        "He's an adventurous eater, always eager to try new foods.",
-        "A young musician, he plays the guitar and composes songs.",
-        "In school, Carlos excels and gets creative with assignments related mathematics.",
-        "Carlos loves reading fantasy novels, especially those with wizards and dragons.",
-        "Carlos really enjoys playing soccer.",
-        "He adores his dog Rocky.",
-        "Outdoorsy, he explores nature and sometimes imagines magical creatures."
-    ]
-}
+// Hooks
+import useSendMessage from '../../../hooks/websocket/sendMessage';
 
-const EditProfile = ({ profile = defaultProfile }) => {
+// Constants
+import { websocket_commands_messages } from '../../../redux/websocket/constants';
+
+// Selectors
+import { selectProfiles } from '../../../redux/profiles-list/selectors';
+
+const EditProfile = ({ profile }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch()
+    const { sendMessage } = useSendMessage();
+    const chatLoadedRef = useRef(false)
+
+    useEffect(() => {
+        console.log('asd')
+    }, [])
+
+    useEffect(() => {
+        if(!profile || chatLoadedRef.current) {
+            return;
+        }
+        chatLoadedRef.current = true;
+
+        setActiveChat(null);
+        sendMessage({ 
+            command: websocket_commands_messages.UPDATE_PROFILE, 
+            profile_id: profile.get('id'),
+            needValidate: false 
+        });
+
+        return () => {
+            dispatch(setActiveChat(null));
+        }
+    }, [profile])
 
     const goToChat = () => {
-        dispatch(setActiveTab('chat'))
+        dispatch(setActiveTab('chat'));
     }
 
     return (
@@ -83,4 +93,10 @@ const EditProfile = ({ profile = defaultProfile }) => {
     );
 }
 
-export default connect(null, { setActiveTab })(EditProfile);
+const mapStatetoProps = state => {
+    const { currentProfile } = selectProfiles(state);
+
+    return { profile: currentProfile };
+};
+
+export default connect(mapStatetoProps, { setActiveTab, setCurrentProfileId })(EditProfile);

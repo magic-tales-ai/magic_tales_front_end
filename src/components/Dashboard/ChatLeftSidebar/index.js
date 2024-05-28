@@ -6,18 +6,22 @@ import { TabContent, TabPane } from "reactstrap";
 // Components
 import Stories from "../Tabs/Stories";
 import EditProfile from "../Tabs/EditProfile";
-
 import { SidebarFooter } from './SidebarFooter';
 
+import { useIsVisible } from '../../../hooks/useIsVisible';
+
 const ChatLeftSidebar = (props) => {
-    const mobileTabRef = useRef(null);
+    const dLgRef = useRef();
+    const dLgIsVisible = useIsVisible(dLgRef);
+
+    const tabContentRef = useRef(null);
     const { activeTab } = props;
     const hideSidebarFooter = activeTab === 'edit-profile';
 
     useEffect(() => {
         const handleDocumentClick = (event) => {
-          if (mobileTabRef.current && !mobileTabRef.current.contains(event.target)) {
-                mobileTabRef.current.classList.remove("main-menu-show");
+          if (!dLgIsVisible && tabContentRef.current && !tabContentRef.current.contains(event.target)) {
+                tabContentRef.current.classList.remove("main-menu-show");
             }
         };
 
@@ -31,20 +35,9 @@ const ChatLeftSidebar = (props) => {
 
     return (
         <React.Fragment>
-            <div className="chat-leftsidebar border-end flex-column d-none d-lg-flex">
-                <TabContent activeTab={activeTab}>
-                    <TabPane tabId="chat" id="pills-chat">
-                        <Stories />
-                    </TabPane>
-                    <TabPane tabId="edit-profile" id="pills-profile">
-                        <EditProfile />
-                    </TabPane>
-                </TabContent>
-
-                {!hideSidebarFooter && <SidebarFooter />}
-            </div>
+            <div ref={dLgRef} className="d-none d-lg-flex"></div>
             
-            <div ref={mobileTabRef} className="chat-leftsidebar border-end flex-column d-flex d-lg-none main-menu">
+            <div ref={tabContentRef} className={`chat-leftsidebar border-end flex-column d-flex ${dLgIsVisible ? '' : 'main-menu'}`}>
                 <TabContent activeTab={activeTab}>
                     <TabPane tabId="chat" id="pills-chat">
                         <Stories />

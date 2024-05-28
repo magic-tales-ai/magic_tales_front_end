@@ -45,8 +45,9 @@ import { selectAuth } from '../../../redux/auth/selectors';
 // Constants
 import { websocket_commands_messages } from '../../../redux/websocket/constants';
 import { selectModalSignIn } from '../../../redux/modal-signin/selectors';
+import { selectLayout } from '../../../redux/layout/selectors';
 
-function Chat({ activeChat, currentChat, sockets, user, tryModeToken, isOpenModalSignIn }) {
+function Chat({ activeTab, activeChat, currentChat, sockets, user, tryModeToken, isOpenModalSignIn }) {
     const { t } = useTranslation();
     const { sendMessage } = useSendMessage();
     const dispatch = useDispatch();
@@ -108,7 +109,7 @@ function Chat({ activeChat, currentChat, sockets, user, tryModeToken, isOpenModa
     }, [, currentChat]);
 
     useEffect(() => {
-        if (preventChatLoading || !(user || tryModeToken)) {
+        if (preventChatLoading || !(user || tryModeToken) || activeTab == 'edit-profile') {
             return;
         }
 
@@ -131,7 +132,11 @@ function Chat({ activeChat, currentChat, sockets, user, tryModeToken, isOpenModa
             };
 
         sendMessage(messageParams);
-    }, [sockets, user?.get('id'), tryModeToken, preventChatLoading])
+    }, [user?.get('id'), tryModeToken, preventChatLoading, activeTab])
+
+    useEffect(() => {
+        console.log(user?.get('id'), tryModeToken, preventChatLoading, activeTab)
+    }, [user?.get('id'), tryModeToken, preventChatLoading, activeTab])
 
     useEffect(() => {
         simpleBarRef.current?.recalculate();
@@ -371,7 +376,9 @@ const mapStateToProps = (state) => {
     const sockets = state.Websocket?.sockets
     const { user } = selectUser(state);
     const { tryModeToken } = selectAuth(state);
-    return { activeChat, currentChat, sockets, user, tryModeToken, isOpenModalSignIn: isOpen };
+    const { activeTab } = selectLayout(state);
+
+    return { activeTab, activeChat, currentChat, sockets, user, tryModeToken, isOpenModalSignIn: isOpen };
 };
 
 export default withRouter(connect(mapStateToProps, { setActiveChat, newUserMessage, closeModalSignin })(Chat));

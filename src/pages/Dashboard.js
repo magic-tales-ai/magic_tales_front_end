@@ -24,7 +24,16 @@ const Dashboard = ({ currentChatDone, user, ...props }) => {
             props.loadPlansList();
             props.loadMonthStoriesCount();
         }
-    }, [user, currentChatDone])
+    }, [user?.get('id')])
+
+    useEffect(() => {
+        if(user?.get('id') && currentChatDone) {
+            props.loadProfilesList();
+            props.loadStoriesList();
+            props.loadPlansList();
+            props.loadMonthStoriesCount();
+        }
+    }, [currentChatDone])
 
     return (
         <React.Fragment>

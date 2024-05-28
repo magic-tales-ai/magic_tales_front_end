@@ -3,6 +3,7 @@ import { List, Map } from 'immutable';
 import {
     LOAD_PROFILES_LIST,
     LOAD_PROFILES_LIST_SUCCESS,
+    SET_CURRENT_PROFILE_ID,
     UPLOAD_PROFILE_IMAGE,
     UPLOAD_PROFILE_IMAGE_SUCCESS,
     PROFILE_API_FAILED,
@@ -13,6 +14,7 @@ import { createProfile } from './profile';
 
 const INIT_STATE = Map({
     list: new List(),
+    currentProfileId: null,
     loading: false,
     error: null
 });
@@ -30,6 +32,10 @@ const ProfilesList = (state = INIT_STATE, action) => {
                 loading: false,
                 error: null
             });
+        
+        case SET_CURRENT_PROFILE_ID:
+            console.log(action.payload)
+            return state.set('currentProfileId', action.payload);
 
         case UPLOAD_PROFILE_IMAGE:
             return state.update('list', list => {

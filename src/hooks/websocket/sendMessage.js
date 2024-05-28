@@ -21,7 +21,8 @@ const useSendMessage = () => {
     const commandForNewChat = useRef([
         websocket_commands_messages.NEW_TALE, 
         websocket_commands_messages.SPIN_OFF, 
-        websocket_commands_messages.CONVERSATION_RECOVERY
+        websocket_commands_messages.CONVERSATION_RECOVERY,
+        websocket_commands_messages.UPDATE_PROFILE
     ])
     const currentSocketUid = useRef(null)
     const { user } = useSelector(selectUser);

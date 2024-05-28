@@ -7,7 +7,7 @@ import { ModalConfirmDelete } from '../Common/Modals/ModalConfirmDelete';
 import { ModalProfile } from './ModalProfile';
 
 // Actions
-import { setActiveChat, setActiveTab, uploadProfileImage } from '../../redux/actions';
+import { setActiveChat, setActiveTab, uploadProfileImage, setCurrentProfileId } from '../../redux/actions';
 
 // i18n
 import { useTranslation } from 'react-i18next';
@@ -43,7 +43,7 @@ const Profile = (props) => {
     }
 
     const goToEditProfile = () => {
-        dispatch(setActiveChat('new'))
+        dispatch(setCurrentProfileId(profile.get('id')))
         dispatch(setActiveTab('edit-profile'))
         navigate('/dashboard')
     }

@@ -1,6 +1,7 @@
 import {
     LOAD_PROFILES_LIST,
     LOAD_PROFILES_LIST_SUCCESS,
+    SET_CURRENT_PROFILE_ID,
     UPLOAD_PROFILE_IMAGE,
     UPLOAD_PROFILE_IMAGE_SUCCESS,
     PROFILE_API_FAILED,
@@ -14,6 +15,11 @@ export const loadProfilesList = () => ({
 export const loadProfilesListSuccess = (profilesList) => ({
     type: LOAD_PROFILES_LIST_SUCCESS,
     payload: profilesList
+})
+
+export const setCurrentProfileId = (profileId) => ({
+    type: SET_CURRENT_PROFILE_ID,
+    payload: profileId
 })
 
 export const uploadProfileImage = ({ profileId, image }) => ({
