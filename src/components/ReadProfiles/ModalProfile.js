@@ -36,7 +36,10 @@ export const ModalProfile = (props) => {
     }
 
     const goToNewTale = () => {
-        sendMessage({ command: websocket_commands_messages.NEW_TALE })
+        sendMessage({ 
+            command: websocket_commands_messages.NEW_TALE,
+            profile_id: profile.get('id')
+        })
         navigate('/dashboard')
     }
 
