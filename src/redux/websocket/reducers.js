@@ -7,12 +7,10 @@ import {
 const websocketReducer = (state = new Map(), action) => {
     switch (action.type) {
         case WEBSOCKET_CONNECTED:
-            console.log(new Date().toTimeString())
             const { socket } = action.payload;
             return state.set(socket.uid, socket.socket);
 
         case WEBSOCKET_DISCONNECT:
-            console.log(new Date().toTimeString())
             console.log('DISCONECT => ', action);
             return state;
 

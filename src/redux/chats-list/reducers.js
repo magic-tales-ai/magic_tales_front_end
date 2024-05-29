@@ -19,7 +19,6 @@ const ChatsList = (state = INIT_STATE, action) => {
 
     switch (action.type) {
         case ACTIVE_CHAT:
-            removeConversationByUidLS(state.get('activeChat'));
             return state.set('activeChat', payload);
 
         case NEW_USER_MESSAGE:

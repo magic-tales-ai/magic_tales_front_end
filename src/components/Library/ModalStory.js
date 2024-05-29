@@ -84,8 +84,9 @@ const ModalStoryComponent = (props) => {
                         <div className="me-3">
                             <div className="mb-3 text-center text-lg-start">
                                 <picture>
-                                    <source srcSet={story.get('image')} className="rounded img-fluid" />
-                                    <img src={avatarDefault} className="rounded avatar-lg h-auto" alt="tale" />
+                                    {story.get('image') &&
+                                        <img src={'data:image/svg+xml;base64,' + story.get('image')} className="rounded avatar-lg h-auto" alt={story.get('title')} />
+                                    }
                                 </picture>
                             </div>
                             <div className="d-none d-lg-block">
@@ -123,12 +124,6 @@ const ModalStoryComponent = (props) => {
                                 <div className="border-light border p-2 rounded-3">
                                     <p className="text-uppercase text-body mb-1">{t('Storyline')}</p>
                                     <p className="font-size-12" dangerouslySetInnerHTML={displayText(story.get('synopsis'))}></p>
-                                    <hr />
-                                    <p className="text-uppercase text-body mb-1">{t('Characters')}</p>
-                                    {/* <p className="font-size-12">{getCharactersNames()}</p> */}
-                                    <hr />
-                                    <p className="text-uppercase text-body mb-1">{t('Type Story')}</p>
-                                    {/* <p className="font-size-12">{getGenresNames()}</p> */}
                                 </div>
                             </div>
                         </div>

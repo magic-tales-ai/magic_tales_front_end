@@ -107,7 +107,7 @@ function Chat({ activeTab, activeChat, currentChat, sockets, user, tryModeToken,
 
         return () => clearTimeout(timeoutId);
     }, [, currentChat]);
-
+    
     useEffect(() => {
         if (preventChatLoading || !(user || tryModeToken) || activeTab == 'edit-profile') {
             return;
@@ -132,10 +132,6 @@ function Chat({ activeTab, activeChat, currentChat, sockets, user, tryModeToken,
             };
 
         sendMessage(messageParams);
-    }, [user?.get('id'), tryModeToken, preventChatLoading, activeTab])
-
-    useEffect(() => {
-        console.log(user?.get('id'), tryModeToken, preventChatLoading, activeTab)
     }, [user?.get('id'), tryModeToken, preventChatLoading, activeTab])
 
     useEffect(() => {

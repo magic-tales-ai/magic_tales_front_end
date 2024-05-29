@@ -34,7 +34,6 @@ const ProfilesList = (state = INIT_STATE, action) => {
             });
         
         case SET_CURRENT_PROFILE_ID:
-            console.log(action.payload)
             return state.set('currentProfileId', action.payload);
 
         case UPLOAD_PROFILE_IMAGE:

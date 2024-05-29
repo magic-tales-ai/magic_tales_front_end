@@ -67,9 +67,11 @@ const CardStory = ({ story, router: { navigate } }) => {
                 <CardBody>
                     <div className="d-flex">
                         <picture>
-                            <source srcSet={avatar1} className="rounded avatar-md" />
-                            <img src={avatar1} className="rounded avatar-md me-2 h-auto" alt={story.get('title')} />
+                            {story.get('image') &&
+                                <img src={'data:image/svg+xml;base64,' + story.get('image')} className="rounded avatar-md me-2 h-auto" alt={story.get('title')} />
+                            }
                         </picture>
+
                         <div>
                             <div className="d-flex justify-content-between align-items-center">
                                 <h2 className="font-size-14 mb-0 opacity-75">{story.get('title')}</h2>
