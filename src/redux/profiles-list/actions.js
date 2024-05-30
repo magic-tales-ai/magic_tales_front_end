@@ -4,6 +4,8 @@ import {
     SET_CURRENT_PROFILE_ID,
     UPLOAD_PROFILE_IMAGE,
     UPLOAD_PROFILE_IMAGE_SUCCESS,
+    DELETE_PROFILE,
+    DELETE_PROFILE_SUCCESS,
     PROFILE_API_FAILED,
     API_FAILED
 } from './constants';
@@ -35,6 +37,20 @@ export const uploadProfileImageSuccess = ({ profileId, image }) => ({
     payload: {
         profileId,
         image
+    }
+})
+
+export const deleteProfile = ({ profileId }) => ({
+    type: DELETE_PROFILE,
+    payload: { 
+        profileId
+    }
+})
+
+export const deleteProfileSuccess = ({ profileId }) => ({
+    type: DELETE_PROFILE_SUCCESS,
+    payload: { 
+        profileId
     }
 })
 
