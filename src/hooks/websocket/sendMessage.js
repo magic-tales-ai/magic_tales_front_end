@@ -113,6 +113,10 @@ const useSendMessage = () => {
                 params.uid = wsmessage.uid
             }
 
+            if(currentSocket && wsmessage.command !== websocket_commands_messages.UPDATE_PROFILE) {
+                currentSocket.close();
+            }
+
             await createWSConection({ params });
         }
 
