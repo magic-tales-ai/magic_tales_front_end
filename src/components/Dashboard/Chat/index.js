@@ -5,10 +5,6 @@ import { Link } from "react-router-dom";
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import SimpleBar from "simplebar-react";
 
-// Marker
-import DOMPurify from 'dompurify';
-import { marked } from 'marked';
-
 // Router
 import withRouter from "../../../components/withRouter";
 
@@ -39,6 +35,7 @@ import useSendMessage from '../../../hooks/websocket/sendMessage';
 
 // Helpers
 import { getConversationLS } from '../../../redux/chats-list/helper';
+import { displayText } from '../../../helpers/app';
 
 // Selectors
 import { selectChatsList } from '../../../redux/chats-list/selectors';
@@ -48,15 +45,9 @@ import { selectAuth } from '../../../redux/auth/selectors';
 // Constants
 import { websocket_commands_messages } from '../../../redux/websocket/constants';
 import { selectModalSignIn } from '../../../redux/modal-signin/selectors';
+import { selectLayout } from '../../../redux/layout/selectors';
 
-function displayMessage(message) {
-    const htmlContent = marked.parse(message);
-    const htmlContentSanitizado = DOMPurify.sanitize(htmlContent);
-    return { __html: htmlContentSanitizado };
-}
-
-
-function Chat({ activeChat, currentChat, sockets, user, tryModeToken, isOpenModalSignIn }) {
+function Chat({ activeTab, activeChat, currentChat, sockets, user, tryModeToken, isOpenModalSignIn }) {
     const { t } = useTranslation();
     const { sendMessage } = useSendMessage();
     const dispatch = useDispatch();
@@ -116,9 +107,9 @@ function Chat({ activeChat, currentChat, sockets, user, tryModeToken, isOpenModa
 
         return () => clearTimeout(timeoutId);
     }, [, currentChat]);
-
+    
     useEffect(() => {
-        if (preventChatLoading || !(user || tryModeToken)) {
+        if (preventChatLoading || !(user || tryModeToken) || activeTab == 'edit-profile') {
             return;
         }
 
@@ -141,7 +132,7 @@ function Chat({ activeChat, currentChat, sockets, user, tryModeToken, isOpenModa
             };
 
         sendMessage(messageParams);
-    }, [sockets, user?.get('id'), tryModeToken, preventChatLoading])
+    }, [user?.get('id'), tryModeToken, preventChatLoading, activeTab])
 
     useEffect(() => {
         simpleBarRef.current?.recalculate();
@@ -234,7 +225,7 @@ function Chat({ activeChat, currentChat, sockets, user, tryModeToken, isOpenModa
                                                     {
                                                         chat.message && chat.type !== 'system' && chat.type !== 'status' &&
                                                         <div className="ctext-wrap">
-                                                            <div className="ctext-wrap-content" dangerouslySetInnerHTML={displayMessage(chat.message)}></div>
+                                                            <div className="ctext-wrap-content" dangerouslySetInnerHTML={displayText(chat.message)}></div>
                                                         </div>
                                                     }
                                                     {
@@ -381,7 +372,9 @@ const mapStateToProps = (state) => {
     const sockets = state.Websocket?.sockets
     const { user } = selectUser(state);
     const { tryModeToken } = selectAuth(state);
-    return { activeChat, currentChat, sockets, user, tryModeToken, isOpenModalSignIn: isOpen };
+    const { activeTab } = selectLayout(state);
+
+    return { activeTab, activeChat, currentChat, sockets, user, tryModeToken, isOpenModalSignIn: isOpen };
 };
 
 export default withRouter(connect(mapStateToProps, { setActiveChat, newUserMessage, closeModalSignin })(Chat));

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { useDispatch } from "react-redux";
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +9,7 @@ import Profile from "./Profile";
 import { useTranslation } from 'react-i18next';
 
 // Actions
-import { setActiveChat, setActiveTab } from "../../redux/actions";
+import { setActiveChat, setActiveTab, setCurrentProfileId } from "../../redux/actions";
 
 // Icons
 import iconFile from "../../assets/images/icons/file-plus.svg";
@@ -36,12 +36,15 @@ export const ModalProfile = (props) => {
     }
 
     const goToNewTale = () => {
-        sendMessage({ command: websocket_commands_messages.NEW_TALE })
+        sendMessage({ 
+            command: websocket_commands_messages.NEW_TALE,
+            profile_id: profile.get('id')
+        })
         navigate('/dashboard')
     }
 
     const goToEditProfile = () => {
-        dispatch(setActiveChat('new'))
+        dispatch(setCurrentProfileId(profile.get('id')))
         dispatch(setActiveTab('edit-profile'))
         navigate('/dashboard')
     }

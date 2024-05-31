@@ -4,6 +4,7 @@ import { APIClient } from '../../helpers/apiClient';
 
 
 import {
+    DELETE_PROFILE,
     LOAD_PROFILES_LIST,
     UPLOAD_PROFILE_IMAGE
 } from './constants';
@@ -11,16 +12,16 @@ import {
 import {
     loadProfilesListSuccess,
     uploadProfileImageSuccess,
+    deleteProfileSuccess,
     profileApiError,
     profilesListApiError as apiError,
 } from './actions';
 
-const get = new APIClient().get;
-const create = new APIClient().create;
+const apiClient = new APIClient();
 
 function* loadProfilesList() {
     try {
-        const response = yield call(get, '/profile');
+        const response = yield call(apiClient.get, '/profile');
         yield put(loadProfilesListSuccess(response));
     } catch (error) {
         yield put(apiError(error));
@@ -29,8 +30,17 @@ function* loadProfilesList() {
 
 function* uploadProfileImage({ payload: { profileId, image } }) {
     try {
-        const response = yield call(create, `/profile/${profileId}/upload-image`, { image });
+        const response = yield call(apiClient.create, `/profile/${profileId}/upload-image`, { image });
         yield put(uploadProfileImageSuccess({ profileId, image: response.image }));
+    } catch (error) {
+        yield put(profileApiError({profileId, error}));
+    }
+}
+
+function* deleteProfile({ payload: { profileId } }) {
+    try {
+        yield call(apiClient.delete, `/profile/${profileId}`);
+        yield put(deleteProfileSuccess({ profileId }));
     } catch (error) {
         yield put(profileApiError({profileId, error}));
     }
@@ -44,10 +54,15 @@ export function* watchUploadProfileImage() {
     yield takeEvery(UPLOAD_PROFILE_IMAGE, uploadProfileImage);
 }
 
+export function* watchDeleteProfile() {
+    yield takeEvery(DELETE_PROFILE, deleteProfile);
+}
+
 function* profilesListSaga() {
     yield all([
         fork(watchLoadProfilesList),
         fork(watchUploadProfileImage),
+        fork(watchDeleteProfile),
     ]);
 }
 

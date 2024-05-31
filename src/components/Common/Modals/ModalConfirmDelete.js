@@ -1,8 +1,10 @@
 import React from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { useTranslation } from "react-i18next";
 
 export const ModalConfirmDelete = (props) => {
-    const { isOpen, setOpen, callback, title = 'Are you sure to delete?', children = '' } = props
+    const { t } = useTranslation();
+    const { isOpen, setOpen, callback, title = t('Are you sure to delete?'), children = '' } = props
 
     const handleClose = () => setOpen(false);
 
@@ -25,10 +27,10 @@ export const ModalConfirmDelete = (props) => {
             </ModalBody>
             <ModalFooter className="px-4">
                 <Button color="outline-danger flex-fill w-100 w-lg-auto" onClick={handleDelete}>
-                    Delete
+                    {t('Delete')}
                 </Button>
                 <Button color="primary flex-fill w-100 w-lg-auto" onClick={handleClose}>
-                    Cancel
+                    {t('Cancel')}
                 </Button>
             </ModalFooter>
         </Modal>

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Badge } from "reactstrap";
 import { useDispatch, connect } from "react-redux";
 
@@ -23,10 +23,13 @@ import useSendMessage from '../../hooks/websocket/sendMessage';
 import { selectChatsList } from "../../redux/chats-list/selectors";
 
 // Actions
-import { setActiveChat } from "../../redux/actions";
+import { setActiveChat, downloadStoryFile } from "../../redux/actions";
 
 // Constants
 import { websocket_commands_messages } from "../../redux/websocket/constants";
+
+// Helper
+import { displayText } from "../../helpers/app";
 
 const ModalStoryComponent = (props) => {
     const dispatch = useDispatch();
@@ -69,6 +72,15 @@ const ModalStoryComponent = (props) => {
             story_id: story.get('id')
         })
         navigate('/dashboard');
+        toggle();
+    }
+
+    const download = () => {
+        dispatch(downloadStoryFile(story.get('id')))
+    }
+
+    if(!story) {
+        return null;
     }
 
     return (
@@ -80,13 +92,13 @@ const ModalStoryComponent = (props) => {
                         <div className="me-3">
                             <div className="mb-3 text-center text-lg-start">
                                 <picture>
-                                    <source srcSet={story.get('image')} className="rounded img-fluid" />
-                                    <img src={avatarDefault} className="rounded avatar-lg h-auto" alt="tale" />
+                                    {story.get('image') &&
+                                        <img src={'data:image/svg+xml;base64,' + story.get('image')} className="rounded avatar-lg h-auto" alt={story.get('title')} />
+                                    }
                                 </picture>
                             </div>
                             <div className="d-none d-lg-block">
-                                <Button onClick={openChat} color="primary" className="d-flex align-items-center mb-2 w-100 text-start font-size-16"><i className="ri-share-box-fill me-2 fw-normal font-size-20"></i>{t('Open chat')}</Button>
-                                <Button color="primary" className="d-flex align-items-center mb-2 w-100 text-start font-size-16"><i className="ri-download-2-line me-2 fw-normal font-size-20"></i>{t('Download')}</Button>
+                                <Button onClick={download} color="primary" className="d-flex align-items-center mb-2 w-100 text-start font-size-16"><i className="ri-download-2-line me-2 fw-normal font-size-20"></i>{t('Download')}</Button>
                                 <Button onClick={newSpinOff} color="primary" className="d-flex align-items-center mb-2 w-100 text-start font-size-16"><span className="custom-icon me-2 font-size-20"><img src={iconFile} alt="icon file" /></span>{t('Create spin - off')}</Button>
                                 <Button onClick={() => setOpenModalDelete(true)} color="outline-danger" className="d-flex align-items-center w-100 text-start font-size-16"><i className="ri-delete-bin-6-line me-2 fw-normal font-size-20"></i>{t('Delete')}</Button>
                             </div>
@@ -119,18 +131,11 @@ const ModalStoryComponent = (props) => {
                                 <h6 className="fw-normal opacity-75 mb-3"> {t('Tale Summary')} </h6>
                                 <div className="border-light border p-2 rounded-3">
                                     <p className="text-uppercase text-body mb-1">{t('Storyline')}</p>
-                                    <p className="font-size-12">{story.get('synopsis')}</p>
-                                    <hr />
-                                    <p className="text-uppercase text-body mb-1">{t('Characters')}</p>
-                                    {/* <p className="font-size-12">{getCharactersNames()}</p> */}
-                                    <hr />
-                                    <p className="text-uppercase text-body mb-1">{t('Type Story')}</p>
-                                    {/* <p className="font-size-12">{getGenresNames()}</p> */}
+                                    <p className="font-size-12" dangerouslySetInnerHTML={displayText(story.get('synopsis'))}></p>
                                 </div>
                             </div>
                         </div>
                         <div className="d-lg-none">
-                            <Button onClick={openChat} color="primary" className="d-flex align-items-center mb-2 w-100 text-start font-size-16"><i className="ri-share-box-fill me-2 fw-normal font-size-20"></i>{t('Open chat')}</Button>
                             <Button color="primary" className="d-flex align-items-center mb-2 w-100 text-start font-size-16"><i className="ri-download-2-line me-2 fw-normal font-size-20"></i>{t('Download')}</Button>
                             <Button onClick={newSpinOff} color="primary" className="d-flex align-items-center mb-2 w-100 text-start font-size-16"><span className="custom-icon me-2 font-size-20"><img src={iconFile} alt="icon file" /></span>{t('Create spin - off')}</Button>
                             <Button onClick={() => setOpenModalDelete(true)} color="outline-danger" className="d-flex align-items-center w-100 text-start font-size-16"><i className="ri-delete-bin-6-line me-2 fw-normal font-size-20"></i>{t('Delete')}</Button>

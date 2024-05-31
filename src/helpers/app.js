@@ -1,3 +1,6 @@
+import DOMPurify from 'dompurify';
+import { marked } from 'marked';
+
 export const toBase64 = file => new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -7,3 +10,10 @@ export const toBase64 = file => new Promise((resolve, reject) => {
     };
     reader.onerror = reject;
 });
+
+export const displayText = text => {
+    const filteredText = text.replace(/【.*?】/g, '');
+    const htmlContent = marked.parse(filteredText);
+    const htmlContentSanitizado = DOMPurify.sanitize(htmlContent);
+    return { __html: htmlContentSanitizado };
+}

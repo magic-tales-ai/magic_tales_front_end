@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Card, CardBody, Nav, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from "reactstrap";
 import { connect } from "react-redux";
+import SimpleBar from "simplebar-react";
 
 // Components/Modals
 import withRouter from '../withRouter';
@@ -23,6 +24,9 @@ import { websocket_commands_messages } from '../../redux/websocket/constants';
 
 // Hooks
 import useSendMessage from '../../hooks/websocket/sendMessage';
+
+// Helpers
+import { displayText } from '../../helpers/app';
 
 const CardStory = ({ story, router: { navigate } }) => {
     const { t } = useTranslation();
@@ -63,9 +67,11 @@ const CardStory = ({ story, router: { navigate } }) => {
                 <CardBody>
                     <div className="d-flex">
                         <picture>
-                            <source srcSet={avatar1} className="rounded avatar-md" />
-                            <img src={avatar1} className="rounded avatar-md me-2 h-auto" alt={story.get('title')} />
+                            {story.get('image') &&
+                                <img src={'data:image/svg+xml;base64,' + story.get('image')} className="rounded avatar-md me-2 h-auto" alt={story.get('title')} />
+                            }
                         </picture>
+
                         <div>
                             <div className="d-flex justify-content-between align-items-center">
                                 <h2 className="font-size-14 mb-0 opacity-75">{story.get('title')}</h2>
@@ -88,7 +94,11 @@ const CardStory = ({ story, router: { navigate } }) => {
                                     </div>
                                 </div>
                             </div>
-                            <p className="font-size-10 opacity-75">{story.get('synopsis')}</p>
+                            
+                            <SimpleBar className="story-card-synopsis">
+                                <p className="font-size-10 opacity-75" dangerouslySetInnerHTML={displayText(story.get('synopsis'))}></p>
+                            </SimpleBar>
+
                             {profileInfo}
                         </div>
                     </div>

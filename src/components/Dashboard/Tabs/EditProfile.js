@@ -1,50 +1,57 @@
-import React from 'react';
-import { Button, Card, CardBody } from "reactstrap";
+import React, { useEffect, useRef } from 'react';
+import { Button } from "reactstrap";
 import { connect, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
 
-//actions
-import { setActiveTab } from "../../../redux/actions";
+// Actions
+import { setActiveTab, setActiveChat, setCurrentProfileId } from "../../../redux/actions";
 
-//i18n
+// i18n
 import { useTranslation } from 'react-i18next';
 
-//image default
+// Image default
 import avatar1 from "../../../assets/images/users/avatar-1.jpg";
 
-const defaultProfile = {
-    id: 0,
-    name: 'Carlos',
-    image: '',
-    years: 8,
-    description: "Smiles a lot, like magic, is strong",
-    characteristics: [
-        "Carlos easily makes friends with his love for wizards and dragons.",
-        "He's a funny kid who loves making his friends laugh.",
-        "Carlos is curious and loves asking questions about magic and science.",
-        "He's a budding artist who enjoys drawing and painting.",
-        "Carlos is compassionate and enjoys helping and comforting his friends.",
-        "He's an adventurous eater, always eager to try new foods.",
-        "A young musician, he plays the guitar and composes songs.",
-        "In school, Carlos excels and gets creative with assignments related mathematics.",
-        "Carlos loves reading fantasy novels, especially those with wizards and dragons.",
-        "Carlos really enjoys playing soccer.",
-        "He adores his dog Rocky.",
-        "Outdoorsy, he explores nature and sometimes imagines magical creatures."
-    ]
-}
+// Hooks
+import useSendMessage from '../../../hooks/websocket/sendMessage';
 
-const EditProfile = ({ profile = defaultProfile }) => {
+// Constants
+import { websocket_commands_messages } from '../../../redux/websocket/constants';
+
+// Selectors
+import { selectProfiles } from '../../../redux/profiles-list/selectors';
+import { selectChatsList } from '../../../redux/chats-list/selectors';
+
+const EditProfile = ({ profile, activeChat }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch()
+    const { sendMessage } = useSendMessage();
+    const chatLoadedRef = useRef(false);
+    const prevouseChatUid = useRef(null);
+
+    useEffect(() => {
+        if(!profile || chatLoadedRef.current) {
+            return;
+        }
+        chatLoadedRef.current = true;
+        prevouseChatUid.current = activeChat;
+
+        dispatch(setActiveChat(null));
+        sendMessage({ 
+            command: websocket_commands_messages.UPDATE_PROFILE, 
+            profile_id: profile.get('id'),
+            needValidate: false 
+        });
+    }, [, profile])
 
     const goToChat = () => {
-        dispatch(setActiveTab('chat'))
+        dispatch(setActiveChat(prevouseChatUid.current));
+        dispatch(setActiveTab('chat'));
     }
 
-    return (
+    return !profile ?
+        null
+        : (
         <React.Fragment>
-
             <div className="d-flex p-3 align-items-center">
                 <Button color="outline-primary" className="me-3 p-1" onClick={goToChat}>
                     <i className="ri-arrow-left-line font-size-24 fw-normal mx-2"></i>
@@ -56,25 +63,18 @@ const EditProfile = ({ profile = defaultProfile }) => {
                 <div className="border-light border rounded-3 p-3">
                     <div className="avatar-md mb-3">
                         <picture>
-                            <source srcSet={profile?.image} className="rounded avatar-md" />
-                            <img src={avatar1} className="rounded avatar-md" alt="chatvia" />
+                            <img src={'data:image/*;base64,' + profile.get('image')} className="rounded avatar-md" alt="profile avatar" />
                         </picture>
                     </div>
 
                     <div className="mb-3">
-                        <h6 className="mb-2"> {profile?.name} </h6>
-                        <p className="opacity-75 font-size-12"> {profile?.years + ' ' + t('years')} </p>
+                        <h6 className="mb-2"> {profile.get('name')} </h6>
+                        <p className="opacity-75 font-size-12"> {profile.get('age') + ' ' + t('years')} </p>
                     </div>
 
-                    <ul className="opacity-75 font-size-12 ps-3">
-                        {
-                            profile?.characteristics?.map((characteristic, key) =>
-                                <li key={key} id={"characteristic" + key} >
-                                    {characteristic}
-                                </li>
-                            )
-                        }
-                    </ul>
+                    <p className="opacity-75 font-size-12">
+                        {profile.get('details')}
+                    </p>
 
                 </div>
             </div>
@@ -83,4 +83,11 @@ const EditProfile = ({ profile = defaultProfile }) => {
     );
 }
 
-export default connect(null, { setActiveTab })(EditProfile);
+const mapStatetoProps = state => {
+    const { currentProfile } = selectProfiles(state);
+    const { activeChat } = selectChatsList(state);
+
+    return { profile: currentProfile, activeChat };
+};
+
+export default connect(mapStatetoProps, { setActiveTab, setCurrentProfileId })(EditProfile);

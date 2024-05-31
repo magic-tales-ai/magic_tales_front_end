@@ -70,7 +70,6 @@ function* updateUser({ payload: data }) {
 function* validateNewUserEmail({ payload: { validationCode } }) {
     try {
         const response = yield call(create, 'user/change-email-validate', { validation_code: validationCode });
-        console.log(response)
         yield put(validateNewUserEmailSuccess(response));
     } catch (error) {console.log(error)
         yield put(apiError(error));

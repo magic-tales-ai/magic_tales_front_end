@@ -15,11 +15,10 @@ export const INIT_STATE = Map({
 });
 
 const ChatsList = (state = INIT_STATE, action) => {
-    const { payload } = action;
+    const { payload } = action;   
 
     switch (action.type) {
         case ACTIVE_CHAT:
-            removeConversationByUidLS(state.get('activeChat'));
             return state.set('activeChat', payload);
 
         case NEW_USER_MESSAGE:
@@ -62,12 +61,19 @@ const ChatsList = (state = INIT_STATE, action) => {
 
                 case websocket_commands_messages.SPIN_OFF:
                     newChat = createNewChat({
-                        ...message,
-                        name: 'Spin-Off'
+                        ...message
                     })
 
                     // Update LS on new spin off
                     handleSaveConversationLS({ uid: newChat.uid, storyParentId: newChat.story_parent_id });
+
+                    return state.set('activeChat', newChat.uid)
+                        .update('chats', chats => chats.set(newChat.uid, newChat));
+
+                case websocket_commands_messages.UPDATE_PROFILE:
+                    newChat = createNewChat({
+                        ...message
+                    })
 
                     return state.set('activeChat', newChat.uid)
                         .update('chats', chats => chats.set(newChat.uid, newChat));

@@ -239,7 +239,6 @@
 
         .conversation-list {
             float: right;
-            text-align: right;
 
             .ctext-wrap {
                 justify-content: flex-end;
@@ -248,7 +247,6 @@
                     order: 2;
                     background-color: $chat-secondary-bg;
                     color: var(--#{$prefix}dark);
-                    text-align: right;
                     border-radius: 8px 8px 0px 8px;
 
                     &:before {

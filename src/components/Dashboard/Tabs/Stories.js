@@ -17,9 +17,6 @@ import iconFile from "../../../assets/images/icons/file-plus.svg";
 import iconGroup from "../../../assets/images/icons/group.svg";
 import iconLibrary from "../../../assets/images/icons/library.svg";
 
-import imgDefault from "../../../assets/images/users/default.png";
-import avatarDefault from "../../../assets/images/users/user-avatar-xxs.png";
-
 // Hooks
 import useSendMessage from '../../../hooks/websocket/sendMessage';
 
@@ -72,7 +69,7 @@ const Stories = ({ stories, activeChat, chats, currentChat, user, anyProfile, an
     }, [activeChat, stories]);
 
     useEffect(() => {
-        if(user?.get('id') && !anyProfile) {
+        if (user?.get('id') && !anyProfile) {
             setDisabledProfiles(true);
             return;
         }
@@ -80,7 +77,7 @@ const Stories = ({ stories, activeChat, chats, currentChat, user, anyProfile, an
     }, [user, anyProfile]);
 
     useEffect(() => {
-        if(user?.get('id') && !anyStory) {
+        if (user?.get('id') && !anyStory) {
             setDisabledLibrery(true);
             return;
         }
@@ -89,7 +86,7 @@ const Stories = ({ stories, activeChat, chats, currentChat, user, anyProfile, an
 
     const openStoryChat = (e, story) => {
         e.preventDefault();
-        
+
         setCurrentStoryId(story.get('id'));
         setOpenModalStory(true);
         // if(chats.get(story.get('sessionId'))) { // chat already loaded
@@ -140,20 +137,15 @@ const Stories = ({ stories, activeChat, chats, currentChat, user, anyProfile, an
                                 <li key={story.get('id')} id={"conversation" + story.get('id')} className={story.get('sessionId') == activeChat ? "active" : ""}>
                                     <Link to="#" onClick={(e) => openStoryChat(e, story)}>
                                         <div className="d-flex align-items-center">
-                                            {
-                                                !story.get('profilePicture') ?
-                                                    <div className={"chat-user-img align-self-center me-1 ms-0"}>
-                                                        <div className="avatar-xs">
-                                                            <img src={imgDefault} className="rounded avatar-xs" alt={story.get('title')} />
-                                                        </div>
-                                                    </div>
-                                                    :
-                                                    <div className={"chat-user-img align-self-center me-1 ms-0"}>
-                                                        <div className="avatar-xs">
-                                                            <img src={story.get('profilePicture')} className="rounded avatar-xs" alt={story.get('title')} />
-                                                        </div>
-                                                    </div>
-                                            }
+                                            <div className={"chat-user-img align-self-center me-1 ms-0"}>
+                                                <div className="avatar-xs">
+                                                    <picture>
+                                                        {story.get('image') &&
+                                                            <img src={'data:image/svg+xml;base64,' + story.get('image')} className="rounded avatar-xs" alt={story.get('title')} />
+                                                        }
+                                                    </picture>
+                                                </div>
+                                            </div>
 
                                             <div className="flex-grow-1 overflow-hidden">
                                                 <h5 className="text-truncate font-size-14 mb-1 ms-1">{story.get('title')}</h5>
@@ -161,23 +153,22 @@ const Stories = ({ stories, activeChat, chats, currentChat, user, anyProfile, an
 
                                                     {story.get('profileId')
                                                         ?
-                                                            <>
-                                                                <div className="chat-user-emoji avatar-xxs me-2 d-flex align-items-center justify-content-center">
-                                                                    <picture className="ms-2">
-                                                                        {story.get('profile').get('image')
-                                                                            ?   <img src={'data:image/*;base64,' + story.get('profile').get('image')} className="rounded avatar-xxs" />
-                                                                            :   <img src={avatarDefault} className="rounded avatar-xxs" alt="avatar" />
-                                                                        }
-                                                                    </picture>
-                                                                </div>
-                                                                <div>
-                                                                    <p className="mb-0 fw-medium chat-user-message text-truncate">{story.get('profile').get('name')} &#x2022; <span className="opacity-75">{story.get('profile').get('age') + ' ' + t('years')}</span></p>
-                                                                </div>
-                                                            </>
-                                                        :
-                                                            <div>
-                                                                <p className="mb-0 fw-medium chat-user-message text-truncate ms-1">{t('No reader')}</p>
+                                                        <>
+                                                            <div className="chat-user-emoji avatar-xxs me-2 d-flex align-items-center justify-content-center">
+                                                                <picture className="ms-2">
+                                                                    {story.get('profile').get('image') &&
+                                                                        <img src={'data:image/*;base64,' + story.get('profile').get('image')} className="rounded avatar-xxs" />
+                                                                    }
+                                                                </picture>
                                                             </div>
+                                                            <div>
+                                                                <p className="mb-0 fw-medium chat-user-message text-truncate">{story.get('profile').get('name')} &#x2022; <span className="opacity-75">{story.get('profile').get('age') + ' ' + t('years')}</span></p>
+                                                            </div>
+                                                        </>
+                                                        :
+                                                        <div>
+                                                            <p className="mb-0 fw-medium chat-user-message text-truncate ms-1">{t('No reader')}</p>
+                                                        </div>
                                                     }
                                                 </div>
                                             </div>

@@ -7,7 +7,7 @@ import { ModalConfirmDelete } from '../Common/Modals/ModalConfirmDelete';
 import { ModalProfile } from './ModalProfile';
 
 // Actions
-import { setActiveChat, setActiveTab, uploadProfileImage } from '../../redux/actions';
+import { setActiveChat, setActiveTab, uploadProfileImage, setCurrentProfileId, deleteProfile as deleteProfileAction } from '../../redux/actions';
 
 // i18n
 import { useTranslation } from 'react-i18next';
@@ -34,22 +34,29 @@ const Profile = (props) => {
     const [dropdownOpen, setdropdownOpen] = useState();
 
     const toggle = () => {
-        setdropdownOpen(!dropdownOpen)
+        setdropdownOpen(!dropdownOpen);
     }
 
     const goToNewTale = () => {
-        sendMessage({ command: websocket_commands_messages.NEW_TALE })
-        navigate('/dashboard')
+        sendMessage({ 
+            command: websocket_commands_messages.NEW_TALE,
+            profile_id: profile.get('id')
+        })
+        navigate('/dashboard');
     }
 
     const goToEditProfile = () => {
-        dispatch(setActiveChat('new'))
-        dispatch(setActiveTab('edit-profile'))
-        navigate('/dashboard')
+        dispatch(setCurrentProfileId(profile.get('id')));
+        dispatch(setActiveTab('edit-profile'));
+        navigate('/dashboard');
     }
 
     const updateImage = ({ image }) => {
-        dispatch(uploadProfileImage({ profileId: profile.get('id'), image }))
+        dispatch(uploadProfileImage({ profileId: profile.get('id'), image }));
+    }
+
+    const deleteProfile = () => {
+        dispatch(deleteProfileAction({ profileId: profile.get('id') }));
     }
 
     const avatar = <picture>
@@ -100,10 +107,10 @@ const Profile = (props) => {
 
             </div>
 
-            <ModalConfirmDelete isOpen={openModalDelete} setOpen={setOpenModalDelete} callback={() => { setOpenModalDelete(false) }} >
+            <ModalConfirmDelete isOpen={openModalDelete} setOpen={setOpenModalDelete} callback={deleteProfile} >
                 <div> 
                     <p className="text-center">
-                        {t('By deleting the reader profile, the stories will not be deleted')}
+                        {t('By deleting the reader profile, the associated stories will be deleted')}
                     </p>
 
                     <div className="p-3 card-profile mx-auto border-light border rounded-3">

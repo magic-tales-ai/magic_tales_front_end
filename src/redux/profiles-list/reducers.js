@@ -3,8 +3,11 @@ import { List, Map } from 'immutable';
 import {
     LOAD_PROFILES_LIST,
     LOAD_PROFILES_LIST_SUCCESS,
+    SET_CURRENT_PROFILE_ID,
     UPLOAD_PROFILE_IMAGE,
     UPLOAD_PROFILE_IMAGE_SUCCESS,
+    DELETE_PROFILE,
+    DELETE_PROFILE_SUCCESS,
     PROFILE_API_FAILED,
     API_FAILED
 } from './constants';
@@ -13,6 +16,7 @@ import { createProfile } from './profile';
 
 const INIT_STATE = Map({
     list: new List(),
+    currentProfileId: null,
     loading: false,
     error: null
 });
@@ -30,6 +34,9 @@ const ProfilesList = (state = INIT_STATE, action) => {
                 loading: false,
                 error: null
             });
+        
+        case SET_CURRENT_PROFILE_ID:
+            return state.set('currentProfileId', action.payload);
 
         case UPLOAD_PROFILE_IMAGE:
             return state.update('list', list => {
@@ -50,6 +57,24 @@ const ProfilesList = (state = INIT_STATE, action) => {
                 }
                 return list;
             })
+        
+        case DELETE_PROFILE:
+            return state.update('list', list => {
+                const index = list.findIndex(profile => profile.get('id') === action.payload.profileId);
+                if (index !== -1) {
+                    return list.setIn([index, 'loading'], true)
+                }
+                return list;
+            })
+    
+        case DELETE_PROFILE_SUCCESS:
+            const updatedList = state.get('list').filter(profile => profile.get('id') !== action.payload.profileId);
+
+            return state.merge({
+                list: updatedList,
+                loading: false,
+                error: null
+            });
 
         case PROFILE_API_FAILED:
             return state.update('list', list => {

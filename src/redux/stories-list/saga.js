@@ -6,20 +6,20 @@ import { APIClient } from '../../helpers/apiClient';
 import {
     DELETE_STORY,
     LOAD_STORIES_LIST,
+    DOWNLOAD_STORY_FILE
 } from './constants';
 
 import {
     loadStoriesListSuccess,
-    storiesListApiError as apiError,
     deleteStorySuccess,
+    storiesListApiError as apiError,
 } from './actions';
 
-const get = new APIClient().get;
-const deleteC = new APIClient().delete;
+const apiClient = new APIClient();
 
 function* loadStoriesList() {
     try {
-        const response = yield call(get, '/story');
+        const response = yield call(apiClient.get, '/story');
         yield put(loadStoriesListSuccess(response));
     } catch (error) {
         yield put(apiError(error));
@@ -28,9 +28,30 @@ function* loadStoriesList() {
 
 function* deleteStory({ payload: storyId }) {
     try {
-        const response = yield call(deleteC, '/story/' + storyId);
+        const response = yield call(apiClient.delete, '/story/' + storyId);
         yield put(deleteStorySuccess({ ...response, storyId }));
     } catch (error) {
+        yield put(apiError(error));
+    }
+}
+
+function* downloadStoryFile({ payload: storyId }) {
+    try {
+        const blob = yield call(apiClient.get, '/story/' + storyId + '/download', {
+            responseType: 'blob'
+        });
+
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'story.pdf');
+        document.body.appendChild(link);
+        link.click();
+        window.URL.revokeObjectURL(url);
+        link.parentNode.removeChild(link);
+
+    } catch (error) {
+        console.log(error)
         yield put(apiError(error));
     }
 }
@@ -43,10 +64,15 @@ export function* watchDeleteStory() {
     yield takeEvery(DELETE_STORY, deleteStory);
 }
 
+export function* watchDownloadStoryFile() {
+    yield takeEvery(DOWNLOAD_STORY_FILE, downloadStoryFile);
+}
+
 function* storiesListSaga() {
     yield all([
         fork(watchLoadStoriesList),
         fork(watchDeleteStory),
+        fork(watchDownloadStoryFile),
     ]);
 }
 

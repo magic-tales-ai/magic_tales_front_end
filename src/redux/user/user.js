@@ -25,7 +25,7 @@ export const createNewUser = (data) => {
     return new User({
         ...data,
         image: data?.image || DEFAULT_PICTURE_B64,
-        monthStoriesCount: data?.month_stories_count,
+        monthStoriesCount: data?.month_stories_count || data?.monthStoriesCount,
         lastName: data?.last_name,
         plan: createPlan(data?.plan)
     })
