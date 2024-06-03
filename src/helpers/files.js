@@ -23,6 +23,8 @@ export function downloadPDFFromFile(pdf, name = getNameFromUrl(pdf)) {
     link.href = fileURL;
     link.download = name + '.pdf'
     link.click();
+
+    return fileURL;
 }
 
 export function getNameFromUrl(url) {

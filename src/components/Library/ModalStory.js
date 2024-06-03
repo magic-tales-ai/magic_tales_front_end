@@ -136,7 +136,7 @@ const ModalStoryComponent = (props) => {
                             </div>
                         </div>
                         <div className="d-lg-none">
-                            <Button color="primary" className="d-flex align-items-center mb-2 w-100 text-start font-size-16"><i className="ri-download-2-line me-2 fw-normal font-size-20"></i>{t('Download')}</Button>
+                            <Button onClick={download} color="primary" className="d-flex align-items-center mb-2 w-100 text-start font-size-16"><i className="ri-download-2-line me-2 fw-normal font-size-20"></i>{t('Download')}</Button>
                             <Button onClick={newSpinOff} color="primary" className="d-flex align-items-center mb-2 w-100 text-start font-size-16"><span className="custom-icon me-2 font-size-20"><img src={iconFile} alt="icon file" /></span>{t('Create spin - off')}</Button>
                             <Button onClick={() => setOpenModalDelete(true)} color="outline-danger" className="d-flex align-items-center w-100 text-start font-size-16"><i className="ri-delete-bin-6-line me-2 fw-normal font-size-20"></i>{t('Delete')}</Button>
                         </div>

@@ -22,7 +22,7 @@ const StoriesList = (state = INIT_STATE, action) => {
     switch (action.type) {
         case LOGOUT_USER_SUCCESS:
             return INIT_STATE;
-            
+
         case LOAD_STORIES_LIST:
             return state.set('loading', true);
 
@@ -53,7 +53,7 @@ const StoriesList = (state = INIT_STATE, action) => {
                 error: action.payload
             });
 
-        default: 
+        default:
             return state;
     }
 }

@@ -1,7 +1,7 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
 import { APIClient } from '../../helpers/apiClient';
-
+import { downloadPDFFromFile } from '../../helpers/files';
 
 import {
     DELETE_STORY,
@@ -41,15 +41,7 @@ function* downloadStoryFile({ payload: storyId }) {
             responseType: 'blob'
         });
 
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'story.pdf');
-        document.body.appendChild(link);
-        link.click();
-        window.URL.revokeObjectURL(url);
-        link.parentNode.removeChild(link);
-
+        downloadPDFFromFile(blob, 'story');
     } catch (error) {
         console.log(error)
         yield put(apiError(error));
