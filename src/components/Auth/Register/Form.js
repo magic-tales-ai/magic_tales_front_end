@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import { FormGroup, Alert, Form, Input, Button, FormFeedback, Label, InputGroup } from 'reactstrap';
 
 // Actions
-import { registerUser, createUserTryMode, apiError } from '../../../redux/actions';
+import { registerUser, createUserTryMode, apiError, fetchSystem } from '../../../redux/actions';
 
 // i18n
 import { useTranslation } from 'react-i18next';
@@ -55,6 +55,10 @@ const RegisterForm = ({ currentChatWebsocket, tryModeId, error, loading, navigat
             dispatch(registerUser({...values, tryModeId}));
         },
     });
+
+    useEffect(() => {
+        dispatch(fetchSystem('languages'));
+    }, [])
 
     useEffect(() => {
         if (successRegister) {
