@@ -79,7 +79,7 @@ const useSendMessage = () => {
 
     const sendMessage = async ({needValidate = true, ...message}) => {
         var wsmessage = buildWsMessage(message);
-        const maxStoriesExceeded = user.get('monthStoriesCount') >= user.get('plan').get('storiesPerMonth');
+        const maxStoriesExceeded = user && user.get('monthStoriesCount') >= user.get('plan').get('storiesPerMonth');
 
         if(maxStoriesExceeded && commandRequireCheckLimit.current.includes(wsmessage.command)) {
             modalLimitStories.open({
