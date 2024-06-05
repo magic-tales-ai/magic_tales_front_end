@@ -6,13 +6,16 @@ import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import { configureStore } from './redux/store';
 import { BrowserRouter } from 'react-router-dom';
+import { DynamicModalProvider } from './contexts/DynamicModalContext';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={configureStore()}>
-    <BrowserRouter basename="/">
-      <App />
-    </BrowserRouter>
+      <BrowserRouter basename="/">
+        <DynamicModalProvider>
+          <App />
+        </DynamicModalProvider>
+      </BrowserRouter>
   </Provider>
 );
 

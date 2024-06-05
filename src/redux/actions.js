@@ -6,6 +6,5 @@ export * from './websocket/actions';
 export * from './layout/actions';
 export * from './plans-list/actions';
 export * from './profiles-list/actions';
-export * from './modal-confirm-change-chat/actions';
 export * from './modal-signin/actions';
 export * from './systems/actions';
