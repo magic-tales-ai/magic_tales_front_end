@@ -29,13 +29,13 @@ const ProfileSettingsCardComponent = ({ user, loading, error, languages }) => {
             name: user.get('name'),
             last_name: user.get('lastName'),
             username: user.get('username'),
-            lang: user.get('lang')
+            language: user.get('language')
         },
         validationSchema: Yup.object({
             name: Yup.string().required('Required'),
             last_name: Yup.string().required('Required'),
             username: Yup.string().required('Required'),
-            lang: Yup.string().required('Required')
+            language: Yup.string().required('Required')
         }),
         onSubmit: (values, actions) => {
             dispatch(apiError(""));
@@ -147,27 +147,27 @@ const ProfileSettingsCardComponent = ({ user, loading, error, languages }) => {
                             </FormGroup>
 
                             <FormGroup>
-                                <Label className="form-label">{t('Lang')}</Label>
+                                <Label className="form-label">{t('Language')}</Label>
                                 <InputGroup className="mb-3 bg-soft-light rounded-3">
                                     <Input
                                         type="select"
-                                        id="lang"
-                                        name="lang"
+                                        id="language"
+                                        name="language"
                                         className="form-control form-control-lg bg-soft-light border-light"
-                                        placeholder="Lang"
+                                        placeholder="Language"
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
-                                        value={formik.values.lang}
-                                        invalid={formik.touched.lang && formik.errors.lang ? true : false}
+                                        value={formik.values.language}
+                                        invalid={formik.touched.language && formik.errors.language ? true : false}
                                     >
                                         {languages?.map(language => {
-                                            return <option value={language.code}>
+                                            return <option key={language.code} value={language.code}>
                                                 {language.name}
                                             </option>
                                         })}
                                     </Input>
-                                    {formik.touched.lang && formik.errors.lang ? (
-                                        <FormFeedback type="invalid">{formik.errors.lang}</FormFeedback>
+                                    {formik.touched.language && formik.errors.language ? (
+                                        <FormFeedback type="invalid">{formik.errors.language}</FormFeedback>
                                     ) : null}
                                 </InputGroup>
                             </FormGroup>

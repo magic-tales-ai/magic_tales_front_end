@@ -1,11 +1,14 @@
-import React, { useEffect, useCallback, useState } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { connect, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import withRouter from "../../../components/withRouter";
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { FormGroup, Alert, Form, Input, Button, FormFeedback, Label, InputGroup } from 'reactstrap';
+
+// Constants
+import { LANGUAGES } from '../../../redux/systems/constants';
 
 // Actions
 import { registerUser, createUserTryMode, apiError, fetchSystem } from '../../../redux/actions';
@@ -16,12 +19,13 @@ import { useTranslation } from 'react-i18next';
 // Selectors
 import { selectAuth } from '../../../redux/auth/selectors';
 import { selectCurrentChatWebsocket } from '../../../redux/websocket/selectors';
+import { selectSystems } from '../../../redux/systems/selectors';
 
 /**
  * Register component
  * @param {*} props 
  */
-const RegisterForm = ({ currentChatWebsocket, tryModeId, error, loading, navigate }) => {
+const RegisterForm = ({ currentChatWebsocket, tryModeId, error, loading, languages, navigate }) => {
     const dispatch = useDispatch();
     const [successRegister, setSuccessRegister] = useState(false)
     const { t } = useTranslation();
@@ -41,14 +45,16 @@ const RegisterForm = ({ currentChatWebsocket, tryModeId, error, loading, navigat
             lastName: '',
             email: '',
             username: '',
-            password: ''
+            password: '',
+            language: ''
         },
         validationSchema: Yup.object({
             name: Yup.string().required('Required'),
             lastName: Yup.string().required('Required'),
             email: Yup.string().email('Enter a valid email address').required('Required'),
             username: Yup.string().required('Required'),
-            password: Yup.string().required('Required')
+            password: Yup.string().required('Required'),
+            language: Yup.string().required('Required')
         }),
         onSubmit: values => {
             dispatch(apiError(""));
@@ -210,6 +216,31 @@ const RegisterForm = ({ currentChatWebsocket, tryModeId, error, loading, navigat
                             </InputGroup>
                         </FormGroup>
 
+                        <FormGroup>
+                                <Label className="form-label">{t('Language')}</Label>
+                                <InputGroup className="mb-3 bg-soft-light rounded-3">
+                                    <Input
+                                        type="select"
+                                        id="language"
+                                        name="language"
+                                        className="form-control form-control-lg bg-soft-light border-light"
+                                        placeholder="Language"
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        value={formik.values.language}
+                                        invalid={formik.touched.language && formik.errors.language ? true : false}
+                                    >
+                                        {languages?.map(language => {
+                                            return <option key={language.code} value={language.code}>
+                                                {language.name}
+                                            </option>
+                                        })}
+                                    </Input>
+                                    {formik.touched.language && formik.errors.language ? (
+                                        <FormFeedback type="invalid">{formik.errors.language}</FormFeedback>
+                                    ) : null}
+                                </InputGroup>
+                            </FormGroup>
 
                         <div className="d-grid">
                             <Button color="secondary" size="lg" block className="waves-effect waves-light" type="submit" disabled={formik.isSubmitting}>
@@ -231,8 +262,10 @@ const RegisterForm = ({ currentChatWebsocket, tryModeId, error, loading, navigat
 const mapStateToProps = (state) => {
     const { tryModeId, error, loading } = selectAuth(state);
     const { currentChatWebsocket } = selectCurrentChatWebsocket(state)
+    const systems = selectSystems(state);
+    const languages = systems.get(LANGUAGES)?.items || [];
 
-    return { currentChatWebsocket, tryModeId, error, loading };
+    return { currentChatWebsocket, tryModeId, error, loading, languages };
 };
 
-export default connect(mapStateToProps, { registerUser, apiError })(RegisterForm);
+export default connect(mapStateToProps, { registerUser, apiError, fetchSystem })(RegisterForm);
