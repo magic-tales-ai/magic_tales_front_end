@@ -5,9 +5,6 @@ import { connect } from "react-redux";
 import ChatLeftSidebar from "../components/Dashboard/ChatLeftSidebar";
 import Chat from "../components/Dashboard/Chat/index";
 
-// Modals
-import { ModalConfirmChangeChat } from '../components/Dashboard/ModalConfirmChangeChat';
-
 // Actions
 import { loadStoriesList, loadProfilesList, loadPlansList, loadMonthStoriesCount } from '../redux/actions';
 
@@ -42,9 +39,6 @@ const Dashboard = ({ currentChatDone, user, ...props }) => {
             
             {/* chat */}
             <Chat />
-
-            {/* confirm change chat */}
-            <ModalConfirmChangeChat />
         </React.Fragment>
     );
 };
