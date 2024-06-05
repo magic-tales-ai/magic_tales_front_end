@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card, CardBody, Nav, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from "reactstrap";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import SimpleBar from "simplebar-react";
 
 // Components/Modals
@@ -9,14 +9,12 @@ import { ModalDeleteStory } from './ModalDeleteStory';
 import { ModalStory } from './ModalStory';
 
 // Actions
-import { setActiveChat } from '../../redux/actions';
+import { setActiveChat, downloadStoryFile } from '../../redux/actions';
 
 // i18n
 import { useTranslation } from 'react-i18next';
 
-// Images default
-import avatar1 from "../../assets/images/users/avatar-tales-big.png";
-import avatar from "../../assets/images/users/avatar-tales-big.png";
+// Images
 import avatarDefault from "../../assets/images/users/user-avatar.png";
 
 // Constants
@@ -31,6 +29,7 @@ import { displayText } from '../../helpers/app';
 const CardStory = ({ story, router: { navigate } }) => {
     const { t } = useTranslation();
     const { sendMessage } = useSendMessage();
+    const dispatch = useDispatch();
 
     const [openModalStory, setOpenModalStory] = useState(false);
     const [openModalDelete, setOpenModalDelete] = useState(false);
@@ -46,6 +45,11 @@ const CardStory = ({ story, router: { navigate } }) => {
             story_id: story.get('id')
         })
         navigate('/dashboard');
+    }
+
+    const download = () => {
+        console.log('download')
+        dispatch(downloadStoryFile(story.get('id')));
     }
 
     const profileInfo = <div className="d-flex">
@@ -85,7 +89,7 @@ const CardStory = ({ story, router: { navigate } }) => {
                                                 <DropdownMenu className="dropdown-menu-end">
                                                     <DropdownItem onClick={newSpinOff}> {t('Create spin - off')} </DropdownItem>
                                                     <DropdownItem divider className="my-1" />
-                                                    <DropdownItem> {t('Download')} </DropdownItem>
+                                                    <DropdownItem onClick={download}> {t('Download')} </DropdownItem>
                                                     <DropdownItem divider className="my-1" />
                                                     <DropdownItem className="text-danger" > <div onClick={() => setOpenModalDelete(true)}> {t('Delete')} </div>  </DropdownItem>
                                                 </DropdownMenu>

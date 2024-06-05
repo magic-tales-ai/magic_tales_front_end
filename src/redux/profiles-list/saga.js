@@ -17,12 +17,19 @@ import {
     profilesListApiError as apiError,
 } from './actions';
 
+import { 
+    WEBSOCKET_MESSAGE,
+    websocket_commands_messages
+} from '../websocket/constants';
+
 const apiClient = new APIClient();
 
-function* loadProfilesList() {
+function* loadProfilesList({ payload }) {
     try {
-        const response = yield call(apiClient.get, '/profile');
-        yield put(loadProfilesListSuccess(response));
+        if(!payload || websocket_commands_messages.PROFILE_UPDATED == payload.message?.command) {
+            const response = yield call(apiClient.get, '/profile');
+            yield put(loadProfilesListSuccess(response));
+        }
     } catch (error) {
         yield put(apiError(error));
     }
@@ -47,7 +54,7 @@ function* deleteProfile({ payload: { profileId } }) {
 }
 
 export function* watchLoadProfilesList() {
-    yield takeEvery(LOAD_PROFILES_LIST, loadProfilesList);
+    yield takeEvery([LOAD_PROFILES_LIST, WEBSOCKET_MESSAGE], loadProfilesList);
 }
 
 export function* watchUploadProfileImage() {

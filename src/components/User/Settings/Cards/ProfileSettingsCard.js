@@ -8,11 +8,15 @@ import * as Yup from 'yup';
 
 // Selectors
 import { selectUser } from "../../../../redux/user/selectors";
+import { selectSystems } from "../../../../redux/systems/selectors";
+
+// Constants
+import { LANGUAGES } from "../../../../redux/systems/constants";
 
 // Actions
-import { updateUser, apiError } from "../../../../redux/actions";
+import { updateUser, apiError, fetchSystem } from "../../../../redux/actions";
 
-const ProfileSettingsCardComponent = ({ user, loading, error }) => {
+const ProfileSettingsCardComponent = ({ user, loading, error, languages }) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const [successUpdated, setSuccessUpdated] = useState(false);
@@ -25,17 +29,23 @@ const ProfileSettingsCardComponent = ({ user, loading, error }) => {
             name: user.get('name'),
             last_name: user.get('lastName'),
             username: user.get('username'),
+            language: user.get('language')
         },
         validationSchema: Yup.object({
             name: Yup.string().required('Required'),
             last_name: Yup.string().required('Required'),
             username: Yup.string().required('Required'),
+            language: Yup.string().required('Required')
         }),
         onSubmit: (values, actions) => {
             dispatch(apiError(""));
             dispatch(updateUser(values));
         },
     });
+
+    useEffect(() => {
+        dispatch(fetchSystem('languages'));
+    }, [])
 
     useEffect(() => {
         if (formik.isSubmitting && !loading) {
@@ -136,6 +146,32 @@ const ProfileSettingsCardComponent = ({ user, loading, error }) => {
                                 </InputGroup>
                             </FormGroup>
 
+                            <FormGroup>
+                                <Label className="form-label">{t('Language')}</Label>
+                                <InputGroup className="mb-3 bg-soft-light rounded-3">
+                                    <Input
+                                        type="select"
+                                        id="language"
+                                        name="language"
+                                        className="form-control form-control-lg bg-soft-light border-light"
+                                        placeholder="Language"
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        value={formik.values.language}
+                                        invalid={formik.touched.language && formik.errors.language ? true : false}
+                                    >
+                                        {languages?.map(language => {
+                                            return <option key={language.code} value={language.code}>
+                                                {language.name}
+                                            </option>
+                                        })}
+                                    </Input>
+                                    {formik.touched.language && formik.errors.language ? (
+                                        <FormFeedback type="invalid">{formik.errors.language}</FormFeedback>
+                                    ) : null}
+                                </InputGroup>
+                            </FormGroup>
+
                             <Button className="mb-2 waves-effect waves-light" size="sm" type="submit" disabled={formik.isSubmitting}> {t("Update")} </Button>
                         </Form>
                     </div>
@@ -147,8 +183,10 @@ const ProfileSettingsCardComponent = ({ user, loading, error }) => {
 
 const mapStateToProps = (state) => {
     const { user, error, loading } = selectUser(state);
+    const systems = selectSystems(state);
+    const languages = systems.get(LANGUAGES)?.items || [];
 
-    return { user, error, loading };
+    return { user, error, loading, languages };
 };
 
-export const ProfileSettingsCard = connect(mapStateToProps, { apiError, updateUser })(ProfileSettingsCardComponent);
+export const ProfileSettingsCard = connect(mapStateToProps, { apiError, updateUser, fetchSystem })(ProfileSettingsCardComponent);

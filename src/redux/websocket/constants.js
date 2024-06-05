@@ -17,5 +17,6 @@ export const websocket_commands_messages = {
     SPIN_OFF: 'spin_off',
     STATUS_UPDATE: 'status_update',
     UPDATE_PROFILE: 'update_profile',
+    PROFILE_UPDATED: 'profile_updated',
     USER_MESSAGE: 'user_message', 
 }

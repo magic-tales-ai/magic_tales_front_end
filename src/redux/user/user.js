@@ -13,6 +13,7 @@ export const User = new Record({
     image: DEFAULT_PICTURE_B64,
     monthStoriesCount: 0,
     plan: null,
+    language: "",
     loading: false,
     error: null
 });

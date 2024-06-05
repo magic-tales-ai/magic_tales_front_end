@@ -10,6 +10,7 @@ import PlansList from './plans-list/reducers';
 import ProfilesList from './profiles-list/reducers';
 import ModalConfirm from './modal-confirm-change-chat/reducers';
 import ModalSignIn from './modal-signin/reducers';
+import Systems from './systems/reducers';
 
 export default combineReducers({
     Auth,
@@ -21,5 +22,6 @@ export default combineReducers({
     PlansList,
     ProfilesList,
     ModalConfirm,
-    ModalSignIn
+    ModalSignIn,
+    Systems
 });

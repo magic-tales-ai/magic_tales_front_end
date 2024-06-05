@@ -2,6 +2,7 @@ import { List, Record, Map } from 'immutable';
 import { v4 as uuidv4 } from 'uuid';
 
 import ChatReducer, { INIT_STATE as INIT_STATE_CHAT } from './reducers';
+import { WEBSOCKET_MESSAGE } from '../websocket/constants';
 
 export const Chat = new Record({
     uid: null,
@@ -41,7 +42,7 @@ export const recoverChat = ({ uid, data }) => {
         const { token, ...detailsWithoutToken } = details;
 
         let action = {
-            type: 'WEBSOCKET_MESSAGE', 
+            type: WEBSOCKET_MESSAGE,
             payload: {
                 uid,
                 command,
