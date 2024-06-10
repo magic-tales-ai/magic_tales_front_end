@@ -36,8 +36,11 @@ export const ModalSignIn = () => {
 
     useEffect(() => {
         if(newRegister && !isOpen && (view === 'validate-registration' || view === 'login')) {
-            // new temporary user for new chat
-            dispatch(createUserTryMode());
+            
+            if(!user?.get('id')) {
+                // new temporary user for new chat
+                dispatch(createUserTryMode());
+            }
             // for the dashboard to create a new chat
             dispatch(setActiveChat(null));
         }

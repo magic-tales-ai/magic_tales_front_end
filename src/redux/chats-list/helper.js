@@ -1,7 +1,8 @@
 import { getLoggedInUser } from "../../helpers/authUtils";
+import { CHAT_TYPES } from "./constants";
 
-function handleSaveConversationLS({ uid, storyParentId = null }) {
-    if (!uid) {
+function handleSaveConversationLS({ uid, storyParentId = null, chatType }) {
+    if (!uid || chatType === CHAT_TYPES.get('update-profile')) {
         return;
     }
 
