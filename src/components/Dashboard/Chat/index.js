@@ -4,6 +4,7 @@ import { connect, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import SimpleBar from "simplebar-react";
+import { List } from 'immutable';
 
 // Router
 import withRouter from "../../../components/withRouter";
@@ -46,6 +47,8 @@ import { selectAuth } from '../../../redux/auth/selectors';
 import { websocket_commands_messages } from '../../../redux/websocket/constants';
 import { selectModalSignIn } from '../../../redux/modal-signin/selectors';
 import { selectLayout } from '../../../redux/layout/selectors';
+
+import image from '../../../assets/images/logo-light.png'
 
 function Chat({ activeTab, activeChat, currentChat, sockets, user, tryModeToken, isOpenModalSignIn }) {
     const { t } = useTranslation();

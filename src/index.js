@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
@@ -8,16 +8,15 @@ import { configureStore } from './redux/store';
 import { BrowserRouter } from 'react-router-dom';
 import { DynamicModalProvider } from './contexts/DynamicModalContext';
 
-// const root = createRoot(document.getElementById("root"));
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
   <Provider store={configureStore()}>
       <BrowserRouter basename="/">
         <DynamicModalProvider>
           <App />
         </DynamicModalProvider>
       </BrowserRouter>
-  </Provider>,
-  document.getElementById('root')
+  </Provider>
 );
 
 // If you want your app to work offline and load faster, you can change
