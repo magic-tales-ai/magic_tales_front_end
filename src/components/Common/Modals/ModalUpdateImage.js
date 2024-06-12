@@ -34,7 +34,6 @@ export const ModalUpdateImage = (props) => {
         }
     }, [loading])
 
-    // validation
     const formik = useFormik({
         initialValues: {
             image: null
@@ -62,6 +61,12 @@ export const ModalUpdateImage = (props) => {
             update({ image: values.image })
         },
     });
+
+    useEffect(() => {
+        if(!isOpen) {
+            formik.resetForm();
+        }
+    }, [isOpen])
 
     const fileHandleChange = (e) => {
         setImageFile(e.target.files[0])
@@ -102,7 +107,6 @@ export const ModalUpdateImage = (props) => {
                                     accept={IMAGE_SUPPORTED_FORMATS}
                                     className="form-control form-control-lg border-light bg-soft-light"
                                     onChange={fileHandleChange}
-                                    onBlur={formik.handleBlur}
                                     invalid={formik.touched.image && formik.errors.image ? true : false}
                                 />
                                 {formik.touched.image && formik.errors.image ? (
@@ -122,6 +126,8 @@ export const ModalUpdateImage = (props) => {
                     {t('Cancel')}
                 </Button>
             </ModalFooter>
+
+            {formik.isSubmitting && <div className="d-flex justify-content-center mb-3"><div className="loader"></div></div>}
         </Modal >
     )
 }
