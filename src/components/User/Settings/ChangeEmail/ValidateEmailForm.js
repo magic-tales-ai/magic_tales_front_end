@@ -77,7 +77,7 @@ const ValidateEmailComponent = ({ error, loading, user, ...props }) => {
                             </Alert>
                         )}
 
-                        {formik.submitCount > 0 && error && (
+                        {formik.submitCount > 0 && error && !formik.isSubmitting && (
                             <Alert color="danger">
                                 <div>{(error.detail && Array.isArray(error.detail) ? error.detail[0].msg : error.detail) || error}</div>
                             </Alert>

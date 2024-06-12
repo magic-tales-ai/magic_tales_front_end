@@ -67,7 +67,7 @@ const LoginForm = ({ error, loading, ...props }) => {
             <div className="text-center px-4 px-lg-5 mb-4">
                 <p className="text-reset ff-special fw-normal h1 mb-3">{t('Login')}</p>
                 <Link to="/register" onClick={(e) => { navigate(e, 'register') }} className="font-weight-medium text-decoration-underline mb-4 d-inline-block"> {t("Don't you have an account?")} </Link>
-                {formik.submitCount > 0 && error && (
+                {formik.submitCount > 0 && error && !formik.isSubmitting && (
                     <Alert color="danger">
                         <div>{(error?.detail && Array.isArray(error.detail) ? error.detail[0].msg : error.detail) || error}</div>
                     </Alert>
