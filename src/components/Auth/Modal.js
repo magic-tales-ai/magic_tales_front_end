@@ -68,7 +68,7 @@ export const ModalSignIn = () => {
     ]);
 
     return (
-        <Modal isOpen={isOpen} centered toggle={toggle}>
+        <Modal isOpen={isOpen} centered>
             <ModalHeader className="border-0 pb-0" toggle={toggle}></ModalHeader>
             <ModalBody className="pt-0" >
                 { content.get(view) }
