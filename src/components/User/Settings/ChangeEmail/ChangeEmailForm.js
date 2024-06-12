@@ -69,6 +69,11 @@ const ChangeEmailComponent = ({ error, loading, user, ...props }) => {
                             formik.handleSubmit();
                         }}
                     >
+                        {successUpdated ? (
+                            <Alert color="success">
+                                {t('Email Successfully Updated')}
+                            </Alert>
+                        ) : null}
 
                         {formik.submitCount > 0 && error && (
                             <Alert color="danger">
@@ -117,11 +122,12 @@ const ChangeEmailComponent = ({ error, loading, user, ...props }) => {
                         </FormGroup>
 
                         <div className="d-grid">
-                            <Button color="secondary" size="lg" block className=" waves-effect waves-light" type="submit" disabled={formik.isSubmitting}>
+                            <Button color="secondary" size="lg" block className=" waves-effect waves-light" type="submit" disabled={formik.isSubmitting || successUpdated}>
                                 {t('Change Email')}
                             </Button>
                         </div>
 
+                        {formik.isSubmitting && <div className="d-flex justify-content-center mt-4"><div className="loader"></div></div>}
                     </Form>
                 </div>
             </div>

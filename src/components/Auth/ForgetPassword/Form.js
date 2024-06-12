@@ -100,14 +100,15 @@ const SendCodeForm = (props) => {
                     </FormGroup>
 
                     <div className="d-grid">
-                        <Button color="secondary" size="lg" block className="waves-effect waves-light" type="submit" disabled={formik.isSubmitting}>{t('Send Code')}</Button>
+                        <Button color="secondary" size="lg" block className="waves-effect waves-light" type="submit" disabled={formik.isSubmitting || success}>{t('Send Code')}</Button>
                     </div>
 
-                </Form>
+                    <div className="mt-2 text-center">
+                        <p>{t('Remember It')}? <Link to="login" onClick={(e) => { navigate({ e, to: 'login' }) }} className="font-weight-medium"> {t('Signin')} </Link> </p>
+                    </div>
 
-                <div className="mt-2 text-center">
-                    <p>{t('Remember It')}? <Link to="login" onClick={(e) => { navigate({ e, to: 'login' }) }} className="font-weight-medium"> {t('Signin')} </Link> </p>
-                </div>
+                    {formik.isSubmitting && <div className="d-flex justify-content-center mt-4"><div className="loader"></div></div>}
+                </Form>
             </div>
         </div>
     )

@@ -73,7 +73,7 @@ const LoginForm = ({ error, loading, ...props }) => {
                     </Alert>
                 )}
                 {
-                    error?.detail && error.detail == 'User is not active' && <Link to="/validate-registration" onClick={(e) => { navigate(e, 'validate-registration') }} className="font-weight-medium text-decoration-underline mb-4 d-inline-block"> {t('Activate your user by clicking here')} </Link>
+                    formik.submitCount > 0 && error?.detail && error.detail == 'User is not active' && <Link to="/validate-registration" onClick={(e) => { navigate(e, 'validate-registration') }} className="font-weight-medium text-decoration-underline mb-4 d-inline-block"> {t('Activate your user by clicking here')} </Link>
                 }
                 <div>
 
@@ -126,6 +126,8 @@ const LoginForm = ({ error, loading, ...props }) => {
                         <div className="text-center mt-2">
                             <Link to="/forget-password" onClick={(e) => { navigate(e, 'forget-password') }} className="font-size-13">{t('Forgot password')}?</Link>
                         </div>
+
+                        {formik.isSubmitting && <div className="d-flex justify-content-center mt-4"><div className="loader"></div></div>}
                     </Form>
                 </div>
             </div>
