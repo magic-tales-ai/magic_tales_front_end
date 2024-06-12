@@ -5,6 +5,10 @@
 :root {
 	--bs-danger-rgb: 255,102,102;
 }
+[data-bs-theme=dark] {
+	--bs-link-color-rgb: 127,127,127;
+	--bs-link-hover-color-rgb: 148,148,148;
+}
 .layout-wrapper { max-width: 1920px; margin: 0 auto;}
 .vh-100 {
     min-height: 100vh!important;
