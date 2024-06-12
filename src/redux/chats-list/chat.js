@@ -6,7 +6,7 @@ import { WEBSOCKET_MESSAGE } from '../websocket/constants';
 
 export const Chat = new Record({
     uid: null,
-    name: 'New Chat',
+    type: '',
     progress: 0,
     profilePicture: '',
     unRead: 0,

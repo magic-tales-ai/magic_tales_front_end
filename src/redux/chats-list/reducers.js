@@ -3,11 +3,11 @@ import { Map } from 'immutable';
 import { createNewChat, createNewMessage, recoverChat } from './chat';
 import { handleSaveConversationLS, removeConversationByUidLS } from './helper';
 import {
-    ACTIVE_CHAT, NEW_USER_MESSAGE
+    ACTIVE_CHAT, NEW_USER_MESSAGE, CHAT_TYPES
 } from './constants';
 import { DELETE_STORY_SUCCESS } from '../stories-list/constants';
-
 import { WEBSOCKET_MESSAGE, websocket_commands_messages } from '../websocket/constants';
+import { LOGIN_USER_SUCCESS } from '../auth/constants';
 
 export const INIT_STATE = Map({
     activeChat: null,
@@ -18,6 +18,9 @@ const ChatsList = (state = INIT_STATE, action) => {
     const { payload } = action;   
 
     switch (action.type) {
+        case LOGIN_USER_SUCCESS:
+            return INIT_STATE;
+
         case ACTIVE_CHAT:
             return state.set('activeChat', payload);
 
@@ -31,6 +34,10 @@ const ChatsList = (state = INIT_STATE, action) => {
 
                 return state.withMutations(currentState => {
                     currentState.updateIn(['chats', state.get('activeChat')], chat => {
+                        console.log(chat)
+                        // Update LS on new user message
+                        handleSaveConversationLS({ uid: chat.uid, storyParentId: chat.storyParentId, chatType: chat.type });
+
                         return chat.set('messages', chat.get('messages').push(newMessage))
                             .set('hasUserMessages', true);
                     })
@@ -50,28 +57,25 @@ const ChatsList = (state = INIT_STATE, action) => {
             switch (message.command) {
                 case websocket_commands_messages.NEW_TALE:
                     newChat = createNewChat({
+                        type: CHAT_TYPES.get('tale'),
                         ...message,
                     })
-
-                    // Update LS on new user message
-                    handleSaveConversationLS({ uid: newChat.get('uid'), storyParentId: newChat.get('storyParentId') });
 
                     return state.set('activeChat', newChat.uid)
                         .update('chats', chats => chats.set(newChat.uid, newChat));
 
                 case websocket_commands_messages.SPIN_OFF:
                     newChat = createNewChat({
+                        type: CHAT_TYPES.get('spin-off'),
                         ...message
                     })
-
-                    // Update LS on new spin off
-                    handleSaveConversationLS({ uid: newChat.uid, storyParentId: newChat.story_parent_id });
 
                     return state.set('activeChat', newChat.uid)
                         .update('chats', chats => chats.set(newChat.uid, newChat));
 
                 case websocket_commands_messages.UPDATE_PROFILE:
                     newChat = createNewChat({
+                        type: CHAT_TYPES.get('update-profile'),
                         ...message
                     })
 

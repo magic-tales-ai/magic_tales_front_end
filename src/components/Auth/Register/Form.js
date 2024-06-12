@@ -46,7 +46,7 @@ const RegisterForm = ({ currentChatWebsocket, tryModeId, error, loading, languag
             email: '',
             username: '',
             password: '',
-            language: ''
+            language: languages.length > 0 ? languages[0].code : ''
         },
         validationSchema: Yup.object({
             name: Yup.string().required('Required'),

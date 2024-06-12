@@ -44,9 +44,7 @@ const useSendMessage = () => {
     ])
 
     useEffect(() => {
-        if (activeChat !== null) {
-            currentSocketUid.current = activeChat
-        }
+        currentSocketUid.current = activeChat;
     }, [activeChat])
 
     const createWSConection = async ({ params }) => {
@@ -142,6 +140,7 @@ const useSendMessage = () => {
         const needReconnect = currentSocket && currentSocket.CLOSED === currentSocket.readyState;
 
         if(needReconnect) {
+            console.log(currentSocketUid.current, currentSocket, needReconnect)
             let params = { uid: currentSocketUid.current };
             await createWSConection({ params });
         }

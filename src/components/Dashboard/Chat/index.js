@@ -107,15 +107,22 @@ function Chat({ activeTab, activeChat, currentChat, sockets, user, tryModeToken,
 
         return () => clearTimeout(timeoutId);
     }, [, currentChat]);
-    
+
     useEffect(() => {
+        // if we opened the signin modal directly (landing), didn't load a user or guest yet, or are in the edit profile tab then don't need to load a chat
         if (preventChatLoading || !(user || tryModeToken) || activeTab == 'edit-profile') {
+            return;
+        }
+
+        // if we are a guest and didn't send a message, don't need to load a chat
+        if(!user?.get('id') && currentChat && !currentChat.get('hasUserMessages')) {
             return;
         }
 
         const dataConversationLS = getConversationLS();
         const hasConversationLS = dataConversationLS && dataConversationLS.uid;
 
+        // if we are in the correct chat, don't need to recover it
         if (hasConversationLS && dataConversationLS.uid === activeChat) {
             return;
         }
