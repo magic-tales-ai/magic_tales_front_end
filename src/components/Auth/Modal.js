@@ -50,6 +50,20 @@ export const ModalSignIn = () => {
         }
     }, [isOpen])
 
+    const handleKeyDown = (event) => {
+        if (event.key === 'Escape') {
+            toggle();
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyDown);
+    
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
+
     const toggle = () => {
         dispatch(closeModalSignin());
     }
@@ -70,7 +84,7 @@ export const ModalSignIn = () => {
     return (
         <Modal isOpen={isOpen} centered>
             <ModalHeader className="border-0 pb-0" toggle={toggle}></ModalHeader>
-            <ModalBody className="pt-0" >
+            <ModalBody className="pt-0">
                 { content.get(view) }
             </ModalBody>
         </Modal>
