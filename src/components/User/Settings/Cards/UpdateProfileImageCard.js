@@ -13,7 +13,7 @@ import { ModalUpdateImage } from "../../../Common/Modals/ModalUpdateImage";
 import { MAX_IMAGE_SIZE, IMAGE_SUPPORTED_FORMATS_TEXTS } from "../../../../constants";
 
 // Actions
-import { updateUser } from "../../../../redux/actions";
+import { updateUser, userApiError } from "../../../../redux/actions";
 
 const UpdateProfileImageCardComponent = ({ user, loading, error }) => {
     const { t } = useTranslation();
@@ -21,6 +21,7 @@ const UpdateProfileImageCardComponent = ({ user, loading, error }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const update = ({ image }) => {
+        dispatch(userApiError(""));
         dispatch(updateUser({ image }));
     }
 

@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import { FormGroup, Alert, Form, Input, Button, FormFeedback, Label, InputGroup } from 'reactstrap';
 
 // Actions
-import { updateUser, apiError } from '../../../../redux/actions';
+import { updateUser, userApiError } from '../../../../redux/actions';
 
 // i18n
 import { useTranslation } from 'react-i18next';
@@ -40,7 +40,7 @@ const ChangeEmailComponent = ({ error, loading, user, ...props }) => {
                 }).required('Required'),
         }),
         onSubmit: (values, actions) => {
-            dispatch(apiError(""));
+            dispatch(userApiError(null));
             dispatch(updateUser(values));
         },
     });
@@ -69,8 +69,13 @@ const ChangeEmailComponent = ({ error, loading, user, ...props }) => {
                             formik.handleSubmit();
                         }}
                     >
+                        {successUpdated ? (
+                            <Alert color="success">
+                                {t('Email Successfully Updated')}
+                            </Alert>
+                        ) : null}
 
-                        {formik.submitCount > 0 && error && (
+                        {formik.submitCount > 0 && error && !formik.isSubmitting && (
                             <Alert color="danger">
                                 <div>{(error.detail && Array.isArray(error.detail) ? error.detail[0].msg : error.detail) || error}</div>
                             </Alert>
@@ -117,11 +122,12 @@ const ChangeEmailComponent = ({ error, loading, user, ...props }) => {
                         </FormGroup>
 
                         <div className="d-grid">
-                            <Button color="secondary" size="lg" block className=" waves-effect waves-light" type="submit" disabled={formik.isSubmitting}>
+                            <Button color="secondary" size="lg" block className=" waves-effect waves-light" type="submit" disabled={formik.isSubmitting || successUpdated}>
                                 {t('Change Email')}
                             </Button>
                         </div>
 
+                        {formik.isSubmitting && <div className="d-flex justify-content-center mt-4"><div className="loader"></div></div>}
                     </Form>
                 </div>
             </div>
@@ -135,4 +141,4 @@ const mapStateToProps = (state) => {
     return { error, loading, user };
 };
 
-export const ChangeEmail = connect(mapStateToProps, { apiError })(ChangeEmailComponent);
+export const ChangeEmail = connect(mapStateToProps, { userApiError })(ChangeEmailComponent);

@@ -34,7 +34,7 @@ const Settings = (props) => {
                 </Row>
 
                 <div className="vh-100 d-flex w-100 justify-content-center">
-					<div className="container py-5 text-center text-md-start">
+					<div className="d-grid container py-5 text-center text-md-start justify-content-center">
                         <section>
                             <UpdateProfileImageCard />
                         </section>

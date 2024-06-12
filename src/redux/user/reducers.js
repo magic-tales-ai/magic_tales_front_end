@@ -47,7 +47,8 @@ const User = (state = INIT_STATE, action) => {
         case UPDATE_USER:
         case VALIDATE_NEW_USER_EMAIL:
         case CHANGE_PASSWORD_LOGGED_USER:
-            return state.set('loading', true);
+            return state.set('loading', true)
+                .set('error', null);
 
         case LOAD_MONTH_STORIES_COUNT_SUCCESS:
             return state.set('monthStoriesCount', action.payload.stories_this_month);

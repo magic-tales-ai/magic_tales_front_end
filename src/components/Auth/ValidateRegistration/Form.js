@@ -86,7 +86,7 @@ const ValidateRegistrationForm = ({ error, loading, currentEmailField, navigate 
                             </Alert>
                         ) : null}
 
-                        {formik.submitCount > 0 && error && (
+                        {formik.submitCount > 0 && error && !formik.isSubmitting && (
                             <Alert color="danger">
                                 <div>{(error.detail && Array.isArray(error.detail) ? error.detail[0].msg : error.detail) || error}</div>
                             </Alert>
@@ -141,11 +141,12 @@ const ValidateRegistrationForm = ({ error, loading, currentEmailField, navigate 
                         }
 
                         <div className="d-grid">
-                            <Button color="secondary" size="lg" block className="waves-effect waves-light" type="submit" disabled={formik.isSubmitting}>
+                            <Button color="secondary" size="lg" block className="waves-effect waves-light" type="submit" disabled={formik.isSubmitting || successValidation}>
                                 {t('Validate')}
                             </Button>
                         </div>
 
+                        {formik.isSubmitting && <div className="d-flex justify-content-center mt-4"><div className="loader"></div></div>}
                     </Form>
                 </div>
             </div>

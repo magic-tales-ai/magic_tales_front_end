@@ -83,7 +83,7 @@ const ChangePassword = ({ error, loading, user, ...props }) => {
                             </Alert>
                         )}
 
-                        {formik.submitCount > 0 && error && (
+                        {formik.submitCount > 0 && error && !loading && (
                             <Alert color="danger">
                                 <div>{(error.detail && Array.isArray(error.detail) ? error.detail[0].msg : error.detail) || error}</div>
                             </Alert>
@@ -153,11 +153,12 @@ const ChangePassword = ({ error, loading, user, ...props }) => {
                         </FormGroup>
 
                         <div className="d-grid">
-                            <Button color="secondary" size="lg" block className=" waves-effect waves-light" type="submit" disabled={formik.isSubmitting}>
+                            <Button color="secondary" size="lg" block className=" waves-effect waves-light" type="submit" disabled={formik.isSubmitting || successUpdated}>
                                 {t('Change Password')}
                             </Button>
                         </div>
 
+                        {formik.isSubmitting && <div className="d-flex justify-content-center mt-4"><div className="loader"></div></div>}
                     </Form>
                 </div>
             </div>

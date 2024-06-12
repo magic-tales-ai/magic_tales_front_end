@@ -108,7 +108,7 @@ const RegisterForm = ({ currentChatWebsocket, tryModeId, error, loading, languag
                             </Alert>
                         ) : null}
 
-                        {formik.submitCount > 0 && error && (
+                        {formik.submitCount > 0 && error && !formik.isSubmitting && (
                             <Alert color="danger">
                                 <div>{(error.detail && Array.isArray(error.detail) ? error.detail[0].msg : error.detail) || error}</div>
                             </Alert>
@@ -243,7 +243,7 @@ const RegisterForm = ({ currentChatWebsocket, tryModeId, error, loading, languag
                             </FormGroup>
 
                         <div className="d-grid">
-                            <Button color="secondary" size="lg" block className="waves-effect waves-light" type="submit" disabled={formik.isSubmitting}>
+                            <Button color="secondary" size="lg" block className="waves-effect waves-light" type="submit" disabled={formik.isSubmitting || successRegister}>
                                 {t('Register')}
                             </Button>
                         </div>
@@ -254,6 +254,8 @@ const RegisterForm = ({ currentChatWebsocket, tryModeId, error, loading, languag
                 <div className="text-center mt-2">
                     <Link to="login" onClick={(e) => { customNavigate({ e, to: 'login' }) }} className="font-size-13"> {t('Already have an account')}? {t('Signin')} </Link>
                 </div>
+
+                {formik.isSubmitting && <div className="d-flex justify-content-center mt-4"><div className="loader"></div></div>}
             </div>
         </div>
     )
