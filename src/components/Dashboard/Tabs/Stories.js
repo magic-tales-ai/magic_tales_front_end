@@ -140,8 +140,9 @@ const Stories = ({ stories, activeChat, chats, currentChat, user, anyProfile, an
                                             <div className={"chat-user-img align-self-center me-1 ms-0"}>
                                                 <div className="avatar-xs">
                                                     <picture>
-                                                        {story.get('image') &&
-                                                            <img src={'data:image/*;base64,' + story.get('image')} className="rounded avatar-xs" alt={story.get('title')} />
+                                                        {story.get('image') 
+                                                            ? <img src={'data:image/*;base64,' + story.get('image')} className="rounded avatar-xs" alt={story.get('title')} />
+                                                            : <img src={'data:image/svg+xml;base64,' + story.get('defaultImage')} className="rounded avatar-xs" alt={story.get('title')} />
                                                         }
                                                     </picture>
                                                 </div>

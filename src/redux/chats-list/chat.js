@@ -73,7 +73,7 @@ export const createNewMessage = (data) => {
     return new Message({
         ...data,
         isFileMessage: data?.files ? true : false,
-        isImageMessage: data?.images ? true : false,
+        isImageMessage: false,
         firstProgressUpdate: data?.firstProgressUpdate === true,
     })
 }
