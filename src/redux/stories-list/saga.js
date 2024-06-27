@@ -6,7 +6,8 @@ import { downloadPDFFromFile } from '../../helpers/files';
 import {
     DELETE_STORY,
     LOAD_STORIES_LIST,
-    DOWNLOAD_STORY_FILE
+    DOWNLOAD_STORY_FILE,
+    DOWNLOAD_STORY_FILE_FROM_URL
 } from './constants';
 
 import {
@@ -48,6 +49,19 @@ function* downloadStoryFile({ payload: storyId }) {
     }
 }
 
+function* downloadStoryFileFromURL({ payload: FileURL }) {
+    try {
+        const blob = yield call(apiClient.get, FileURL, {
+            responseType: 'blob'
+        });
+
+        downloadPDFFromFile(blob, 'story');
+    } catch (error) {
+        console.log(error)
+        yield put(apiError(error));
+    }
+}
+
 export function* watchLoadStoriesList() {
     yield takeEvery(LOAD_STORIES_LIST, loadStoriesList);
 }
@@ -60,11 +74,16 @@ export function* watchDownloadStoryFile() {
     yield takeEvery(DOWNLOAD_STORY_FILE, downloadStoryFile);
 }
 
+export function* watchDownloadStoryFileFromURL() {
+    yield takeEvery(DOWNLOAD_STORY_FILE_FROM_URL, downloadStoryFileFromURL);
+}
+
 function* storiesListSaga() {
     yield all([
         fork(watchLoadStoriesList),
         fork(watchDeleteStory),
         fork(watchDownloadStoryFile),
+        fork(watchDownloadStoryFileFromURL),
     ]);
 }
 
