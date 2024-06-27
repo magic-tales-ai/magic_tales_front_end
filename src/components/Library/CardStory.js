@@ -72,7 +72,7 @@ const CardStory = ({ story, router: { navigate } }) => {
                     <div className="d-flex">
                         <picture>
                             {story.get('image') &&
-                                <img src={'data:image/svg+xml;base64,' + story.get('image')} className="rounded avatar-md me-2 h-auto" alt={story.get('title')} />
+                                <img src={'data:image/*;base64,' + story.get('image')} className="rounded avatar-md me-2 h-auto" alt={story.get('title')} />
                             }
                         </picture>
 
