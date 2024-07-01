@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import ChatReducer, { INIT_STATE as INIT_STATE_CHAT } from './reducers';
 import { WEBSOCKET_MESSAGE } from '../websocket/constants';
+import { getLoggedInUser } from '../../helpers/authUtils';
 
 export const Chat = new Record({
     uid: null,
@@ -19,6 +20,7 @@ export const Chat = new Record({
     storyParentId: null,
     aiIsWorking: false,
     messages: new List(),
+    userId: getLoggedInUser()?.id
 });
 
 export const createNewChat = (data) => {
