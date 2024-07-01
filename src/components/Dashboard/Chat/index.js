@@ -122,6 +122,11 @@ function Chat({ activeTab, activeChat, currentChat, sockets, user, tryModeToken,
             return;
         }
 
+        // if the current conversation was recently created by the current user, it is not necessary to create a new conversations
+        if(activeTab !== 'edit-profile' && currentChat && currentChat.userId === user?.get('id')) {
+            return;
+        }
+
         const dataConversationLS = getConversationLS();
         const hasConversationLS = dataConversationLS && dataConversationLS.uid;
 
