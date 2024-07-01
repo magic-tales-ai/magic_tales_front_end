@@ -71,8 +71,9 @@ const CardStory = ({ story, router: { navigate } }) => {
                 <CardBody>
                     <div className="d-flex">
                         <picture>
-                            {story.get('image') &&
-                                <img src={'data:image/svg+xml;base64,' + story.get('image')} className="rounded avatar-md me-2 h-auto" alt={story.get('title')} />
+                            {story.get('image')
+                                ? <img src={'data:image/*;base64,' + story.get('image')} className="rounded avatar-md me-2 h-auto" alt={story.get('title')} />
+                                : <img src={'data:image/svg+xml;base64,' + story.get('defaultImage')} className="rounded avatar-md me-2 h-auto" alt={story.get('title')} />
                             }
                         </picture>
 
@@ -98,7 +99,7 @@ const CardStory = ({ story, router: { navigate } }) => {
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <SimpleBar className="story-card-synopsis">
                                 <p className="font-size-10 opacity-75" dangerouslySetInnerHTML={displayText(story.get('synopsis'))}></p>
                             </SimpleBar>

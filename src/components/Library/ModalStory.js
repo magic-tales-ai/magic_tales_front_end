@@ -78,7 +78,7 @@ const ModalStoryComponent = (props) => {
         dispatch(downloadStoryFile(story.get('id')))
     }
 
-    if(!story) {
+    if (!story) {
         return null;
     }
 
@@ -91,8 +91,9 @@ const ModalStoryComponent = (props) => {
                         <div className="me-3">
                             <div className="mb-3 text-center text-lg-start">
                                 <picture>
-                                    {story.get('image') &&
-                                        <img src={'data:image/svg+xml;base64,' + story.get('image')} className="rounded avatar-lg h-auto" alt={story.get('title')} />
+                                    {story.get('image')
+                                        ? <img src={'data:image/*;base64,' + story.get('image')} className="rounded avatar-lg h-auto" alt={story.get('title')} />
+                                        : <img src={'data:image/svg+xml;base64,' + story.get('defaultImage')} className="rounded avatar-lg h-auto" alt={story.get('title')} />
                                     }
                                 </picture>
                             </div>
