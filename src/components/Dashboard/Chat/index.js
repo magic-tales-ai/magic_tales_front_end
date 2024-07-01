@@ -4,7 +4,6 @@ import { connect, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import SimpleBar from "simplebar-react";
-import { List } from 'immutable';
 
 // Router
 import withRouter from "../../../components/withRouter";
@@ -48,8 +47,6 @@ import { websocket_commands_messages } from '../../../redux/websocket/constants'
 import { selectModalSignIn } from '../../../redux/modal-signin/selectors';
 import { selectLayout } from '../../../redux/layout/selectors';
 
-import image from '../../../assets/images/logo-light.png'
-
 function Chat({ activeTab, activeChat, currentChat, sockets, user, tryModeToken, isOpenModalSignIn }) {
     const { t } = useTranslation();
     const { sendMessage } = useSendMessage();
@@ -65,21 +62,24 @@ function Chat({ activeTab, activeChat, currentChat, sockets, user, tryModeToken,
     const [preventChatLoading, setPreventChatLoading] = useState(false);
 
     useEffect(() => {
-        if (isOpenModalSignIn) {
+        if (isOpenModalSignIn && !activeChat) {
             dispatch(setActiveChat(null));
             setPreventChatLoading(true);
         }
+    }, [isOpenModalSignIn, dispatch, activeChat])
+
+    useEffect(() => {
         return () => {
             setPreventChatLoading(false);
             dispatch(closeModalSignin());
         }
-    }, [])
+    }, [dispatch])
 
     useEffect(() => {
         if (!user?.get('id') && !tryModeToken) {
             dispatch(createUserTryMode());
         }
-    }, [])
+    }, [dispatch, tryModeToken, user])
 
     useEffect(() => {
         if (!isOpenModalSignIn) {
@@ -109,11 +109,11 @@ function Chat({ activeTab, activeChat, currentChat, sockets, user, tryModeToken,
         }, 200);
 
         return () => clearTimeout(timeoutId);
-    }, [, currentChat]);
+    }, [currentChat]);
 
     useEffect(() => {
         // if we opened the signin modal directly (landing), didn't load a user or guest yet, or are in the edit profile tab then don't need to load a chat
-        if (preventChatLoading || !(user || tryModeToken) || activeTab == 'edit-profile') {
+        if (preventChatLoading || !(user || tryModeToken) || activeTab === 'edit-profile') {
             return;
         }
 
@@ -130,7 +130,7 @@ function Chat({ activeTab, activeChat, currentChat, sockets, user, tryModeToken,
         const dataConversationLS = getConversationLS();
         const hasConversationLS = dataConversationLS && dataConversationLS.uid;
 
-        // if we are in the correct chat, don't need to recover it
+        // if we are in the correct chat, we don't need to recover it
         if (hasConversationLS && dataConversationLS.uid === activeChat) {
             return;
         }
@@ -147,6 +147,7 @@ function Chat({ activeTab, activeChat, currentChat, sockets, user, tryModeToken,
             };
 
         sendMessage(messageParams);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user?.get('id'), tryModeToken, preventChatLoading, activeTab])
 
     useEffect(() => {
@@ -156,7 +157,7 @@ function Chat({ activeTab, activeChat, currentChat, sockets, user, tryModeToken,
         if (currentChat && currentChat.get('isFinished') && !user?.get('id')) {
             dispatch(openModalSignin());
         }
-    }, [currentChat])
+    }, [currentChat, user, dispatch])
 
     const addMessage = (message, type) => {
         var messageObj = null;
@@ -384,7 +385,7 @@ function Chat({ activeTab, activeChat, currentChat, sockets, user, tryModeToken,
 const mapStateToProps = (state) => {
     const { isOpen } = selectModalSignIn(state);
     const { activeChat, currentChat } = selectChatsList(state);
-    const sockets = state.Websocket?.sockets
+    const sockets = state.Websocket?.sockets;
     const { user } = selectUser(state);
     const { tryModeToken } = selectAuth(state);
     const { activeTab } = selectLayout(state);

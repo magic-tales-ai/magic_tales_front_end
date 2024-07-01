@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Container, Row, Col, Button } from 'reactstrap';
+import { Row, Col, Button } from 'reactstrap';
 import withRouter from '../components/withRouter';
 
 // i18n

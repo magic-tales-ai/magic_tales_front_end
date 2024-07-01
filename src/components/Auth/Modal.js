@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Modal, ModalHeader, ModalBody } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -22,17 +22,21 @@ export const ModalSignIn = () => {
     const [previousView, setPreviousView] = useState(null);
     const [newRegister, setNewRegister] = useState(false);
 
+    const toggle = useCallback(() => {
+        dispatch(closeModalSignin());
+    }, [dispatch]);
+
     useEffect(() => {
         if(user?.get('id') && isOpen) {
             toggle();
         }
-    }, [user])
+    }, [user, toggle, isOpen])
 
     useEffect(() => {
         if(previousView === 'register' && view === 'validate-registration') {
             setNewRegister(true);
         }
-    }, [view])
+    }, [view, previousView])
 
     useEffect(() => {
         if(newRegister && !isOpen && (view === 'validate-registration' || view === 'login')) {
@@ -48,13 +52,13 @@ export const ModalSignIn = () => {
         if(!isOpen) {
             setNewRegister(false);
         }
-    }, [isOpen])
+    }, [dispatch, isOpen, newRegister, user, view])
 
-    const handleKeyDown = (event) => {
+    const handleKeyDown = useCallback((event) => {
         if (event.key === 'Escape') {
             toggle();
         }
-    };
+    }, [toggle]);
 
     useEffect(() => {
         document.addEventListener('keydown', handleKeyDown);
@@ -62,15 +66,11 @@ export const ModalSignIn = () => {
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         };
-    }, []);
-
-    const toggle = () => {
-        dispatch(closeModalSignin());
-    }
+    }, [handleKeyDown]);
 
     const changeView = (view) => {
-        setPreviousView(view)
-        dispatch(setView({ view }))
+        setPreviousView(view);
+        dispatch(setView({ view }));
     }
 
     const content = new Map([

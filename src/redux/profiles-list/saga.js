@@ -26,7 +26,7 @@ const apiClient = new APIClient();
 
 function* loadProfilesList({ payload }) {
     try {
-        if(!payload || websocket_commands_messages.PROFILE_UPDATED == payload.message?.command) {
+        if(!payload || websocket_commands_messages.PROFILE_UPDATED === payload.message?.command) {
             const response = yield call(apiClient.get, '/profile');
             yield put(loadProfilesListSuccess(response));
         }

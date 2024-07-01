@@ -92,7 +92,7 @@ function* validateRegister({ payload: { email, validationCode } }) {
 
 function* resendVerificationCode({ payload: { email } }) {
     try {
-        const response = yield call(create, 'user/resend-validation-code', { email });
+        yield call(create, 'user/resend-validation-code', { email });
     } catch (error) {
         yield put(apiError(error));
     }

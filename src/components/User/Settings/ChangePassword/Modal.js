@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Modal, ModalHeader, ModalBody } from "reactstrap";
 
 // Components
@@ -14,7 +14,7 @@ export const ModalChangePassword = ({ isOpen, setOpen }) => {
         <Modal isOpen={isOpen} centered toggle={toggle}>
             <ModalHeader className="border-0 pb-0" toggle={toggle}></ModalHeader>
             <ModalBody className="pt-0" >
-                <ChangePasswordForm updated={toggle} />
+                <ChangePasswordForm updated={() => setOpen(false)} />
             </ModalBody>
         </Modal>
     )

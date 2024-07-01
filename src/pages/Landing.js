@@ -30,7 +30,7 @@ import readerProfile from '../assets/images/landing/reader-profile.svg'
 import ghost from '../assets/images/landing/ghost.svg'
 import languages from '../assets/images/landing/languages.svg'
 
-import separador from '../assets/images/landing/separador.svg'
+import separator from '../assets/images/landing/separator.svg'
 
 function ButtonNextSection({scrollTo, className}){
 
@@ -67,14 +67,14 @@ const Landing = () => {
 						</div>
 						<picture>
 							<source srcSet={section2dk} media="(min-width: 768px)" />
-							<img src={section2} className="mx-auto img-fluid mb-5 d-block" />
+							<img src={section2} className="mx-auto img-fluid mb-5 d-block" alt="Preview" />
 						</picture>
 						<div className="mx-auto px-3 d-inline-block lista-infinite-stories mb-3">
 							<ul className="list-unstyled text-start lista-img d-md-flex">
-								<li className="mb-4 col-md-3"><img src={library} width="24" /><span className="opacity-75">{t('Save your favourite creations.')}</span></li>
-								<li className="mb-4 col-md-3"><img src={readerProfile} width="24" /><span className="opacity-75">{t("Have multiple reader's profiles.")}</span></li>
-								<li className="mb-4 col-md-3"><img src={ghost} width="24" /><span className="opacity-75">{t('Create tailor made characters with their own personallities.')}</span></li>
-								<li className="col-md-3"><img src={languages} width="24" /><span className="opacity-75">{t('Choose and combine languages freely.')}</span></li>
+								<li className="mb-4 col-md-3"><img src={library} width="24" alt="Library" /><span className="opacity-75">{t('Save your favourite creations.')}</span></li>
+								<li className="mb-4 col-md-3"><img src={readerProfile} width="24" alt="Reader Profile" /><span className="opacity-75">{t("Have multiple reader's profiles.")}</span></li>
+								<li className="mb-4 col-md-3"><img src={ghost} width="24" alt="Ghost" /><span className="opacity-75">{t('Create tailor made characters with their own personallities.')}</span></li>
+								<li className="col-md-3"><img src={languages} width="24" alt="Languages" /><span className="opacity-75">{t('Choose and combine languages freely.')}</span></li>
 							</ul>
 						</div>
 					</div>
@@ -196,14 +196,14 @@ const Landing = () => {
 
 				<div id="globalStorytelling" className="vh-100 d-flex w-100 align-items-center justify-content-center position-relative">
 					<div className="container py-5 text-center">
-						<img src={separador} width="210" className="mx-auto mb-5" />
+						<img src={separator} width="210" className="mx-auto mb-5" alt="Separator" />
 						<div className="title-global-storytelling mx-auto mb-5">
 							<h2 className="mb-5">{t('Global Storytelling')}</h2>
 							<p className="opacity-75">{t('Step into the realm of languages with our enchanting stories, tailored in any language or a blend of your choice. A magical tool for language enthusiasts on a journey to enhance their linguistic skills')}</p>
 						</div>
 						<picture>
 							<source srcSet={section8dk} media="(min-width: 768px)" />
-							<img src={section8} className="mx-auto img-fluid mb-5" />
+							<img src={section8} className="mx-auto img-fluid mb-5" alt="Story Example" />
 						</picture>
 					</div>
 					<ButtonNextSection className="scrollArrow" scrollTo="plansList"/>

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
 import withRouter from "../../components/withRouter";
 
 //redux store
@@ -31,14 +30,14 @@ const Logout = (props) => {
       dispatch(openModalSignin())
     }
     dispatch(logoutUser(props.router.navigate));
-  }, [dispatch, props.router.navigate]);
+  }, [dispatch, urlParams, props.router.navigate]);
 
   useEffect(() => {
     if (isUserLogout) {
       const path = urlParams.has('requireSignIn') ? '/dashboard' : '/';
       window.location.href = path;
     }
-  },[isUserLogout])  
+  },[isUserLogout, urlParams])
 
   document.title = "Logout | Chatvia React - Responsive Bootstrap 5 Chat App"
 

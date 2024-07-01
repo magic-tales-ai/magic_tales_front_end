@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import { FormGroup, Form, InputGroup, Input, FormFeedback, Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from "reactstrap";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -12,27 +12,9 @@ import { MAX_IMAGE_SIZE, IMAGE_SUPPORTED_FORMATS } from "../../../constants";
 export const ModalUpdateImage = (props) => {
     const { isOpen, setOpen, title, image, loading, update, error } = props;
     const [imageFile, setImageFile] = useState(null)
+    const prevLoadingRef = useRef(loading); // Necessary because formik updates before the reducer switches to 'pending'
     const currentImage = image;
     const { t } = useTranslation();
-
-    const toggle = () => {
-        setOpen(!isOpen);
-    }
-
-    useMemo(() => {
-        if(isOpen) {
-            setImageFile(null);
-        }
-    }, [isOpen])
-
-    useEffect(() => {
-        if(formik.isSubmitting && !loading) {
-            formik.setSubmitting(false);
-            if(!error) {
-                toggle();
-            }
-        }
-    }, [loading])
 
     const formik = useFormik({
         initialValues: {
@@ -62,11 +44,41 @@ export const ModalUpdateImage = (props) => {
         },
     });
 
-    useEffect(() => {
-        if(!isOpen) {
+    const resetForm = useCallback(
+        () => {
             formik.resetForm();
+        },
+        [formik]
+    );
+
+    useCallback(() => {
+        if(!isOpen) {
+            resetForm();
+        }
+    }, [isOpen, resetForm])
+
+    const toggle = useCallback(() => {
+        setOpen((prevState) => !prevState);
+    }, [setOpen]);
+
+    useMemo(() => {
+        if(isOpen) {
+            setImageFile(null);
         }
     }, [isOpen])
+
+    useEffect(() => {
+        if (formik.isSubmitting && prevLoadingRef.current && !loading) {
+            formik.setSubmitting(false);
+        }
+        prevLoadingRef.current = loading;
+    }, [loading, formik]);
+
+    useEffect(() => {
+        if (!error && !loading) {
+            setOpen(false);
+        }
+    }, [loading, error, setOpen])
 
     const fileHandleChange = (e) => {
         setImageFile(e.target.files[0])
@@ -95,7 +107,7 @@ export const ModalUpdateImage = (props) => {
                         )}
 
                         <picture>
-                            {currentImageUrl && <img src={currentImageUrl} className={`rounded avatar-lg`} />}
+                            {currentImageUrl && <img src={currentImageUrl} className={`rounded avatar-lg`} alt="profile" />}
                         </picture>
 
                         <FormGroup className="mb-0">
@@ -127,7 +139,7 @@ export const ModalUpdateImage = (props) => {
                 </Button>
             </ModalFooter>
 
-            {formik.isSubmitting && <div className="d-flex justify-content-center mb-3"><div className="loader"></div></div>}
+            {loading && <div className="d-flex justify-content-center mb-3"><div className="loader"></div></div>}
         </Modal >
     )
 }

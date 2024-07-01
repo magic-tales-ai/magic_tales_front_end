@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { connect, useDispatch } from 'react-redux';
 
 import { useFormik } from 'formik';
@@ -22,6 +22,7 @@ const ChangeEmailComponent = ({ error, loading, user, ...props }) => {
     const { nextStep } = props;
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const prevLoadingRef = useRef(loading); // Necessary because formik updates before the reducer switches to 'pending'
     const [successUpdated, setSuccessUpdated] = useState(false)
 
     const formik = useFormik({
@@ -46,17 +47,18 @@ const ChangeEmailComponent = ({ error, loading, user, ...props }) => {
     });
 
     useEffect(() => {
-        if (formik.isSubmitting && !loading) {
+        if (formik.isSubmitting && prevLoadingRef.current && !loading) {
             formik.setSubmitting(false);
             setSuccessUpdated(!error);
         };
-    }, [loading]);
+        prevLoadingRef.current = loading;
+    }, [loading, error, formik]);
 
     useEffect(() => {
         if (successUpdated) {
             nextStep();
         }
-    }, [successUpdated])
+    }, [successUpdated, nextStep])
 
     return (
         <div className="justify-content-center">

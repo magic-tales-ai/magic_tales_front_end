@@ -22,7 +22,7 @@ export const ModalChangeEmail = ({ isOpen, setOpen }) => {
     }
 
     const nextStep = () => {
-        if(currentView == 'change-email') {
+        if(currentView === 'change-email') {
             setCurrentView('validate-email');
             return;
         }

@@ -52,7 +52,8 @@ export const recoverChat = ({ uid, data }) => {
             }
         }
 
-        state = ChatReducer(state, action)
+        state = ChatReducer(state, action);
+        return interaction;
     })
 
     return state.get('chats').first();

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Card, CardBody, Button, Form, Label, InputGroup, FormGroup, Input } from "reactstrap";
-import { connect, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 
 // Selectors
 import { selectUser } from "../../../../redux/user/selectors";

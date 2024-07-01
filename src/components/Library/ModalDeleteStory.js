@@ -1,12 +1,8 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { Card, CardBody } from "reactstrap";
 
 // i18n
 import { useTranslation } from 'react-i18next';
-
-// Image default
-import avatar1 from "../../assets/images/users/avatar-tales-big.png";
 
 // Components
 import { ModalConfirmDelete } from "../Common/Modals/ModalConfirmDelete";

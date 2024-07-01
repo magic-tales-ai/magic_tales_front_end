@@ -33,7 +33,7 @@ const get = new APIClient().get;
  */
 function* loadMonthStoriesCount({ payload }) {
     try {
-        if(!payload || payload.message.command == websocket_commands_messages.DONE) {
+        if(!payload || payload.message.command === websocket_commands_messages.DONE) {
             if(localStorage.getItem("authUser")) {
                 const response = yield call(get, 'user/month-stories-count');
                 yield put(loadMonthStoriesCountSuccess(response));

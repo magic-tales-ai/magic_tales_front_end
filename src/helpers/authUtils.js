@@ -38,7 +38,7 @@ const setLoggedInUser = (user) => {
  */
 const getLoggedInUser = () => {
     const user = localStorage.getItem('authUser');
-    return user ? (typeof (user) == 'object' ? user : JSON.parse(user)) : null;
+    return user ? (typeof (user) === 'object' ? user : JSON.parse(user)) : null;
 }
 
 /**
