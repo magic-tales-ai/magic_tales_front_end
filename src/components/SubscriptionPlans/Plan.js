@@ -20,7 +20,7 @@ const Plan = (props) => {
                 </Badge>
             }
             </h3>
-            <picture><img src={'data:image/*;base64,' + plan.get('image')} className="img-fluid w-100 mb-3" /></picture> 
+            <picture><img src={'data:image/*;base64,' + plan.get('image')} className="img-fluid w-100 mb-3" alt="Plan" /></picture> 
 
             {pay === 'monthly' ?
                 <p className="price"> {plan.get('price')} $ {plan.get('price') > 0 && <span className="h5"> {'/ ' + t('month')} </span>} </p>

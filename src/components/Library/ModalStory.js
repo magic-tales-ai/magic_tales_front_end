@@ -22,7 +22,7 @@ import useSendMessage from '../../hooks/websocket/sendMessage';
 import { selectChatsList } from "../../redux/chats-list/selectors";
 
 // Actions
-import { setActiveChat, downloadStoryFile } from "../../redux/actions";
+import { downloadStoryFile } from "../../redux/actions";
 
 // Constants
 import { websocket_commands_messages } from "../../redux/websocket/constants";
@@ -32,38 +32,19 @@ import { displayText } from "../../helpers/app";
 
 const ModalStoryComponent = (props) => {
     const dispatch = useDispatch();
-    const { sendMessage, validateForNewChat } = useSendMessage();
+    const { sendMessage } = useSendMessage();
     const { t } = useTranslation();
     const [openModalDelete, setOpenModalDelete] = useState(false);
     const {
         isOpen,
         setOpen,
         story,
-        chats,
         router: { navigate }
     } = props;
 
     const toggle = () => {
         setOpen(!isOpen)
     }
-
-    // const openChat = () => {
-    //     if (chats.get(story.get('sessionId'))) { // chat already loaded
-    //         validateForNewChat({
-    //             _callback: () => {
-    //                 dispatch(setActiveChat(story.get('sessionId')))
-    //                 navigate('/dashboard');
-    //             }
-    //         })
-    //     }
-    //     else {
-    //         sendMessage({
-    //             command: 'conversation_recovery',
-    //             uid: story.get('sessionId')
-    //         })
-    //         navigate('/dashboard');
-    //     }
-    // }
 
     const newSpinOff = () => {
         sendMessage({
@@ -115,7 +96,7 @@ const ModalStoryComponent = (props) => {
                                     <div className="avatar-xs me-3">
                                         <picture>
                                             {story.get('profile').get('image')
-                                                ? <img src={'data:image/*;base64,' + story.get('profile').get('image')} className="rounded img-fluid" />
+                                                ? <img src={'data:image/*;base64,' + story.get('profile').get('image')} className="rounded img-fluid" alt="Profile" />
                                                 : <img src={avatar1} className="rounded img-fluid" alt="avatar" />
                                             }
                                         </picture>

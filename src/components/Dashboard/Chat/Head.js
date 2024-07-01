@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Row, Col } from "reactstrap";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
@@ -8,11 +8,6 @@ function UserHead(props) {
     const [showMenu, setShowMenu] = useState(activeTab === 'chat')
     const [title, setTitle] = useState('')
 
-    useEffect(() => {
-        setTitle(getTitle())
-        setShowMenu(activeTab === 'chat')
-    }, [activeTab])
-
     const closeChat = (e) => {
         e.preventDefault();
         var chat = document.getElementsByClassName("main-menu");
@@ -21,20 +16,28 @@ function UserHead(props) {
         }
     }
 
-    const getTitle = () => {
-        const { activeTab } = props
-        let title = 'Magi Tale'
-
+    const getTitle = useCallback(() => {
+        const { activeTab } = props;
+        let title = 'Magi Tale';
+    
         if (!showMenu) {
             switch (activeTab) {
                 case 'edit-profile':
                     title = 'Read editor';
                     break;
+                default:
+                    title = 'Magi Tale'
+                    break;
             }
         }
-
+    
         return title;
-    }
+    }, [showMenu, props]);
+
+    useEffect(() => {
+        setTitle(getTitle())
+        setShowMenu(activeTab === 'chat')
+    }, [activeTab, getTitle])
 
     return (
         <React.Fragment>

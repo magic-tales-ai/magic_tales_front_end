@@ -55,7 +55,7 @@ const CardStory = ({ story, router: { navigate } }) => {
     const profileInfo = <div className="d-flex">
         <div className="chat-user-emoji bg-primary rounded p-1 text-dark me-2 d-flex align-items-center justify-content-center">
             {story.get('profile').get('image')
-                ? <img src={'data:image/*;base64,' + story.get('profile').get('image')} className="rounded avatar-xs" />
+                ? <img src={'data:image/*;base64,' + story.get('profile').get('image')} className="rounded avatar-xs" alt="Profile" />
                 : <img src={avatarDefault} className="rounded avatar-xs" alt="avatar" />
             }
         </div>

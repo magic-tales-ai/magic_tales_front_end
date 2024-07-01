@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from "react-router-dom";
 
@@ -15,17 +15,21 @@ export const Header = () => {
     const [ticking, setTicking] = useState(false);
     const headerRef = useRef();
 
-    const changeHeader = (scrollPos) => {
-        if (scrollPos > 400) {
-            headerRef.current?.classList.add('onScroll');
-            return;
+    const changeHeader = useCallback((scrollPos) => {
+        if (headerRef.current) {
+            if (scrollPos > 400) {
+                headerRef.current.classList.add('onScroll');
+                return;
+            }
+            
+            headerRef.current.classList.remove('onScroll');
         }
+    }, [headerRef]);
 
-        headerRef.current?.classList.remove('onScroll');
-    };
-
-    const handleScroll = () => {
-        setLastKnownScrollPosition(window.scrollY);
+    const handleScroll = useCallback(() => {
+        const scrollY = window.scrollY;
+        setLastKnownScrollPosition(scrollY);
+    
         if (!ticking) {
             window.requestAnimationFrame(() => {
                 changeHeader(lastKnownScrollPosition);
@@ -33,7 +37,7 @@ export const Header = () => {
             });
         }
         setTicking(true);
-    };
+    }, [changeHeader, ticking, lastKnownScrollPosition]);
 
     useEffect(() => {
         window.addEventListener("scroll", handleScroll);
@@ -41,13 +45,13 @@ export const Header = () => {
         return () => {
             window.removeEventListener("scroll", handleScroll);
         };
-    }, [lastKnownScrollPosition, ticking]);
+    }, [handleScroll]);
 
     return (
         <header ref={headerRef} className="fixed-top">
             <nav className="navbar navbar-expand-md">
                 <div className="container-fluid">
-                    <a href="#" className="navbar-brand"><span>{t('Magic Tales')}</span></a>
+                    <a href="/#" className="navbar-brand"><span>{t('Magic Tales')}</span></a>
                     <div className="ms-auto">
                         <Link to="/dashboard" className="min-width btn btn-primary rounded-pill me-3 me-xs-0" type="button" id="btn-try-free">{t('Try to free')}</Link>
                         <Link to="/dashboard" onClick={() => { dispatch(openModalSignin()) }} className="min-width btn btn-primary rounded-pill" type="button" id="btn-login">{t('Login')}</Link>

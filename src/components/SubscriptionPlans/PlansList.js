@@ -28,7 +28,7 @@ const PlansListComponent = (props) => {
 
     useEffect(() => {
         props.loadPlansList()
-    }, [])
+    }, [props])
 
     return (
         <div id="plansList" className="w-100 d-flex flex-column align-items-center justify-content-center planes-box bg-black">
