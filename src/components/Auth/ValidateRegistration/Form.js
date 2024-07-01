@@ -49,12 +49,6 @@ const ValidateRegistrationForm = ({ error, loading, currentEmailField, navigate 
     });
 
     useEffect(() => {
-        if (successValidation) {
-            setTimeout(() => customNavigate({ to: 'login' }), 3000);
-        }
-    }, [successValidation]);
-
-    useEffect(() => {
         if (formik.isSubmitting && prevLoadingRef.current && !loading) {
             formik.setSubmitting(false);
             setSuccessValidation(!error)
@@ -67,7 +61,13 @@ const ValidateRegistrationForm = ({ error, loading, currentEmailField, navigate 
             e?.preventDefault();
             navigate(to)
         }
-    }, [])
+    }, [navigate])
+
+    useEffect(() => {
+        if (successValidation) {
+            setTimeout(() => customNavigate({ to: 'login' }), 3000);
+        }
+    }, [successValidation, customNavigate]);
 
     return (
         <div className="justify-content-center">
