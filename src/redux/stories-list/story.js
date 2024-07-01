@@ -11,6 +11,7 @@ export const Story = new Record({
     lastSuccessfulStep: 0,
     synopsis: "",
     image: null,
+    defaultImage: true,
     createdAt: "",
 });
 
@@ -21,7 +22,8 @@ export const createStory = (data) => {
         profile: data?.profile_id ? createProfile(data.profile) : null,
         sessionId: data?.session_id,
         lastSuccessfulStep: data?.last_successful_step,
-        image: data?.image || DEFAULT_PICTURE_B64,
+        image: data?.image,
+        defaultImage: DEFAULT_PICTURE_B64,
         createdAt: data?.created_at
     })
 }

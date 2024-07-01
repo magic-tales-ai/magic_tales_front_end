@@ -4,6 +4,7 @@ import {
     DELETE_STORY,
     DELETE_STORY_SUCCESS,
     DOWNLOAD_STORY_FILE,
+    DOWNLOAD_STORY_FILE_FROM_URL,
     API_FAILED
 } from './constants';
 
@@ -29,6 +30,11 @@ export const deleteStorySuccess = (storyId) => ({
 export const downloadStoryFile = (storyId) => ({
     type: DOWNLOAD_STORY_FILE,
     payload: storyId
+})
+
+export const downloadStoryFileFromURL = (fileURL) => ({
+    type: DOWNLOAD_STORY_FILE_FROM_URL,
+    payload: fileURL
 })
 
 export const storiesListApiError = (error) => ({
