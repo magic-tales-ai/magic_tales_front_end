@@ -19,7 +19,7 @@ import { setAuthorization } from '../../helpers/apiClient';
 
 import { Auth as AuthRecord } from './auth';
 
-const Auth = (state = new AuthRecord, action) => {
+const Auth = (state = new AuthRecord(), action) => {
     if (action?.payload?.token) {
         setAuthorization(action.payload.token);
     }

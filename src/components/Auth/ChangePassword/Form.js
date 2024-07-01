@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { Link, Navigate } from 'react-router-dom';
 import { FormGroup, Alert, Form, Input, Button, FormFeedback, Label, InputGroup } from 'reactstrap';
@@ -22,6 +22,7 @@ const ChangePasswordForm = (props) => {
     const { loading, error, currentEmailField } = props;
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const prevLoadingRef = useRef(loading); // Necessary because formik updates before the reducer switches to 'pending'
     const [success, setSuccess] = useState(false)
     const [showPassword, setShowPassword] = useState(false);
     const [showRepeatedPassword, setRepeatedPassword] = useState(false);
@@ -34,7 +35,7 @@ const ChangePasswordForm = (props) => {
 
     useEffect(() => {
         dispatch(apiError(""));
-    }, []);
+    }, [dispatch]);
 
     // validation
     const formik = useFormik({
@@ -57,24 +58,25 @@ const ChangePasswordForm = (props) => {
     });
 
     useEffect(() => {
-        if (formik.isSubmitting && !loading) {
+        if (formik.isSubmitting && prevLoadingRef.current && !loading) {
             formik.setSubmitting(false);
             setSuccess(!error)
         };
-    }, [loading]);
+        prevLoadingRef.current = loading;
+    }, [loading, error, formik]);
+
+    const navigate = useCallback(({ e, to }) => {
+        if (props.navigate) {
+            e?.preventDefault();
+            props.navigate(to);
+        }
+    }, [props]);
 
     useEffect(() => {
         if (success) {
             setTimeout(() => navigate({ to: 'login' }), 3000);
         }
-    }, [success]);
-
-    const navigate = ({ e, to }) => {
-        if (props.navigate) {
-            e?.preventDefault();
-            props.navigate(to)
-        }
-    }
+    }, [success, navigate]);
 
     if (localStorage.getItem("authUser")) {
         return <Navigate to="/" />;

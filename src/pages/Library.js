@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, connect } from 'react-redux';
-import { Button, Form, FormGroup, InputGroup, Input, Badge, Row, Col } from 'reactstrap';
+import { Button, Row, Col } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
 
 // Components
 import CardStory from '../components/Library/CardStory';
-import { ModalFilters } from '../components/Library/ModalFilters';
+// import { ModalFilters } from '../components/Library/ModalFilters';
 
 // i18n
 import { useTranslation } from 'react-i18next';
 
 // Icons
-import iconFilter from "../assets/images/icons/filter.svg";
+// import iconFilter from "../assets/images/icons/filter.svg";
 
 // Actions
 import { loadStoriesList } from '../redux/actions';
@@ -23,78 +23,78 @@ const Library = ({ stories }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const [openFilters, setOpenFilters] = useState(false);
-    const [storiesFiltered, setStoriesFiltered] = useState(stories.list);
-    const [filters, setFilters] = useState({
-        search: '',
-        profiles: [],
-        genres: []
-    })
-    const totalFiltered = stories.list.size - storiesFiltered.size;
+    // const [openFilters, setOpenFilters] = useState(false);
+    // const [storiesFiltered, setStoriesFiltered] = useState(stories.list);
+    // const [filters, setFilters] = useState({
+    //     search: '',
+    //     profiles: [],
+    //     genres: []
+    // })
+    // const totalFiltered = stories.list.size - storiesFiltered.size;
     
-    const handleFilters = (newFilters) => {
-        setFilters({
-            ...filters,
-            ...newFilters
-        })
-    }
+    // const handleFilters = (newFilters) => {
+    //     setFilters({
+    //         ...filters,
+    //         ...newFilters
+    //     })
+    // }
 
     useEffect(() => {
         dispatch(loadStoriesList());
-    }, [])
+    }, [dispatch])
 
-    useEffect(() => {
-        // applyFilters()
-    }, [filters])
+    // useEffect(() => {
+    //     applyFilters()
+    // }, [filters])
 
-    const applyFilters = () => {
-        const newStoriesList = stories.list.filter(story => {
-            const lowercaseSearch = filters.search.toLowerCase();
-            const lowercaseName = story.get('title').toLowerCase();
-            const lowercaseDescription = story.get('synopsis').toLowerCase();
+    // const applyFilters = () => {
+    //     const newStoriesList = stories.list.filter(story => {
+    //         const lowercaseSearch = filters.search.toLowerCase();
+    //         const lowercaseName = story.get('title').toLowerCase();
+    //         const lowercaseDescription = story.get('synopsis').toLowerCase();
 
-            const searchCondition = lowercaseName.includes(lowercaseSearch) || lowercaseDescription.includes(lowercaseSearch)
+    //         const searchCondition = lowercaseName.includes(lowercaseSearch) || lowercaseDescription.includes(lowercaseSearch)
 
-            const profilesCondition = filters.profiles.length
-                    ? filters.profiles.some(p => p.id === story.profile.id)
-                    : true
+    //         const profilesCondition = filters.profiles.length
+    //                 ? filters.profiles.some(p => p.id === story.profile.id)
+    //                 : true
             
-            const genresCondition = filters.genres.length
-                    ? filters.genres.every(fg => !story.genres.find(g => g.id === fg.id))
-                    : true
+    //         const genresCondition = filters.genres.length
+    //                 ? filters.genres.every(fg => !story.genres.find(g => g.id === fg.id))
+    //                 : true
                 
-            return profilesCondition && genresCondition && searchCondition;
-        })
+    //         return profilesCondition && genresCondition && searchCondition;
+    //     })
 
-        setStoriesFiltered(newStoriesList)
-    }
+    //     setStoriesFiltered(newStoriesList)
+    // }
 
-    const getGenres = () => {
-        var genres = []
+    // const getGenres = () => {
+    //     var genres = []
 
-        // stories.list.forEach(story => {
-        //     genres = genres.concat(story.genres)
-        // });
+    //     // stories.list.forEach(story => {
+    //     //     genres = genres.concat(story.genres)
+    //     // });
 
-        return genres;
-    }
+    //     return genres;
+    // }
 
-    const getProfiles = () => {
-        var profiles = []
+    // const getProfiles = () => {
+    //     var profiles = []
 
-        // stories.list.forEach(story => {
-        //     profiles = profiles.concat(story.profile)
-        // });
+    //     stories.list.forEach(story => {
+    //         profiles = profiles.concat(story.profile)
+    //     });
 
-        return profiles;
-    }
+    //     return profiles;
+    // }
 
-    const handleInputs = ({ target: { name, value } }) => {
-        setFilters({
-            ...filters,
-            [name]: value
-        })
-    }
+    // const handleInputs = ({ target: { name, value } }) => {
+    //     setFilters({
+    //         ...filters,
+    //         [name]: value
+    //     })
+    // }
 
     return (
         <React.Fragment>

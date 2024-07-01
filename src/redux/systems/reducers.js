@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-import { System, createSystem } from './system';
+import { System } from './system';
 import { FETCH_SYSTEM, FETCH_SYSTEM_SUCCESS, FETCH_SYSTEM_FAILED } from './constants';
 
 const INIT_STATE = new Map([]);

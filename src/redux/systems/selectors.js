@@ -1,14 +1,16 @@
 import { createSelector } from 'reselect';
 
-export function getSystem(state) {
+import { LANGUAGES } from './constants';
+
+export function getSystems(state) {
   return state.Systems;
 }
 
 export function getSystemById(state, systemId) {
-  return getSystem(state)?.get(systemId);
+  return getSystems(state)?.get(systemId);
 }
 
-export const selectSystems = createSelector(
-    (state) => state.Systems,
-    (systems) => (systems)
+export const selectLanguages = createSelector(
+  getSystems,
+  (systems) => systems.get(LANGUAGES)?.items || []
 );

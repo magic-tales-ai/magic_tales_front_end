@@ -23,7 +23,7 @@ const ReadProfiles = ({ profiles, stories }) => {
 
     useEffect(() => {
         dispatch(loadProfilesList());
-    }, [, stories])
+    }, [dispatch, stories])
 
     return (
         <React.Fragment>

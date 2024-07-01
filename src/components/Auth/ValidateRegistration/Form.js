@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { connect, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import withRouter from "../../withRouter";
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -23,6 +22,7 @@ import { selectAuth } from '../../../redux/auth/selectors';
 const ValidateRegistrationForm = ({ error, loading, currentEmailField, navigate }) => {
     const dispatch = useDispatch();
     const [successValidation, setSuccessValidation] = useState(false);
+    const prevLoadingRef = useRef(loading); // Necessary because formik updates before the reducer switches to 'pending'
     const currentEmail = useRef(currentEmailField)
     const { t } = useTranslation();
 
@@ -55,18 +55,19 @@ const ValidateRegistrationForm = ({ error, loading, currentEmailField, navigate 
     }, [successValidation]);
 
     useEffect(() => {
-        if (formik.isSubmitting && !loading) {
+        if (formik.isSubmitting && prevLoadingRef.current && !loading) {
             formik.setSubmitting(false);
             setSuccessValidation(!error)
         };
-    }, [loading]);
+        prevLoadingRef.current = loading;
+    }, [loading, error, formik]);
 
-    const customNavigate = ({ e, to }) => {
+    const customNavigate = useCallback(({ e, to }) => {
         if (navigate) {
             e?.preventDefault();
             navigate(to)
         }
-    }
+    }, [])
 
     return (
         <div className="justify-content-center">

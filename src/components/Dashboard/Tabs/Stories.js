@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Dropdown, DropdownItem, DropdownToggle, DropdownMenu, Button, Collapse } from "reactstrap";
+import { Dropdown, DropdownItem, DropdownToggle, DropdownMenu, Button } from "reactstrap";
 import { connect, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -34,7 +34,7 @@ import { websocket_commands_messages } from '../../../redux/websocket/constants'
 import { ModalStory } from '../../Library/ModalStory';
 
 const Stories = ({ stories, activeChat, chats, currentChat, user, anyProfile, anyStory } = {}) => {
-    const { sendMessage, validateForNewChat } = useSendMessage();
+    const { sendMessage } = useSendMessage();
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const ref = useRef();
@@ -134,7 +134,7 @@ const Stories = ({ stories, activeChat, chats, currentChat, user, anyProfile, an
                     {
                         stories?.list?.size > 0 && stories.list.map((story) => {
                             return (
-                                <li key={story.get('id')} id={"conversation" + story.get('id')} className={story.get('sessionId') == activeChat ? "active" : ""}>
+                                <li key={story.get('id')} id={"conversation" + story.get('id')} className={story.get('sessionId') === activeChat ? "active" : ""}>
                                     <Link to="#" onClick={(e) => openStoryChat(e, story)}>
                                         <div className="d-flex align-items-center">
                                             <div className={"chat-user-img align-self-center me-1 ms-0"}>
@@ -199,7 +199,7 @@ const Stories = ({ stories, activeChat, chats, currentChat, user, anyProfile, an
                 </div> */}
             </SimpleBar>
 
-            {currentStoryId && <ModalStory isOpen={openModalStory} setOpen={setOpenModalStory} story={stories.list.find(story => story?.get('id') == currentStoryId)} />}
+            {currentStoryId && <ModalStory isOpen={openModalStory} setOpen={setOpenModalStory} story={stories.list.find(story => story?.get('id') === currentStoryId)} />}
 
             <ModalConfirmDelete isOpen={openModalDelete} setOpen={setOpenModalDelete} callback={() => { dispatch(deleteStory(currentStoryId)) }} title={'Are you sure you want to delete?'} >
                 <p className='text-left'>You will not be able to recover this story</p>

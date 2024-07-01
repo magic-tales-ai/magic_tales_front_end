@@ -1,7 +1,5 @@
-import React, { useEffect, useCallback, useState } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import withRouter from "../../../withRouter";
+import React, { useEffect, useState, useRef } from 'react';
+import { connect, useDispatch } from 'react-redux';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -24,6 +22,7 @@ const ValidateEmailComponent = ({ error, loading, user, ...props }) => {
     const { nextStep } = props;
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const prevLoadingRef = useRef(loading); // Necessary because formik updates before the reducer switches to 'pending'
     const [successUpdated, setSuccessUpdated] = useState(false)
 
     const formik = useFormik({
@@ -43,11 +42,12 @@ const ValidateEmailComponent = ({ error, loading, user, ...props }) => {
     });
 
     useEffect(() => {
-        if (formik.isSubmitting && !loading) {
+        if (formik.isSubmitting && prevLoadingRef.current && !loading) {
             formik.setSubmitting(false);
             setSuccessUpdated(!error);
         };
-    }, [loading]);
+        prevLoadingRef.current = loading;
+    }, [loading, error, formik]);
 
     useEffect(() => {
         if (successUpdated) {
@@ -55,7 +55,7 @@ const ValidateEmailComponent = ({ error, loading, user, ...props }) => {
                 nextStep();
             }, 3000)
         }
-    }, [successUpdated])
+    }, [successUpdated, nextStep])
 
     return (
         <div className="justify-content-center">

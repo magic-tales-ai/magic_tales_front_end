@@ -30,7 +30,7 @@ const ChatLeftSidebar = (props) => {
         return () => {
           document.removeEventListener('mousedown', handleDocumentClick);
         };
-      }, []);
+      }, [dLgIsVisible]);
       
 
     return (

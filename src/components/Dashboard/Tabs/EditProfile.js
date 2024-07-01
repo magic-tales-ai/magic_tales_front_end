@@ -8,9 +8,6 @@ import { setActiveTab, setActiveChat, setCurrentProfileId } from "../../../redux
 // i18n
 import { useTranslation } from 'react-i18next';
 
-// Image default
-import avatar1 from "../../../assets/images/users/avatar-1.jpg";
-
 // Hooks
 import useSendMessage from '../../../hooks/websocket/sendMessage';
 
@@ -41,7 +38,7 @@ const EditProfile = ({ profile, activeChat }) => {
             profile_id: profile.get('id'),
             needValidate: false 
         });
-    }, [, profile])
+    }, [profile, activeChat, dispatch, sendMessage])
 
     const goToChat = () => {
         dispatch(setActiveChat(prevouseChatUid.current));

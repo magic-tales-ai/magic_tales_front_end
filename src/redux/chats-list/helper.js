@@ -61,13 +61,13 @@ function removeConversationByUidLS(uid) {
     }
     
     const guestConversation = JSON.parse(localStorage.getItem('guestConversationData'));
-    if(guestConversation?.uid == uid) {
+    if(guestConversation?.uid === uid) {
         localStorage.removeItem('guestConversationData');
     }
 
     const user = getLoggedInUser();
     const userConversation = JSON.parse(localStorage.getItem(user?.id + 'userConversationData'));
-    if(userConversation?.uid == uid) {
+    if(userConversation?.uid === uid) {
         localStorage.removeItem(user.id + 'userConversationData')
     }
 }

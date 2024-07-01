@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Badge } from "reactstrap";
+import React, { useState } from "react";
+import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
 import { useDispatch, connect } from "react-redux";
 
 // Components
@@ -11,7 +11,6 @@ import { useTranslation } from 'react-i18next';
 
 // Image default
 import avatar1 from "../../assets/images/users/user-avatar.png";
-import avatarDefault from "../../assets/images/users/avatar-tales-big.png";
 
 // Icon
 import iconFile from "../../assets/images/icons/file-plus.svg";
@@ -48,23 +47,23 @@ const ModalStoryComponent = (props) => {
         setOpen(!isOpen)
     }
 
-    const openChat = () => {
-        if (chats.get(story.get('sessionId'))) { // chat already loaded
-            validateForNewChat({
-                _callback: () => {
-                    dispatch(setActiveChat(story.get('sessionId')))
-                    navigate('/dashboard');
-                }
-            })
-        }
-        else {
-            sendMessage({
-                command: 'conversation_recovery',
-                uid: story.get('sessionId')
-            })
-            navigate('/dashboard');
-        }
-    }
+    // const openChat = () => {
+    //     if (chats.get(story.get('sessionId'))) { // chat already loaded
+    //         validateForNewChat({
+    //             _callback: () => {
+    //                 dispatch(setActiveChat(story.get('sessionId')))
+    //                 navigate('/dashboard');
+    //             }
+    //         })
+    //     }
+    //     else {
+    //         sendMessage({
+    //             command: 'conversation_recovery',
+    //             uid: story.get('sessionId')
+    //         })
+    //         navigate('/dashboard');
+    //     }
+    // }
 
     const newSpinOff = () => {
         sendMessage({

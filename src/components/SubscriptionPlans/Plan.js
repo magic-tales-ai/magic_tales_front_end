@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardBody, Badge, Button } from "reactstrap";
+import { Card, Badge, Button } from "reactstrap";
 
 //i18n
 import { useTranslation } from 'react-i18next';

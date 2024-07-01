@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { connect, useDispatch } from 'react-redux';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { FormGroup, Alert, Form, Input, Button, FormFeedback, Label, InputGroup } from 'reactstrap';
+import { FormGroup, Alert, Form, Input, Button, FormFeedback, InputGroup } from 'reactstrap';
 
 // Actions
 import { updateUserPassword, apiError } from '../../../../redux/actions';
@@ -22,6 +22,7 @@ const ChangePassword = ({ error, loading, user, ...props }) => {
     const { updated } = props;
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const prevLoadingRef = useRef(loading); // Necessary because formik updates before the reducer switches to 'pending'
     const [successUpdated, setSuccessUpdated] = useState(false);
     const [showOldPassword, setShowOldPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
@@ -51,11 +52,12 @@ const ChangePassword = ({ error, loading, user, ...props }) => {
     });
 
     useEffect(() => {
-        if (formik.isSubmitting && !loading) {
+        if (formik.isSubmitting && prevLoadingRef.current && !loading) {
             formik.setSubmitting(false);
             setSuccessUpdated(!error);
         };
-    }, [loading]);
+        prevLoadingRef.current = loading;
+    }, [loading, error, formik]);
 
     useEffect(() => {
         if (successUpdated) {
@@ -63,7 +65,7 @@ const ChangePassword = ({ error, loading, user, ...props }) => {
                 updated();
             }, 3000)
         }
-    }, [successUpdated])
+    }, [successUpdated, updated])
 
     return (
         <div className="justify-content-center">
@@ -158,7 +160,7 @@ const ChangePassword = ({ error, loading, user, ...props }) => {
                             </Button>
                         </div>
 
-                        {formik.isSubmitting && <div className="d-flex justify-content-center mt-4"><div className="loader"></div></div>}
+                        {loading && <div className="d-flex justify-content-center mt-4"><div className="loader"></div></div>}
                     </Form>
                 </div>
             </div>

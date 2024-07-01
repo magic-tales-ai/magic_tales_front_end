@@ -27,26 +27,26 @@ export const ModalFilters = (props) => {
 
     const handleProfileClick = (index) => {
         const profileRef = profileRefs.current[index]
-        const found = profilesSelected.find(p => p.id == profileRef.id)
+        const found = profilesSelected.find(p => p.id === profileRef.id)
 
         if (found) {
             setProfilesSelected(profilesSelected.filter(p => p.id != profileRef.id))
             return;
         }
 
-        setProfilesSelected([...profilesSelected, profiles.find(p => p.id == profileRef.id)])
+        setProfilesSelected([...profilesSelected, profiles.find(p => p.id === profileRef.id)])
     }
 
     const handleGenreClick = (index) => {
         const genreRef = genresRefs.current[index]
-        const found = genresSelected.find(g => g.id == genreRef.id)
+        const found = genresSelected.find(g => g.id === genreRef.id)
 
         if (found) {
             setGenresSelected(genresSelected.filter(g => g.id != genreRef.id))
             return;
         }
 
-        setGenresSelected([...genresSelected, genres.find(g => g.id == genreRef.id)])
+        setGenresSelected([...genresSelected, genres.find(g => g.id === genreRef.id)])
     }
 
     const handleClear = () => {

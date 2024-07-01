@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { useDispatch } from "react-redux";
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +9,7 @@ import Profile from "./Profile";
 import { useTranslation } from 'react-i18next';
 
 // Actions
-import { setActiveChat, setActiveTab, setCurrentProfileId } from "../../redux/actions";
+import { setActiveTab, setCurrentProfileId } from "../../redux/actions";
 
 // Icons
 import iconFile from "../../assets/images/icons/file-plus.svg";

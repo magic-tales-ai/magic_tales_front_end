@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Card, CardBody, FormGroup, Alert, Form, Input, Button, FormFeedback, Label, InputGroup } from 'reactstrap';
 import { connect, useDispatch } from "react-redux";
@@ -8,10 +8,7 @@ import * as Yup from 'yup';
 
 // Selectors
 import { selectUser } from "../../../../redux/user/selectors";
-import { selectSystems } from "../../../../redux/systems/selectors";
-
-// Constants
-import { LANGUAGES } from "../../../../redux/systems/constants";
+import { selectLanguages } from "../../../../redux/systems/selectors";
 
 // Actions
 import { updateUser, apiError, fetchSystem } from "../../../../redux/actions";
@@ -19,6 +16,7 @@ import { updateUser, apiError, fetchSystem } from "../../../../redux/actions";
 const ProfileSettingsCardComponent = ({ user, loading, error, languages }) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
+    const prevLoadingRef = useRef(loading); // Necessary because formik updates before the reducer switches to 'pending'
     const [successUpdated, setSuccessUpdated] = useState(false);
 
     const formik = useFormik({
@@ -45,14 +43,15 @@ const ProfileSettingsCardComponent = ({ user, loading, error, languages }) => {
 
     useEffect(() => {
         dispatch(fetchSystem('languages'));
-    }, [])
+    }, [dispatch])
 
     useEffect(() => {
-        if (formik.isSubmitting && !loading) {
+        if (formik.isSubmitting && prevLoadingRef.current && !loading) {
             formik.setSubmitting(false);
             setSuccessUpdated(!error);
         };
-    }, [loading]);
+        prevLoadingRef.current = loading;
+    }, [loading, error, formik]);
 
     useEffect(() => {
         if (successUpdated) {
@@ -183,8 +182,7 @@ const ProfileSettingsCardComponent = ({ user, loading, error, languages }) => {
 
 const mapStateToProps = (state) => {
     const { user, error, loading } = selectUser(state);
-    const systems = selectSystems(state);
-    const languages = systems.get(LANGUAGES)?.items || [];
+    const languages = selectLanguages(state);
 
     return { user, error, loading, languages };
 };

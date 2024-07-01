@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { FormGroup, Alert, Form, Input, Button, FormFeedback, InputGroup } from 'reactstrap';
 import { connect, useDispatch } from 'react-redux';
 import { Link, Navigate } from 'react-router-dom';
@@ -22,7 +22,7 @@ import { selectAuth } from '../../../redux/auth/selectors';
 const LoginForm = ({ error, loading, ...props }) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
-
+    const prevLoadingRef = useRef(loading); // Necessary because formik updates before the reducer switches to 'pending'
     const [showPassword, setShowPassword] = useState(false);
 
     const handleTogglePassword = () => {
@@ -46,10 +46,11 @@ const LoginForm = ({ error, loading, ...props }) => {
     });
 
     useEffect(() => {
-        if (formik.isSubmitting && !loading) {
+        if (formik.isSubmitting && prevLoadingRef.current && !loading) {
             formik.setSubmitting(false);
         };
-    }, [loading]);
+        prevLoadingRef.current = loading;
+    }, [loading, formik]);
 
     if (localStorage.getItem("authUser")) {
         return <Navigate to="/dashboard" />;
@@ -73,7 +74,7 @@ const LoginForm = ({ error, loading, ...props }) => {
                     </Alert>
                 )}
                 {
-                    formik.submitCount > 0 && error?.detail && error.detail == 'User is not active' && <Link to="/validate-registration" onClick={(e) => { navigate(e, 'validate-registration') }} className="font-weight-medium text-decoration-underline mb-4 d-inline-block"> {t('Activate your user by clicking here')} </Link>
+                    formik.submitCount > 0 && error?.detail && error.detail === 'User is not active' && <Link to="/validate-registration" onClick={(e) => { navigate(e, 'validate-registration') }} className="font-weight-medium text-decoration-underline mb-4 d-inline-block"> {t('Activate your user by clicking here')} </Link>
                 }
                 <div>
 
