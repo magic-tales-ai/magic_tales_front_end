@@ -2,15 +2,10 @@ import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 
-// i18n
-import { useTranslation } from 'react-i18next';
-
 // Actions
 import { openModalSignin, downloadStoryFileFromURL } from '../../../redux/actions';
-import { downloadPDF } from '../../../helpers/files';
 
 function FileList(props) {
-    const { t } = useTranslation();
     const dispatch = useDispatch();
     const user = useSelector(state => state.User);
     const [files] = useState(props.files);

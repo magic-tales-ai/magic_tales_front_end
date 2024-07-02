@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import withRouter from "../../components/withRouter";
 
@@ -13,7 +13,6 @@ import { createSelector } from 'reselect';
 const Logout = (props) => {
   const dispatch = useDispatch();
   const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
 
   const layoutdata = createSelector(
     (state) => state.Auth,
@@ -24,6 +23,10 @@ const Logout = (props) => {
 
   // Inside your component
   const isUserLogout = useSelector(layoutdata);
+
+  const urlParams = useMemo(() => {
+    return new URLSearchParams(queryString);
+  }, [queryString]);
 
   useEffect(() => {
     if(urlParams.has('requireSignIn')) {

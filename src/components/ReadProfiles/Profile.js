@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Nav, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from "reactstrap";
 import { connect, useDispatch } from "react-redux";
 import { useNavigate } from 'react-router-dom';

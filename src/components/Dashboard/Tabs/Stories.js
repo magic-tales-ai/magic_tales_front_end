@@ -158,7 +158,7 @@ const Stories = ({ stories, activeChat, chats, currentChat, user, anyProfile, an
                                                             <div className="chat-user-emoji avatar-xxs me-2 d-flex align-items-center justify-content-center">
                                                                 <picture className="ms-2">
                                                                     {story.get('profile').get('image') &&
-                                                                        <img src={'data:image/*;base64,' + story.get('profile').get('image')} className="rounded avatar-xxs" />
+                                                                        <img src={'data:image/*;base64,' + story.get('profile').get('image')} className="rounded avatar-xxs" alt="Profile" />
                                                                     }
                                                                 </picture>
                                                             </div>

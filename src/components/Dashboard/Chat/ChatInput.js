@@ -4,37 +4,15 @@ import { Button, Input, Row, Col, Form } from "reactstrap";
 function ChatInput(props) {
     const { disabled } = props;
     const [textMessage, settextMessage] = useState("");
-    const [isOpen, setisOpen] = useState(false);
     const [file, setfile] = useState({
         name: "",
         size: ""
     });
     const [fileImage, setfileImage] = useState("")
 
-    const toggle = () => setisOpen(!isOpen);
-
     //function for text input value change
     const handleChange = e => {
         settextMessage(e.target.value);
-    }
-
-    const onEmojiClick = (event) => {
-        settextMessage(textMessage + event.emoji);
-    };
-
-    //function for file input change
-    const handleFileChange = e => {
-        if (e.target.files.length !== 0)
-            setfile({
-                name: e.target.files[0].name,
-                size: e.target.files[0].size,
-            })
-    }
-
-    //function for image input change
-    const handleImageChange = e => {
-        if (e.target.files.length !== 0)
-            setfileImage(URL.createObjectURL(e.target.files[0]))
     }
 
     //function for send data to onaddMessage function(in Chat/index.js component)

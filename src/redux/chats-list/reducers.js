@@ -43,6 +43,7 @@ const ChatsList = (state = INIT_STATE, action) => {
                     })
                 })
             }
+            return state;
 
         // STORY
         case DELETE_STORY_SUCCESS:
